@@ -24,6 +24,7 @@ class PluginInfo:
 class PluginManager:
 
     def __init__(self, plugin_player):
+        self.saved_plugins = []
         self.plugin_player = plugin_player
         
     def plugin_loader(self):
@@ -34,9 +35,9 @@ class PluginManager:
         selected_file_path.hint_text = "Enter Filepath/Browsing Directory"
         # Check if the file exists and is a .so file
         if not os.path.isfile(filepath):
-            self.plugin_player.addMessage("File does not exist")
+            self.plugin_player.add_message("File does not exist")
         elif not filepath.endswith('.so'):
-            self.plugin_player.addMessage("File is not a Plugin (.so) file")
+            self.plugin_player.add_message("File is not a Plugin (.so) file")
         else:
             # Split the file path into directory and filename
             directory_path, filename = os.path.split(filepath)
@@ -53,19 +54,19 @@ class PluginManager:
                 #try to load plugin modules into module manager
                 try:
                     lib.load_modules(self.plugin_player.mm)
-                    self.plugin_player.addMessage(f"Successfuly loaded {filename} into ModuleManager")
+                    self.plugin_player.add_message(f"Successfuly loaded {filename} into ModuleManager")
 
                     #save info of the Plugin and its modules
-                    tempMM = pp.ModuleManager()
-                    lib.load_modules(tempMM)
-                    newPlugin = PluginInfo(filename, tempMM.keys())
-                    self.plugin_player.savedPlugins.append(newPlugin)
-                    self.pluginView()
+                    temp_MM = pp.ModuleManager()
+                    lib.load_modules(temp_MM)
+                    new_plugin = PluginInfo(filename, temp_MM.keys())
+                    self.saved_plugins.append(new_plugin)
+                    self.plugin_view()
                 except Exception as e:
-                    self.plugin_player.addMessage(f"Could not add {filename} to ModuleManager")
-                    self.plugin_player.addMessage(f"{e}")
+                    self.plugin_player.add_message(f"Could not add {filename} to ModuleManager")
+                    self.plugin_player.add_message(f"{e}")
             except Exception as e:
-                self.plugin_player.addMessage(f"Could not import module {filename}: {e}")
+                self.plugin_player.add_message(f"Could not import module {filename}: {e}")
                 
                 
     #delete a preinstalled plugin from the mm and remove the folder
@@ -75,7 +76,7 @@ class PluginManager:
 
         #grab folder number and plugin name from the widget's id
         folder_number = int(instance.id)
-        plugin = self.plugin_player.savedPlugins[folder_number]
+        plugin = self.saved_plugins[folder_number]
         name = plugin.plugin_name
 
         #delete dependencies on the tree that are of the plugin's modules
@@ -96,14 +97,14 @@ class PluginManager:
                         #check if the submodule is set to use the module
                         if submodule[1] == module_name:
                             submodule = (submodule[0], None)
-                            self.plugin_player.addMessage(f"Removed Submodule: {submodule[0]}, {module_name} from Node {node_number}")
+                            self.plugin_player.add_message(f"Removed Submodule: {submodule[0]}, {module_name} from Node {node_number}")
                 node_number += 1
 
-        for i in range(len(self.plugin_player.savedPlugins[folder_number].modules)):
-            self.plugin_player.mm.erase(self.plugin_player.savedPlugins[folder_number].modules[i])
-        self.plugin_player.savedPlugins[folder_number] = None     
-        self.plugin_player.addMessage("Removed Plugin: " + name)
-        self.pluginView()
+        for i in range(len(self.saved_plugins[folder_number].modules)):
+            self.plugin_player.mm.erase(self.saved_plugins[folder_number].modules[i])
+        self.saved_plugins[folder_number] = None     
+        self.plugin_player.add_message("Removed Plugin: " + name)
+        self.plugin_view()
             
 
 
@@ -113,7 +114,7 @@ class PluginManager:
         module_number = int(instance.id.split()[0])
         plugin_number = int(instance.id.split()[1])
         accessed_in_tree = int(instance.id.split()[2])
-        module_name = self.plugin_player.savedPlugins[plugin_number].modules[module_number]
+        module_name = self.saved_plugins[plugin_number].modules[module_number]
         module = self.plugin_player.mm.at(module_name)
 
         #find the information of inputs, outputs, submodules, description
@@ -122,44 +123,35 @@ class PluginManager:
         inputs = ""
         submodules = ""
         description = ""
-        try:
-            output_dict = module.results()
-            for key, value in output_dict.items():
+        output_dict = module.results()
+        for key, value in output_dict.items():
+            try:
+                output_add = f"    {key}: {value.description()} \n"
+            except:
+                output_add = f"    {key}: description unavailable\n"
+            outputs += output_add
+        input_dict = module.inputs()
+        for key, value in input_dict.items():
+            try:
+                input_add = f"    {key}: {value.description()} \n"
+            except:
+                input_add = f"    {key}: description unavailable\n"
+            inputs += input_add   
+        submod_dict = module.submods()
+        if submod_dict:
+            for key, value in submod_dict.items():
                 try:
-                    output_add = f"    {key}: {value.description()} \n"
+                    submodule_add = f"    {key}: {value.description()} \n"
                 except:
-                    output_add = f"    {key}: description unavailable\n"
-                outputs += output_add
-        except Exception as e:
-            self.plugin_player.addMessage(f"Couldn't find output information: {e}")
-        try:
-            input_dict = module.inputs()
-            for key, value in input_dict.items():
-                try:
-                    input_add = f"    {key}: {value.description()} \n"
-                except:
-                    input_add = f"    {key}: description unavailable\n"
-                inputs += input_add
-        except Exception as e:
-            self.plugin_player.addMessage(f"Couldn't find input information: {e}")
-        try:     
-            submod_dict = module.submods()
-            if submod_dict:
-                for key, value in submod_dict.items():
-                    try:
-                        submodule_add = f"    {key}: {value.description()} \n"
-                    except:
-                        submodule_add = f"    {key} description unavailable"
+                    submodule_add = f"    {key} description unavailable"
                     submodules += submodule_add
-            else:
-                submodules = "    None\n"
-        except Exception as e:
-            self.plugin_player.addMessage(f"Couldn't find submodule information: {e}")
-        try:
-            description = module.description()
-        except Exception as e:
+        else:
+            submodules = "    None\n"
+            
+        description = module.description()
+        if not description:
             description = "Not Supported"
-            self.plugin_player.addMessage(f"Couldn't find description: {e}")
+
         #put into massive string
         full_info = f"Description:{description}\nInputs:\n{inputs}Outputs:\n{outputs}Submods:\n{submodules}"
 
@@ -213,13 +205,13 @@ class PluginManager:
 
         
         #add each of the modules that are in the plugin
-        module_amount = len(self.plugin_player.savedPlugins[folder_number].modules)
+        module_amount = len(self.saved_plugins[folder_number].modules)
         for i in range(module_amount):
             #create main holding box
             view_module = BoxLayout(orientation='horizontal', size_hint_y=None, height=30, spacing=5)
 
             #add the name of the module
-            module_name = Label(text=self.plugin_player.savedPlugins[folder_number].modules[i], color=(0,0,0,1), size_hint_x=1/2)
+            module_name = Label(text=self.saved_plugins[folder_number].modules[i], color=(0,0,0,1), size_hint_x=1/2)
             view_module.add_widget(module_name)
 
             #add the add button to add to the tree
@@ -248,13 +240,13 @@ class PluginManager:
         scroll_view.add_widget(module_widget)
 
         self.plugin_player.popup = Popup(content=scroll_view, background_color=(255, 255, 255), size_hint=(None, None), 
-                size=plugin_section.size, auto_dismiss=True, title=self.plugin_player.savedPlugins[folder_number].plugin_name, 
+                size=plugin_section.size, auto_dismiss=True, title=self.saved_plugins[folder_number].plugin_name, 
                 title_color=(0,0,0,1))
         self.plugin_player.popup.id = f'{folder_number}'
         self.plugin_player.popup.open()
 
     #update the loaded plugin visuals
-    def pluginView(self):
+    def plugin_view(self):
         #grab the plugin section
         plugin_widget = self.plugin_player.root.ids.plugin_section
 
@@ -266,21 +258,21 @@ class PluginManager:
         self.plugin_player.create_image('folder_icon.png', 'button_folder.png',(int(new_width), int(new_height)))
 
         number_of_added_plugins = 0
-        for i in range(len(self.plugin_player.savedPlugins)):
+        for i in range(len(self.saved_plugins)):
 
             #skip when encountering a deleted plugin
-            if not self.plugin_player.savedPlugins[i]:
+            if not self.saved_plugins[i]:
                 continue
             
             #add image and route the popup function when pressed
             image_widget = Button(on_press=self.view_modules, background_normal='button_folder.png', 
-                    size_hint=(None,None), size=(new_width, new_height), text=self.plugin_player.savedPlugins[i].plugin_name, 
+                    size_hint=(None,None), size=(new_width, new_height), text=self.saved_plugins[i].plugin_name, 
                     font_size=11, text_size=(new_width, None), halign='center', valign='bottom')
             image_widget.id = f'{i} 0'
             plugin_widget.add_widget(image_widget)
             number_of_added_plugins += 1
 
         #fill in space for sizing
-        for i in range(3 - (number_of_added_plugins % 4) % 4):
+        for i in range(4 - (number_of_added_plugins % 4)):
             extra_widgets = BoxLayout(size_hint=(None,None), size=(new_width, new_height))
             plugin_widget.add_widget(extra_widgets)

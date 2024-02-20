@@ -50,34 +50,24 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
             new_y = touch.y - self.node_widget.touch_y
 
             # Check if the new position is within the boundaries of the relative window
-            if 0 <= new_x <= self.relative_window.width - self.node_widget.width:
-
+            x_within_bounds = 0 <= new_x <= self.relative_window.width - self.node_widget.width
+            y_within_bounds = 0 <= new_y <= self.relative_window.height - self.node_widget.height
+            if x_within_bounds or y_within_bounds:
                 #changes position of the connected lines
                 for line in self.node_widget.incoming_lines:
                     in_line = line[0]
                     points = in_line.points
-                    in_line.points = [new_x + 50, points[1], points[2], points[3]]
+                    x1 = new_x + 50 if x_within_bounds else points[0]
+                    y1 = new_y + 50 if x_within_bounds else points[1]
+                    in_line.points = [x1, y1, points[2], points[3]]
                 for line in self.node_widget.outgoing_lines:
                     out_line = line[0]
                     points = out_line.points
-                    out_line.points = [points[0], points[1], new_x + 50, points[3]]
-                
+                    x2 = new_x + 50 if x_within_bounds else points[2]
+                    y2 = new_y + 50 if x_within_bounds else points[3]
+                    out_line.points = [points[0], points[1], x2, y2]
                 #changes node position
                 self.node_widget.x = new_x
-
-            if 0 <= new_y <= self.relative_window.height - self.node_widget.height:
-
-                #changes the position of connecting lines
-                for line in self.node_widget.incoming_lines:
-                    in_line = line[0]
-                    points = in_line.points
-                    in_line.points = [points[0], new_y + 50, points[2], points[3]]
-                for line in self.node_widget.outgoing_lines:
-                    out_line = line[0]
-                    points = out_line.points
-                    out_line.points = [points[0], points[1], points[2], new_y + 50]
-                
-                #changes node position
                 self.node_widget.y = new_y
 
             return True
@@ -92,11 +82,13 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
 
 #a drag-and-drop widget used for nodes in the tree
 class DraggableWidget(BoxLayout):
-    is_dragging = False
-    touch_x = 0
-    touch_y = 0
+
 
     def __init__(self, **kwargs):
+
+        self.is_dragging = False
+        self.touch_x = 0
+        self.touch_y = 0
 
         #the array holders for the visual lines connecting nodes that link outputs and inputs
         self.incoming_lines = []
@@ -107,26 +99,36 @@ class DraggableWidget(BoxLayout):
 
 #Defines the visual element of a module as a node within a tree and its connections for run time
 class ModuleNode:
-    def __init__(self, module, module_name, input_dict, output_dict, submod_dict, description):
+    def __init__(self, module, module_name):
 
         #module components the node holds
         self.module = module
         self.module_name = module_name
 
-        #holds the input keys and descriptions the node needs to run
-        self.input_dict = input_dict
-
-        #holds the output keys and descriptions the node outputs after running
-        self.output_dict = output_dict
-
-        #holds the submodule keys and descriptions needed for the node to run
-        self.submod_dict = submod_dict
+        #find the information of inputs, outputs, submodules, description
+        try:
+            self.output_dict = module.results()
+        except Exception as e:
+            self.plugin_player.add_message(f"Couldn't find output information: {e}")
+            return
+        try:
+            self.input_dict = module.inputs()
+        except Exception as e:
+            self.plugin_player.add_message(f"Couldn't find input information: {e}")
+            return
+        try:     
+            self.submod_dict = module.submods()
+        except Exception as e:
+            self.plugin_player.add_message(f"Couldn't find submodule information: {e}")
+            return
+        try:
+            self.description = module.description()
+        except Exception as e:
+            self.description = "Not Supported"
+            self.plugin_player.add_message(f"Couldn't find description: {e}")
 
         #holds the property type for the module
         self.property_type = None
-
-        #holds the description of the module
-        self.description = description
 
         #holds the widget of the node
         self.module_widget = None

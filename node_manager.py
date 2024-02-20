@@ -43,7 +43,7 @@ class NodeManager():
 
             #remove the previous output edge
             previous_output_node.output_map[previous_output_number].remove((input_node_number, input_number))
-            self.plugin_player.addMessage(f"Removed input {input_key} of Node {input_node_number} to {previous_output_key} from Node {previous_output_node_number}")
+            self.plugin_player.add_message(f"Removed input {input_key} of Node {input_node_number} to {previous_output_key} from Node {previous_output_node_number}")
         
         #load in a custom input 
         if output_node_number == -1:
@@ -57,17 +57,18 @@ class NodeManager():
 
             #try to assign the variable
             #may be a security risk as it evaluates injected code
+            # TODO: find eval alternative
             try:
                 custom_input = eval(custom_declaration, sys.modules['__main__'].__dict__)
                 input_node.input_map[input_number] = (-1, custom_input, custom_declaration)
-                self.plugin_player.addMessage(f"Set input {input_key} of Node {input_node_number} with Value: {custom_declaration}")
+                self.plugin_player.add_message(f"Set input {input_key} of Node {input_node_number} with Value: {custom_declaration}")
             except Exception as e:
-                self.plugin_player.addMessage(f"Could not set input {custom_declaration}: {e}")
+                self.plugin_player.add_message(f"Could not set input {custom_declaration}: {e}")
 
         #set a new edge and input route
         else:
             #get remaining information
-            output_node = self.plugin_playe.nodes[output_node_number]
+            output_node = self.plugin_player.nodes[output_node_number]
             output_key = list(output_node.output_dict.keys())[output_number]
 
             #set the edges of the nodes
@@ -83,7 +84,7 @@ class NodeManager():
             self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(Color(0,0,0))
             self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(connecting_line)
             #display message
-            self.addMessage(f"Set input {input_key} of Node {input_node_number} to {output_key} from Node {output_node_number}")
+            self.plugin_player.add_message(f"Set input {input_key} of Node {input_node_number} to {output_key} from Node {output_node_number}")
 
         #go back to view_config
         temp_widget = Widget()
@@ -100,12 +101,13 @@ class NodeManager():
 
         #try to assign the variable
         #may be a security risk as it evaluates injected code
+        # TODO: find eval alternative
         try:
             ptype = eval(custom_declaration, sys.modules['__main__'].__dict__)
             node.property_type = (custom_declaration, ptype)
-            self.plugin_player.addMessage(f"Set property type of Node {node_number} with Value: {custom_declaration}")
+            self.plugin_player.add_message(f"Set property type of Node {node_number} with Value: {custom_declaration}")
         except Exception as e:
-            self.plugin_player.addMessage(f"Could not set property type {custom_declaration}: {e}")
+            self.plugin_player.add_message(f"Could not set property type {custom_declaration}: {e}")
         self.plugin_player.node_widget_manager.view_config(instance)
 
     #attempts to add a submodule type to a node
@@ -119,14 +121,14 @@ class NodeManager():
         key_name = list(node.submod_dict.keys())[key_number]
         plugin_number = int(instance.id.split()[2])
         submodule_number = int(instance.id.split()[3])
-        submodule_name = self.plugin_player.savedPlugins[plugin_number].modules[submodule_number]
+        submodule_name = self.saved_plugins[plugin_number].modules[submodule_number]
 
         try:
             self.plugin_player.mm.change_submod(module_name, key_name, submodule_name)
-            self.plugin_player.addMessage(f"Added submodule {submodule_name} to {key_name} of {module_name}")
+            self.plugin_player.add_message(f"Added submodule {submodule_name} to {key_name} of {module_name}")
             node.submod_map[key_number] = (key_name, submodule_name)
         except Exception as e:
-            self.plugin_player.addMessage(f"Could not add submodule {submodule_name} to {key_name} of {module_name}\n {e}")
+            self.plugin_player.add_message(f"Could not add submodule {submodule_name} to {key_name} of {module_name}\n {e}")
 
         #go back to view_config
         temp_widget = Widget()

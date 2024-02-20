@@ -31,12 +31,6 @@ class PluginPlayer(App):
         #The app's module manager
         self.mm = pp.ModuleManager()
 
-        #list of imported plugins and their modules
-        self.savedPlugins = []
-
-        #list of imported class types
-        self.imported_classes = []
-
         #saved tree containing the nodes and modules to be ran
         self.nodes = []
         
@@ -60,14 +54,13 @@ class PluginPlayer(App):
 
         #add logo
         tree_section = build.ids.right_section.ids.tree_section
-        self.create_image('NWCHEMEX.png', 'NWCHEMEX_icon.png', (200,200))
-        logo = Image(source='NWCHEMEX_icon.png', size_hint=(None, None), size=(200, 200), pos_hint={'x': .75, 'y': 0})
+        logo = Image(source='NWCHEMEX.png', fit_mode="fill", size_hint=(None, None), size=(200, 200), pos_hint={'right': 1, 'y': 0})
         tree_section.add_widget(logo)
 
         return build
 
     #Add a string message to the message section
-    def addMessage(self, message):
+    def add_message(self, message):
 
         #grab message widget
         message_widget = self.root.ids.message_section
@@ -91,6 +84,5 @@ class PluginPlayer(App):
         image = PILImage.open(filepath)
         resized_image = image.resize(size)
         resized_image.save(new_filepath)
-
 if __name__ == "__main__":
     PluginPlayer().run()

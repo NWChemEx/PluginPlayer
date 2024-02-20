@@ -354,7 +354,7 @@ class NodeWidgetManager():
         plugin_number = 0
         module_number = 0
         #for each module in each plugin, place a module and option to add
-        for plugin in self.plugin_player.savedPlugins:
+        for plugin in self.plugin_player.plugin_manager.saved_plugins:
 
             #continue if the plugin was deleted
             if not plugin:
