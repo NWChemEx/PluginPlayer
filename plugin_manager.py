@@ -1,3 +1,17 @@
+# Copyright 2024 NWChemEx-Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import pluginplay as pp
 
 #import helpers
@@ -13,6 +27,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
+
 #Plugin class containing the modules imported
 class PluginInfo:
 
@@ -20,13 +35,14 @@ class PluginInfo:
         self.plugin_name = name
         self.modules = modules
 
+
 #Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
 class PluginManager:
 
     def __init__(self, plugin_player):
         self.saved_plugins = []
         self.plugin_player = plugin_player
-        
+
     def plugin_loader(self):
         #grab filepath from the entry
         selected_file_path = self.plugin_player.root.ids.file_entry.ids.file_path_input
@@ -54,7 +70,8 @@ class PluginManager:
                 #try to load plugin modules into module manager
                 try:
                     lib.load_modules(self.plugin_player.mm)
-                    self.plugin_player.add_message(f"Successfuly loaded {filename} into ModuleManager")
+                    self.plugin_player.add_message(
+                        f"Successfuly loaded {filename} into ModuleManager")
 
                     #save info of the Plugin and its modules
                     temp_MM = pp.ModuleManager()
@@ -63,12 +80,13 @@ class PluginManager:
                     self.saved_plugins.append(new_plugin)
                     self.plugin_view()
                 except Exception as e:
-                    self.plugin_player.add_message(f"Could not add {filename} to ModuleManager")
+                    self.plugin_player.add_message(
+                        f"Could not add {filename} to ModuleManager")
                     self.plugin_player.add_message(f"{e}")
             except Exception as e:
-                self.plugin_player.add_message(f"Could not import module {filename}: {e}")
-                
-                
+                self.plugin_player.add_message(
+                    f"Could not import module {filename}: {e}")
+
     #delete a preinstalled plugin from the mm and remove the folder
     def delete_plugin(self, instance):
         #dismiss any popup
@@ -90,24 +108,24 @@ class PluginManager:
                     temp_widget = Widget()
                     temp_widget.id = f'{node_number}'
                     self.plugin_player.tree_manager.remove_node(temp_widget)
-            
-                #remove all set submodules 
+
+                #remove all set submodules
                 else:
                     for submodule in node.submod_map:
                         #check if the submodule is set to use the module
                         if submodule[1] == module_name:
                             submodule = (submodule[0], None)
-                            self.plugin_player.add_message(f"Removed Submodule: {submodule[0]}, {module_name} from Node {node_number}")
+                            self.plugin_player.add_message(
+                                f"Removed Submodule: {submodule[0]}, {module_name} from Node {node_number}"
+                            )
                 node_number += 1
 
         for i in range(len(self.saved_plugins[folder_number].modules)):
-            self.plugin_player.mm.erase(self.saved_plugins[folder_number].modules[i])
-        self.saved_plugins[folder_number] = None     
+            self.plugin_player.mm.erase(
+                self.saved_plugins[folder_number].modules[i])
+        self.saved_plugins[folder_number] = None
         self.plugin_player.add_message("Removed Plugin: " + name)
         self.plugin_view()
-            
-
-
 
     def view_module_info(self, instance):
         #grab info from the instance id's
@@ -136,7 +154,7 @@ class PluginManager:
                 input_add = f"    {key}: {value.description()} \n"
             except:
                 input_add = f"    {key}: description unavailable\n"
-            inputs += input_add   
+            inputs += input_add
         submod_dict = module.submods()
         if submod_dict:
             for key, value in submod_dict.items():
@@ -147,7 +165,7 @@ class PluginManager:
                     submodules += submodule_add
         else:
             submodules = "    None\n"
-            
+
         description = module.description()
         if not description:
             description = "Not Supported"
@@ -158,18 +176,22 @@ class PluginManager:
         #create main frame for popup
         new_frame = BoxLayout(orientation='vertical')
         #add back button
-        back_button = Button(text="Back", size_hint=(None,None), size=(50, 20), halign='left', 
-                on_press=self.view_modules)
+        back_button = Button(text="Back",
+                             size_hint=(None, None),
+                             size=(50, 20),
+                             halign='left',
+                             on_press=self.view_modules)
         back_button.id = f'{plugin_number} {accessed_in_tree}'
         new_frame.add_widget(back_button)
 
         #add info label
-        info_label = Label(text=full_info, halign='left', color=(0,0,0,1))
+        info_label = Label(text=full_info, halign='left', color=(0, 0, 0, 1))
         new_frame.add_widget(info_label)
         scrolling_info = ScrollView(do_scroll_y=True, do_scroll_x=True)
         scrolling_info.add_widget(new_frame)
 
-        self.plugin_player.create_popup(scrolling_info, module_name + " Info", False)
+        self.plugin_player.create_popup(scrolling_info, module_name + " Info",
+                                        False)
 
     #view modules from selecting a plugin
     def view_modules(self, instance):
@@ -179,7 +201,7 @@ class PluginManager:
             self.plugin_player.popup.dismiss()
         except:
             pass
-        
+
         #grab folder number from the id
         folder_number = int(instance.id.split()[0])
         accessed_in_tree = int(instance.id.split()[1])
@@ -187,49 +209,64 @@ class PluginManager:
         #exit if back button was pressed from the tree view
         if accessed_in_tree:
             return
-        
+
         #grab pluginSection widget
         plugin_section = self.plugin_player.root.ids.plugin_section
 
         #create widget to fill with modules
-        module_widget = BoxLayout(orientation='vertical', size_hint=(None, None), 
-                size=(plugin_section.width - 20, plugin_section.height),spacing=5)
-        
+        module_widget = BoxLayout(orientation='vertical',
+                                  size_hint=(None, None),
+                                  size=(plugin_section.width - 20,
+                                        plugin_section.height),
+                                  spacing=5)
+
         #add a delete plugin button
-        delete_plugin = Button(text='Delete Plugin', color=(0,0,0,1), size_hint_y=None, height=20, 
-                on_press=self.delete_plugin)
+        delete_plugin = Button(text='Delete Plugin',
+                               color=(0, 0, 0, 1),
+                               size_hint_y=None,
+                               height=20,
+                               on_press=self.delete_plugin)
 
         #use id as a value holder for the folder number
         delete_plugin.id = f'{folder_number}'
         module_widget.add_widget(delete_plugin)
 
-        
         #add each of the modules that are in the plugin
         module_amount = len(self.saved_plugins[folder_number].modules)
         for i in range(module_amount):
             #create main holding box
-            view_module = BoxLayout(orientation='horizontal', size_hint_y=None, height=30, spacing=5)
+            view_module = BoxLayout(orientation='horizontal',
+                                    size_hint_y=None,
+                                    height=30,
+                                    spacing=5)
 
             #add the name of the module
-            module_name = Label(text=self.saved_plugins[folder_number].modules[i], color=(0,0,0,1), size_hint_x=1/2)
+            module_name = Label(
+                text=self.saved_plugins[folder_number].modules[i],
+                color=(0, 0, 0, 1),
+                size_hint_x=1 / 2)
             view_module.add_widget(module_name)
 
             #add the add button to add to the tree
-            add_to_tree = Button(text='Add', size_hint_x=1/10, on_press=self.plugin_player.tree_manager.add_node)
+            add_to_tree = Button(
+                text='Add',
+                size_hint_x=1 / 10,
+                on_press=self.plugin_player.tree_manager.add_node)
             #set the id for the module number in the plugin
             add_to_tree.id = f'{i} {folder_number}'
             view_module.add_widget(add_to_tree)
 
             #add the info button for extended information
-            view_info = Button(text='Info', size_hint_x=1/10, on_press=self.view_module_info)
+            view_info = Button(text='Info',
+                               size_hint_x=1 / 10,
+                               on_press=self.view_module_info)
             #set the id for the module number and plugin number and 0 (accessed in folder)
             view_info.id = f'{i} {folder_number} 0'
             view_module.add_widget(view_info)
 
-
             #add the module widget to the main view
             module_widget.add_widget(view_module)
-        
+
         #fill in the empty scroll space
         space_filler = Label(height=plugin_section.height)
         module_widget.add_widget(space_filler)
@@ -239,9 +276,14 @@ class PluginManager:
         scroll_view.id = "scroll"
         scroll_view.add_widget(module_widget)
 
-        self.plugin_player.popup = Popup(content=scroll_view, background_color=(255, 255, 255), size_hint=(None, None), 
-                size=plugin_section.size, auto_dismiss=True, title=self.saved_plugins[folder_number].plugin_name, 
-                title_color=(0,0,0,1))
+        self.plugin_player.popup = Popup(
+            content=scroll_view,
+            background_color=(255, 255, 255),
+            size_hint=(None, None),
+            size=plugin_section.size,
+            auto_dismiss=True,
+            title=self.saved_plugins[folder_number].plugin_name,
+            title_color=(0, 0, 0, 1))
         self.plugin_player.popup.id = f'{folder_number}'
         self.plugin_player.popup.open()
 
@@ -252,10 +294,11 @@ class PluginManager:
 
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()
-        
+
         #Set the folder size
-        new_width, new_height = plugin_widget.width/4-10, plugin_widget.width/4-10
-        self.plugin_player.create_image('folder_icon.png', 'button_folder.png',(int(new_width), int(new_height)))
+        new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
+        self.plugin_player.create_image('folder_icon.png', 'button_folder.png',
+                                        (int(new_width), int(new_height)))
 
         number_of_added_plugins = 0
         for i in range(len(self.saved_plugins)):
@@ -263,16 +306,23 @@ class PluginManager:
             #skip when encountering a deleted plugin
             if not self.saved_plugins[i]:
                 continue
-            
+
             #add image and route the popup function when pressed
-            image_widget = Button(on_press=self.view_modules, background_normal='button_folder.png', 
-                    size_hint=(None,None), size=(new_width, new_height), text=self.saved_plugins[i].plugin_name, 
-                    font_size=11, text_size=(new_width, None), halign='center', valign='bottom')
+            image_widget = Button(on_press=self.view_modules,
+                                  background_normal='button_folder.png',
+                                  size_hint=(None, None),
+                                  size=(new_width, new_height),
+                                  text=self.saved_plugins[i].plugin_name,
+                                  font_size=11,
+                                  text_size=(new_width, None),
+                                  halign='center',
+                                  valign='bottom')
             image_widget.id = f'{i} 0'
             plugin_widget.add_widget(image_widget)
             number_of_added_plugins += 1
 
         #fill in space for sizing
         for i in range(4 - (number_of_added_plugins % 4)):
-            extra_widgets = BoxLayout(size_hint=(None,None), size=(new_width, new_height))
+            extra_widgets = BoxLayout(size_hint=(None, None),
+                                      size=(new_width, new_height))
             plugin_widget.add_widget(extra_widgets)

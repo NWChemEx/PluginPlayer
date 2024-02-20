@@ -1,3 +1,17 @@
+# Copyright 2024 NWChemEx-Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #file and library helpers
 import importlib
 import os
@@ -33,7 +47,7 @@ class PluginPlayer(App):
 
         #saved tree containing the nodes and modules to be ran
         self.nodes = []
-        
+
         #helper class handling addition/removal of nodes, deleting/running the tree
         self.tree_manager = TreeManager(self)
 
@@ -54,7 +68,14 @@ class PluginPlayer(App):
 
         #add logo
         tree_section = build.ids.right_section.ids.tree_section
-        logo = Image(source='NWCHEMEX.png', fit_mode="fill", size_hint=(None, None), size=(200, 200), pos_hint={'right': 1, 'y': 0})
+        logo = Image(source='NWCHEMEX.png',
+                     fit_mode="fill",
+                     size_hint=(None, None),
+                     size=(200, 200),
+                     pos_hint={
+                         'right': 1,
+                         'y': 0
+                     })
         tree_section.add_widget(logo)
 
         return build
@@ -70,19 +91,25 @@ class PluginPlayer(App):
         message_widget.scroll_y = 1
 
     #set up a basic popup given a scrolling widget and a name
-        
+
     def create_popup(self, widget, description, dismiss):
-        
+
         #close and change popup
         self.popup.dismiss()
-        self.popup = Popup(content=widget, size_hint=(None,None), size=(800,500), 
-                background_color=(255, 255, 255), auto_dismiss=dismiss, title=description, 
-                title_color=(0,0,0,1))
+        self.popup = Popup(content=widget,
+                           size_hint=(None, None),
+                           size=(800, 500),
+                           background_color=(255, 255, 255),
+                           auto_dismiss=dismiss,
+                           title=description,
+                           title_color=(0, 0, 0, 1))
         self.popup.open()
 
     def create_image(self, filepath, new_filepath, size):
         image = PILImage.open(filepath)
         resized_image = image.resize(size)
         resized_image.save(new_filepath)
+
+
 if __name__ == "__main__":
     PluginPlayer().run()

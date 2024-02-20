@@ -1,3 +1,17 @@
+# Copyright 2024 NWChemEx-Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.button import Button
@@ -18,8 +32,10 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import BooleanProperty
 
+
 #an image button used to drag a module node within the tree section
 class DraggableImageButton(ButtonBehavior, BoxLayout):
+
     def __init__(self, node_widget, relative_window, **kwargs):
         super().__init__(**kwargs)
 
@@ -28,7 +44,6 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
 
         #window node belonds in
         self.relative_window = relative_window
-
 
         #icon for the drag button
         self.add_widget(Image(source='drag.png'))
@@ -80,9 +95,9 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
             return True
         return super().on_touch_up(touch)
 
+
 #a drag-and-drop widget used for nodes in the tree
 class DraggableWidget(BoxLayout):
-
 
     def __init__(self, **kwargs):
 
@@ -97,8 +112,10 @@ class DraggableWidget(BoxLayout):
         #initializes the BoxLayout that will be draggable
         super().__init__(**kwargs)
 
+
 #Defines the visual element of a module as a node within a tree and its connections for run time
 class ModuleNode:
+
     def __init__(self, module, module_name):
 
         #module components the node holds
@@ -109,17 +126,20 @@ class ModuleNode:
         try:
             self.output_dict = module.results()
         except Exception as e:
-            self.plugin_player.add_message(f"Couldn't find output information: {e}")
+            self.plugin_player.add_message(
+                f"Couldn't find output information: {e}")
             return
         try:
             self.input_dict = module.inputs()
         except Exception as e:
-            self.plugin_player.add_message(f"Couldn't find input information: {e}")
+            self.plugin_player.add_message(
+                f"Couldn't find input information: {e}")
             return
-        try:     
+        try:
             self.submod_dict = module.submods()
         except Exception as e:
-            self.plugin_player.add_message(f"Couldn't find submodule information: {e}")
+            self.plugin_player.add_message(
+                f"Couldn't find submodule information: {e}")
             return
         try:
             self.description = module.description()
@@ -157,5 +177,6 @@ class ModuleNode:
                 #array is set with the first index value as the key for the submod
                 #second index value at index 0 is the name of the submodule to use
                 self.submod_map.append((key, None))
+
     def add_widget(self, widget):
         self.module_widget = widget
