@@ -35,7 +35,6 @@ class TreeManager():
         """
         self.plugin_player = plugin_player
 
-
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
         """

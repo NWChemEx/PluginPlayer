@@ -36,7 +36,7 @@ class UtilityManager():
         """Initialization of the UtilityManager class
         """
         self.imported_classes = []
-    
+
     def browse(self, plugin_player):
         """Browse for a new file from the file system and place in entry box
 
@@ -70,7 +70,7 @@ class UtilityManager():
                       size=(500, 500))
         file_chooser.bind(on_submit=select_file)
         popup.open()
-    
+
     def class_types(self, instance, plugin_player):
         """Show a popup to see all class types imported
 

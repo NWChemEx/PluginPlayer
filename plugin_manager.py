@@ -28,7 +28,6 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
-
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
 

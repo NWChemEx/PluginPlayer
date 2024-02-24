@@ -24,7 +24,6 @@ import sys
 class NodeManager():
     """NodeManager is a helper class for the PluginPlayer application handling the linking of inputs, outputs, submodules, and property types of modules.
     """
-    
 
     def __init__(self, plugin_player):
         """Initialization of the NodeManager class

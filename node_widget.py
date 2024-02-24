@@ -175,6 +175,7 @@ class DraggableWidget(BoxLayout):
 class ModuleNode:
     """Defines the visual element of a module as a node within a tree and its connections for run time
     """
+
     def __init__(self, module, module_name):
         """Initializes the ModuleNode class with its module, input, output, submodule, and property type information/descriptions"""
         #module components the node holds
