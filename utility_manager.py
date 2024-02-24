@@ -31,15 +31,14 @@ from kivy.uix.widget import Widget
 #Helper class for the PluginPlayer application to browse files, view class types, and import new class types.
 class UtilityManager():
 
-    def __init__(self, plugin_player):
+    def __init__(self):
         self.imported_classes = []
-        self.plugin_player = plugin_player
-
+    
     #browse for a new file from file system and place in entry
-    def browse(self):
+    def browse(self, plugin_player):
 
         #grab text from entry
-        entry_text = self.plugin_player.root.ids.file_entry.ids.file_path_input.text
+        entry_text = plugin_player.root.ids.file_entry.ids.file_path_input.text
 
         #if entry text is a directory, open popup to directory
         if os.path.isdir(entry_text):
@@ -51,8 +50,10 @@ class UtilityManager():
         def select_file(instance, selection, *args):
             if selection:
                 # Set selected file path in TextInput
-                file_entry_widget = self.plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
                 file_entry_widget.text = selection[0]
+                file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget.text = selection[0] 
                 popup.dismiss()
 
         #set up the popup
@@ -62,11 +63,9 @@ class UtilityManager():
                       size=(500, 500))
         file_chooser.bind(on_submit=select_file)
         popup.open()
-
-    #load in a new plugin
-
+    
     #show a popup to see all class types imported
-    def class_types(self, instance):
+    def class_types(self, instance, plugin_player):
 
         #grab needed info
         node_number = int(instance.id.split()[0])
@@ -81,7 +80,7 @@ class UtilityManager():
         #create a back button
         #return to main config page or back to the add input page
         back_to_main = (key_number == -1)
-        on_press_func = self.view_config if back_to_main else self.add_input
+        on_press_func = plugin_player.node_widget_manager.view_config if back_to_main else plugin_player.node_widget_manager.add_input
         back_button = Button(text="Back",
                              size_hint=(None, None),
                              size=(40, 20),
@@ -117,6 +116,7 @@ class UtilityManager():
         add_button = Button(text="Import",
                             size_hint_x=1 / 10,
                             on_press=self.new_type)
+        add_button = Button(text="Import",size_hint_x = 1/10, on_press=lambda instance, *args: self.new_type(instance, plugin_player))
         #if its a property type assignt the id to route back to view_config,
         #otherwise route to input page
         add_button.id = f'{node_number} {key_number}'
@@ -149,22 +149,25 @@ class UtilityManager():
                                  scroll_type=['content'])
         scroll_view.add_widget(types_box)
 
-        self.plugin_player.create_popup(scroll_view, "Class Types", False)
+        plugin_player.create_popup(scroll_view, "Class Types", False)
 
     #define a new class type for custom inputs and property types
-    def new_type(self, instance):
+    def new_type(self, instance, plugin_player):
         try:
             import_name = self.custom_declaration_widget.text.split()[0]
             class_name = self.custom_declaration_widget.text.split()[1]
         except Exception as e:
-            self.plugin_player.addMessage(
+            plugin_player.add_message(
                 "Invalid Entry, enter the blanks with a space in between from the Python import statement"
             )
-            self.plugin_player.addMessage(e)
+            plugin_player.add_message(e)
+            plugin_player.add_message("Invalid Entry, enter the blanks with a space in between from the Python import statement")
+            plugin_player.add_message(e)
             return
         if class_name in self.imported_classes:
-            self.plugin_player.addMessage(
+            plugin_player.add_message(
                 f"Class type {class_name} previously imported")
+            plugin_player.add_message(f"Class type {class_name} previously imported")
             return
         try:
             #import the library
@@ -178,12 +181,14 @@ class UtilityManager():
             self.imported_classes.append(class_name)
 
             #send success message
-            self.plugin_player.add_message(f"Imported class type {class_name}")
+            plugin_player.add_message(f"Imported class type {class_name}")
 
         except Exception as e:
             #Failure Message
-            self.plugin_player.add_message(
+            plugin_player.add_message(
                 f"Couldn't import type {class_name}: {e}")
 
+            plugin_player.add_message(f"Couldn't import type {class_name}: {e}")
+        
         #recall the popup to update the newly loaded values and show hint text
-        self.class_types(instance)
+        self.class_types(instance, plugin_player)

@@ -221,10 +221,9 @@ class NodeWidgetManager():
             on_press=self.plugin_player.node_manager.link_property_type)
 
         #add button to view the class types
-        class_types_button = Button(
-            text="Class Types",
-            size_hint_x=1 / 5,
-            on_press=self.plugin_player.utility_manager.class_types)
+        class_types_button = Button(text="Class Types", 
+                                    size_hint_x = 1/5, on_press=lambda instance, 
+                                    *args: self.plugin_player.utility_manager.class_types(instance, self.plugin_player))
 
         #id to trigger the custom input response
         custom_entry_button.id = f'{node_number}'
@@ -368,10 +367,10 @@ class NodeWidgetManager():
         custom_input.add_widget(custom_entry_button)
 
         #add button to import a new class type
-        class_types_button = Button(
-            text="Class Types",
-            size_hint_x=3 / 10,
-            on_press=self.plugin_player.utility_manager.class_types)
+
+        class_types_button = Button(text = "Class Types", 
+                                    size_hint_x=3/10, on_press=lambda instance, 
+                                    *args: self.plugin_player.utility_manager.class_types(instance, self.plugin_player))
         class_types_button.id = f'{node_number} {key_number}'
         custom_input.add_widget(class_types_button)
 

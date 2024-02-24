@@ -61,7 +61,7 @@ class PluginPlayer(App):
         self.plugin_manager = PluginManager(self)
 
         #helper class handling browsing, imported class types, and importing new classes
-        self.utility_manager = UtilityManager(self)
+        self.utility_manager = UtilityManager()
 
         #build the main application from the kivy script file
         build = Builder.load_file('plugin_player_setup.kv')

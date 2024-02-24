@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import pluginplay as pp
+from collections import namedtuple
 
 #import helpers
 import sys
@@ -29,11 +30,7 @@ from kivy.uix.widget import Widget
 
 
 #Plugin class containing the modules imported
-class PluginInfo:
-
-    def __init__(self, name, modules):
-        self.plugin_name = name
-        self.modules = modules
+PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
 
 #Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
@@ -76,7 +73,7 @@ class PluginManager:
                     #save info of the Plugin and its modules
                     temp_MM = pp.ModuleManager()
                     lib.load_modules(temp_MM)
-                    new_plugin = PluginInfo(filename, temp_MM.keys())
+                    new_plugin = PluginInfo(plugin_name=filename, modules=temp_MM.keys())
                     self.saved_plugins.append(new_plugin)
                     self.plugin_view()
                 except Exception as e:
