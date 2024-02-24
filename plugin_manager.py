@@ -28,7 +28,6 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
-
 #Plugin class containing the modules imported
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
@@ -73,7 +72,8 @@ class PluginManager:
                     #save info of the Plugin and its modules
                     temp_MM = pp.ModuleManager()
                     lib.load_modules(temp_MM)
-                    new_plugin = PluginInfo(plugin_name=filename, modules=temp_MM.keys())
+                    new_plugin = PluginInfo(plugin_name=filename,
+                                            modules=temp_MM.keys())
                     self.saved_plugins.append(new_plugin)
                     self.plugin_view()
                 except Exception as e:

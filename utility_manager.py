@@ -33,7 +33,7 @@ class UtilityManager():
 
     def __init__(self):
         self.imported_classes = []
-    
+
     #browse for a new file from file system and place in entry
     def browse(self, plugin_player):
 
@@ -53,7 +53,7 @@ class UtilityManager():
                 file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
                 file_entry_widget.text = selection[0]
                 file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
-                file_entry_widget.text = selection[0] 
+                file_entry_widget.text = selection[0]
                 popup.dismiss()
 
         #set up the popup
@@ -63,7 +63,7 @@ class UtilityManager():
                       size=(500, 500))
         file_chooser.bind(on_submit=select_file)
         popup.open()
-    
+
     #show a popup to see all class types imported
     def class_types(self, instance, plugin_player):
 
@@ -116,7 +116,10 @@ class UtilityManager():
         add_button = Button(text="Import",
                             size_hint_x=1 / 10,
                             on_press=self.new_type)
-        add_button = Button(text="Import",size_hint_x = 1/10, on_press=lambda instance, *args: self.new_type(instance, plugin_player))
+        add_button = Button(text="Import",
+                            size_hint_x=1 / 10,
+                            on_press=lambda instance, *args: self.new_type(
+                                instance, plugin_player))
         #if its a property type assignt the id to route back to view_config,
         #otherwise route to input page
         add_button.id = f'{node_number} {key_number}'
@@ -161,13 +164,16 @@ class UtilityManager():
                 "Invalid Entry, enter the blanks with a space in between from the Python import statement"
             )
             plugin_player.add_message(e)
-            plugin_player.add_message("Invalid Entry, enter the blanks with a space in between from the Python import statement")
+            plugin_player.add_message(
+                "Invalid Entry, enter the blanks with a space in between from the Python import statement"
+            )
             plugin_player.add_message(e)
             return
         if class_name in self.imported_classes:
             plugin_player.add_message(
                 f"Class type {class_name} previously imported")
-            plugin_player.add_message(f"Class type {class_name} previously imported")
+            plugin_player.add_message(
+                f"Class type {class_name} previously imported")
             return
         try:
             #import the library
@@ -188,7 +194,8 @@ class UtilityManager():
             plugin_player.add_message(
                 f"Couldn't import type {class_name}: {e}")
 
-            plugin_player.add_message(f"Couldn't import type {class_name}: {e}")
-        
+            plugin_player.add_message(
+                f"Couldn't import type {class_name}: {e}")
+
         #recall the popup to update the newly loaded values and show hint text
         self.class_types(instance, plugin_player)
