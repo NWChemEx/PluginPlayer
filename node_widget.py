@@ -35,8 +35,22 @@ from kivy.properties import BooleanProperty
 
 #an image button used to drag a module node within the tree section
 class DraggableImageButton(ButtonBehavior, BoxLayout):
+    """An Image button used to drag a module node and is restricted within the tree section
+
+    :param ButtonBehavior: The kivy tool to modify a Button class
+    :type ButtonBehavior: ButtonBehavior
+    :param BoxLayout: The kivy tool to store multiple widgets in one
+    :type BoxLayout: BoxLayout
+    """
 
     def __init__(self, node_widget, relative_window, **kwargs):
+        """Initialization of the DraggableImage button
+
+        :param node_widget: the widget you want to be able to drag
+        :type node_widget: Widget
+        :param relative_window: The restricting window where it can be dragged in
+        :type relative_window: RelativeWindow
+        """
         super().__init__(**kwargs)
 
         #the node to update the location
@@ -48,8 +62,18 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
         #icon for the drag button
         self.add_widget(Image(source='drag.png'))
 
-    #prepare to drag
     def on_touch_down(self, touch):
+        """Prepare for a widget to be dragged
+
+        This method is called when a touch event occurs. It checks whether the touch point is within
+        the boundaries of the widget, and if so, it prepares the widget for dragging by setting
+        necessary attributes.
+
+        :param touch: The point where a user has started clicking
+        :type touch: kivy.core.window.Event
+        :return: Returns True if the touch event is within the widget's boundaries, False otherwise.
+        :rtype: bool
+        """
         if self.collide_point(*touch.pos):
             self.node_widget.is_dragging = True
             self.node_widget.touch_x = touch.x - self.node_widget.x
@@ -57,8 +81,18 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
             return True
         return super().on_touch_down(touch)
 
-    #update movement on dragging
     def on_touch_move(self, touch):
+        """Update the widget's position during a dragging motion.
+
+        This method is called when a touch move event occurs, and it updates the position of the widget
+        based on the user's dragging motion. It also adjusts the position of connected lines if the new
+        widget position is within the boundaries of the relative window.
+
+        :param touch: The touch event containing information about the user input.
+        :type touch: kivy.core.window.Event
+        :return: Returns True if the widget is currently being dragged, False otherwise.
+        :rtype: bool
+        """
         if self.node_widget.is_dragging:
             #updates location of the mouse
             new_x = touch.x - self.node_widget.touch_x
@@ -88,8 +122,17 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
             return True
         return super().on_touch_move(touch)
 
-    #finish dragging process
     def on_touch_up(self, touch):
+        """Handle the completion of a dragging motion.
+
+        This method is called when a touch up event occurs, signifying the end of a dragging motion.
+        It resets the widget's dragging state, indicating that the dragging operation has concluded.
+
+        :param touch: The touch event containing information about the user input.
+        :type touch: kivy.core.window.Event
+        :return: Returns True if the widget was previously being dragged, False otherwise.
+        :rtype: bool
+        """
         if self.node_widget.is_dragging:
             self.node_widget.is_dragging = False
             return True
@@ -98,9 +141,25 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
 
 #a drag-and-drop widget used for nodes in the tree
 class DraggableWidget(BoxLayout):
+    """A drag-and-drop widget used for nodes in the tree.
+
+    This class extends the Kivy BoxLayout to create a draggable widget that represents nodes
+    in a tree structure. It provides functionality for handling drag-and-drop operations and
+    visually connecting nodes through incoming and outgoing lines.
+
+    :param kwargs: Additional keyword arguments to be passed to the BoxLayout constructor.
+    :type kwargs: dict
+    """
 
     def __init__(self, **kwargs):
+        """Initialize the DraggableWidget.
 
+        Sets up the initial state of the DraggableWidget, including attributes for tracking
+        dragging state, touch coordinates, and arrays for visual lines connecting nodes.
+
+        :param kwargs: Additional keyword arguments to be passed to the BoxLayout constructor.
+        :type kwargs: dict
+        """
         self.is_dragging = False
         self.touch_x = 0
         self.touch_y = 0
@@ -113,11 +172,11 @@ class DraggableWidget(BoxLayout):
         super().__init__(**kwargs)
 
 
-#Defines the visual element of a module as a node within a tree and its connections for run time
 class ModuleNode:
-
+    """Defines the visual element of a module as a node within a tree and its connections for run time
+    """
     def __init__(self, module, module_name):
-
+        """Initializes the ModuleNode class with its module, input, output, submodule, and property type information/descriptions"""
         #module components the node holds
         self.module = module
         self.module_name = module_name
@@ -179,4 +238,5 @@ class ModuleNode:
                 self.submod_map.append((key, None))
 
     def add_widget(self, widget):
+        """Adds a widget that represents the node in the tree."""
         self.module_widget = widget

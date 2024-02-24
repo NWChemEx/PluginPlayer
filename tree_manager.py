@@ -23,16 +23,22 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
 
 
-#helper class for the PluginPlayer application to add/delete nodes from the module tree, run the tree, and delete the tree
 class TreeManager():
+    """TreeManager is a helper class for the PluginPlayer application to add/delete nodes from the module tree, run the tree, and delete the tree
+    """
 
     def __init__(self, plugin_player):
+        """Initialization of the TreeManager class
+
+        :param plugin_player: The PluginPlayer object that holds the nodes and tree the TreeManager will manage
+        :type plugin_player: PluginPlayer
+        """
         self.plugin_player = plugin_player
 
 
-#delete the entire tree and its edges and nodes
-
     def delete_tree(self):
+        """Delete the entire tree, its edges, and nodes.
+        """
         #remove each node one by one
         self.plugin_player.add_message("Initiating Tree Removal")
         for i in range(len(self.plugin_player.nodes)):
@@ -43,8 +49,12 @@ class TreeManager():
         self.plugin_player.nodes = []
         self.plugin_player.add_message("Removed Tree")
 
-    #adds a new node to the tree section
     def add_node(self, instance):
+        """Add a new node to the tree section
+
+        :param instance: The button that calls this function
+        :type instance: kivy.uix.button.Button
+        """
         #grab info from instance
         self.plugin_player.popup.dismiss()
         module_number = int(instance.id.split()[0])
@@ -150,6 +160,11 @@ class TreeManager():
 
     #remove a node's widget and connecting edges
     def remove_node(self, instance):
+        """Remove a node's widget and connecting edges
+
+        :param instance: The button that calls this function
+        :type instance: kivy.uix.button.Button
+        """
         #get the node number
         node_number = int(instance.id)
         node = self.plugin_player.nodes[node_number]
@@ -224,8 +239,9 @@ class TreeManager():
             f"Removed {node.module_name} Node: {node_number} from the tree")
         return
 
-        #run the series of nodes through the connected tree
     def run_tree(self):
+        """Run the series of nodes through the connected tree
+        """
         #grab the tree
         nodes = self.plugin_player.nodes
 
@@ -359,6 +375,17 @@ class TreeManager():
 
     #recursively traverse the tree and returns run order list, catches cycles and non-used nodes
     def dfs_traversal(self, nodes, dfs_stack, visited):
+        """recursively traverse the tree and return a list for run order, catches cycles, and non-used nodes
+
+        :param nodes: The array of nodes in the tree
+        :type nodes: ModuleNode[]
+        :param dfs_stack: The array of nodes needing to be processed and visited for cycles and links
+        :type dfs_stack: ModuleNode[]
+        :param visited: The array of nodes already processed and visited
+        :type visited: ModuleNode[]
+        :return: The array of updated visited/processed nodes
+        :rtype: ModuleNode[]
+        """
 
         #START DFS TRAVERSAL
 

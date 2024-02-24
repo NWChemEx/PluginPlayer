@@ -33,13 +33,25 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import BooleanProperty
 
 
-#Helper class for the PluginPlayer application to build widgets for viewing a module's run configuration
 class NodeWidgetManager():
+    """Helper class for the PluginPlayer application to build widgets for viewing a module's run configuration
+
+    """
 
     def __init__(self, plugin_player):
+        """Initialization to set the PluginPlayer for which the UtilityManager will be managing
+
+        :param plugin_player: The PluginPlayer object that the UtilityManager will manage
+        :type plugin_player: PluginPlayer
+        """
         self.plugin_player = plugin_player
 
     def view_config(self, instance):
+        """Open a popup to view the configuration of a module's inputs, outputs, property type, and submodules with options to edit
+
+        :param instance: The button routing to this function
+        :type instance: kivy.uix.button.Button
+        """
 
         #attempt to close any popups
         try:
@@ -315,6 +327,11 @@ class NodeWidgetManager():
 
     #attempts to add an entered input
     def add_input(self, instance):
+        """Opens a popup to ask a user to add an input. Can add a custom input value or link output from another node.
+
+        :param instance: Button routing to this function
+        :type instance: kivy.uix.button.Button
+        """
         #grab needed info form the id and
         node_number = int(instance.id.split()[0])
         key_number = int(instance.id.split()[1])
@@ -454,8 +471,12 @@ class NodeWidgetManager():
 
         return
 
-    #attempts to add an entered submodule to a node
     def add_submod(self, instance):
+        """Opens a popup to prompt a user to select a submodule from the imported modules.
+
+        :param instance: Button routing to the function
+        :type instance: kivy.uix.button.Button
+        """
         #grab needed info form the id and
         node_number = int(instance.id.split()[0])
         key_number = int(instance.id.split()[1])

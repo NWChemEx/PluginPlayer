@@ -28,18 +28,26 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
-#Plugin class containing the modules imported
+
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
 
-#Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
 class PluginManager:
+    """Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
+    """
 
     def __init__(self, plugin_player):
+        """Initializing the PluginManager class to manage the PluginPlayer object
+
+        :param plugin_player: The PluginPlayer object that the PluginManager will manage
+        :type plugin_player: PluginPlayer
+        """
         self.saved_plugins = []
         self.plugin_player = plugin_player
 
     def plugin_loader(self):
+        """Attempt to load in a plugin from a filepath stored in an entry box and update the plugin view and module manager
+        """
         #grab filepath from the entry
         selected_file_path = self.plugin_player.root.ids.file_entry.ids.file_path_input
         filepath = selected_file_path.text
@@ -84,8 +92,9 @@ class PluginManager:
                 self.plugin_player.add_message(
                     f"Could not import module {filename}: {e}")
 
-    #delete a preinstalled plugin from the mm and remove the folder
     def delete_plugin(self, instance):
+        """delete a preinstalled plugin from the module manager, remove all it's module nodes, remove linkage from the tree that depend on it's modules, and remove the folder from the plugin view.
+        """
         #dismiss any popup
         self.plugin_player.popup.dismiss()
 
@@ -125,6 +134,11 @@ class PluginManager:
         self.plugin_view()
 
     def view_module_info(self, instance):
+        """View a module's information of its property types, submodules, inputs, outputs, and description
+
+        :param instance: Button that calls this function
+        :type instance: kivy.uix.button.Button
+        """
         #grab info from the instance id's
         module_number = int(instance.id.split()[0])
         plugin_number = int(instance.id.split()[1])
@@ -190,8 +204,12 @@ class PluginManager:
         self.plugin_player.create_popup(scrolling_info, module_name + " Info",
                                         False)
 
-    #view modules from selecting a plugin
     def view_modules(self, instance):
+        """View modules from selecting a plugin giving options to add to the tree and view information
+
+        :param instance: Button that calls this function
+        :type instance: kivy.uix.button.Button
+        """
 
         #close any current popup
         try:
@@ -284,8 +302,8 @@ class PluginManager:
         self.plugin_player.popup.id = f'{folder_number}'
         self.plugin_player.popup.open()
 
-    #update the loaded plugin visuals
     def plugin_view(self):
+        """update the loaded plugin visual display of folders"""
         #grab the plugin section
         plugin_widget = self.plugin_player.root.ids.plugin_section
 

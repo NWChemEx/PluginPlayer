@@ -37,9 +37,24 @@ from PIL import Image as PILImage
 
 #Class defining the running app
 class PluginPlayer(App):
+    """A class to open a python Kivy application for the PluginPlayer GUI. 
+
+    This GUI will allow users to import plugins from their filesystem, view each of their module's information, and create a tree structure of modules to run.
+    Creating a tree structure, they are able to link modules together, add submodules, property types, and inputs for each module.
+
+    :param App: The Kivy App class
+    :type App: kivy.app
+    :return: returns a built app
+    :rtype: App
+    """
 
     #build the main window from the kv file
     def build(self):
+        """Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
+
+        :return: The built Kivy application
+        :rtype: kivy.app
+        """
         self.popup = Popup()
 
         #The app's module manager
@@ -80,8 +95,12 @@ class PluginPlayer(App):
 
         return build
 
-    #Add a string message to the message section
     def add_message(self, message):
+        """Add a string message to the message section
+
+        :param message: The string to add to the message section
+        :type message: String
+        """
 
         #grab message widget
         message_widget = self.root.ids.message_section
@@ -90,9 +109,17 @@ class PluginPlayer(App):
         message_widget.ids.message_label.text += f"\n{message}"
         message_widget.scroll_y = 1
 
-    #set up a basic popup given a scrolling widget and a name
-
     def create_popup(self, widget, description, dismiss):
+        """Set up a basic popup given a scrolling widget, name, description, and dismissal protocol
+
+
+        :param widget: The widget to be displayed in the popup
+        :type widget: kivy.uix.widget
+        :param description: The description of the popup
+        :type description: String
+        :param dismiss: True if you want the popup to autodismiss, False if not
+        :type dismiss: bool
+        """
 
         #close and change popup
         self.popup.dismiss()

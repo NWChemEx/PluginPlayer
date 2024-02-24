@@ -21,13 +21,25 @@ from kivy.graphics import Color
 import sys
 
 
-#helper class for the PluginPlayer application handling the linking of inputs, outputs, submodules, and property types of modules
 class NodeManager():
+    """NodeManager is a helper class for the PluginPlayer application handling the linking of inputs, outputs, submodules, and property types of modules.
+    """
+    
 
     def __init__(self, plugin_player):
+        """Initialization of the NodeManager class
+
+        :param plugin_player: The PluginPlayer object for the NodeManager to manage the nodes of
+        :type plugin_player: PluginPlayer
+        """
         self.plugin_player = plugin_player
 
     def link_input(self, instance):
+        """Dictates the linkage of a module's input by assigning another module's output, or a custom value to the input and update the tree graph
+
+        :param instance: The instance of the button pressed to redirect to this function.
+        :type instance: kivy.uix.button.Button
+        """
         #get info from instance id
         output_node_number = int(instance.id.split()[0])
         output_number = int(instance.id.split()[1])
@@ -136,6 +148,11 @@ class NodeManager():
 
     #attempts to add a property type to a node
     def link_property_type(self, instance):
+        """Dictates the linkage of a module's property type by assigning the inputted property type to the module
+
+        :param instance: The instance of the button pressed to redirect to this function.
+        :type instance: kivy.uix.button.Button
+        """
 
         #grab info from the instance id and text entry
         node_number = int(instance.id)
@@ -158,6 +175,11 @@ class NodeManager():
 
     #attempts to add a submodule type to a node
     def link_submod(self, instance):
+        """Dictates the linkage of a module's submodule by attempting to assign the inputted submodule to the module
+
+        :param instance: The instance of the button pressed to redirect to this function.
+        :type instance: kivy.uix.button.Button
+        """
 
         #get info from the instance id
         node_number = int(instance.id.split()[0])
