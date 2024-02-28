@@ -1,0 +1,136 @@
+<LeftSection@BoxLayout>:
+    orientation: 'vertical'
+
+
+<FileEntry@BoxLayout>:
+    orientation: 'horizontal'
+    spacing: 10
+    TextInput:
+        id: file_path_input
+        multiline: False
+        hint_text: "Enter Filepath/Browsing Directory"
+        size_hint_x: 3
+
+    Button:
+        text: "Browse"
+        on_press: app.utility_manager.browse(app)
+
+    Button:
+        text: "Submit"
+        on_press: app.plugin_manager.plugin_loader()
+
+<MessageSection@BoxLayout>:
+    ScrollView:
+        do_scroll_y: True
+        do_scroll_x: False
+        scroll_y: 0
+        Label:
+            id: message_label
+            halign: 'left'
+            size_hint_y: None
+            height: self.texture_size[1]
+            text_size: self.width, None
+            text: ''
+            color: 0, 0, 0, 1
+
+<PluginSection@GridLayout>:
+    cols: 4
+    size_hint_y: None
+    height: self.minimum_height
+    spacing: 10
+    #ScrollView:
+        #do_scroll_y: True
+        #do_scroll_x: False
+        #scroll_y: 1
+
+
+<RightSection@BoxLayout>:
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    Label:
+        text: "Tree Builder"
+        size_hint_y: 1/30
+        color: 0, 0, 0, 1
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 1/20
+        spacing: 10
+        Widget:
+            size_hint_x: 4/5
+        Button:
+            text: "Delete Tree"
+            on_press: app.tree_manager.delete_tree()
+            size_hint_x: 1/10
+
+
+        Button:
+            text: "Run Tree"
+            on_press: app.tree_manager.run_tree()
+            size_hint_x: 1/10
+        
+
+    RelativeLayout:
+        id: tree_section
+    
+
+BoxLayout:
+    padding: 10
+    spacing: 10
+    orientation: 'horizontal'
+    LeftSection:
+        canvas.before:
+            Color:
+                rgba: 37,150,190,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        size_hint: 1/3, 1
+        id: left_section
+        Label:
+            text: "Add New Plugin File"
+            color: 0, 0, 0, 1
+            size_hint_y: 3/100
+
+        FileEntry:
+            id: file_entry
+            background_color: 1, 1, 1, 0
+            size_hint_y:5/100
+        
+        PluginSection:
+            id: plugin_section
+            size_hint_y:70/100
+
+        Label:
+            text: "Messages"
+            color: 0, 0, 0, 1
+            size_hint_y: 3/100
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .2  #Transparent Grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        MessageSection:
+            id: message_section
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .2  #Transparent Grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_y: 19/100
+        
+    RightSection:
+        id: right_section
+        size_hint: 2/3, 1
+    
+
+        
+    

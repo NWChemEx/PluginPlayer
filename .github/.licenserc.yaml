@@ -23,5 +23,6 @@ header:
     - LICENSE
     - docs/requirements.txt
     - docs/source/bibliography/*.bib
+    - plugin_player_setup.kv
 
   comment: never

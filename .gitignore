@@ -49,3 +49,8 @@ toolchain.cmake
 cache.db
 uuid.db
 
+#These are the resized images made using PIL in PluginPlayer
+button_folder.png
+drag.png
+info.png
+remove.png
