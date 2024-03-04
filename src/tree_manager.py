@@ -102,7 +102,7 @@ class TreeManager():
 
         options.add_widget(Widget(size_hint_y=None, height=10))
 
-        self.plugin_player.create_image('drag_icon.png', 'drag.png', (20, 20))
+        self.plugin_player.create_image('../assets/drag_icon.png', '../assets/drag.png', (20, 20))
         navigate_button = DraggableImageButton(
             node_widget=node_widget,
             relative_window=self.plugin_player.root.ids.right_section.ids.
@@ -111,7 +111,7 @@ class TreeManager():
             height=20)
         options.add_widget(navigate_button)
 
-        self.plugin_player.create_image('info_icon.png', 'info.png', (20, 20))
+        self.plugin_player.create_image('../assets/info_icon.png', '../assets/info.png', (20, 20))
 
         info_button = Button(
             background_normal='info.png',
@@ -122,7 +122,7 @@ class TreeManager():
         info_button.id = f'{module_number} {plugin_number} 1'
         options.add_widget(info_button)
 
-        self.plugin_player.create_image('remove_icon.png', 'remove.png',
+        self.plugin_player.create_image('../assets/remove_icon.png', '../assets/remove.png',
                                         (20, 20))
 
         remove_button = Button(background_normal='remove.png',

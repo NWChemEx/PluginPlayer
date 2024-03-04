@@ -22,6 +22,7 @@ PluginPlayer is a :term:`GUI <GUI>` for `PluginPlay <https://github.com/NWChemEx
    :maxdepth: 2
    :caption: Contents:
 
+   terminology
    introductory
    kivyintro
    pluginmanager

@@ -311,7 +311,7 @@ class PluginManager:
 
         #Set the folder size
         new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
-        self.plugin_player.create_image('folder_icon.png', 'button_folder.png',
+        self.plugin_player.create_image('../assets/folder_icon.png', '../assets/button_folder.png',
                                         (int(new_width), int(new_height)))
 
         number_of_added_plugins = 0

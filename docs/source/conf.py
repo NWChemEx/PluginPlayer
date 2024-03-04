@@ -163,19 +163,19 @@ texinfo_documents = [
 ]
 
 # -- Extension configuration -------------------------------------------------
-# autoapi_dirs = [
-#     '../../src',
-# ]
-# autoapi_add_toctree_entry = False
-# autoapi_options = [
-#     'members',
-#     'undoc-members',
-#     'private-members',
-#     'show-inheritance',
-#     'show-module-summary',
-#     'special-members',
-#     #    'imported-members',
-# ]
+autoapi_dirs = [
+    '../../src',
+]
+autoapi_add_toctree_entry = False
+autoapi_options = [
+    'members',
+    'undoc-members', 
+    'private-members',
+    'show-inheritance',
+    'show-module-summary',
+    'special-members',
+    'imported-members',
+]
 
 # -- Options for intersphinx extension ---------------------------------------
 

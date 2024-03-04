@@ -83,7 +83,7 @@ class PluginPlayer(App):
 
         #add logo
         tree_section = build.ids.right_section.ids.tree_section
-        logo = Image(source='NWCHEMEX.png',
+        logo = Image(source='../assets/NWCHEMEX.png',
                      fit_mode="fill",
                      size_hint=(None, None),
                      size=(200, 200),

@@ -12,25 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.popup import Popup
+
 from kivy.uix.image import Image
-from kivy.uix.filechooser import FileChooserListView
-from kivy.core.window import Window
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.graphics import Line
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.graphics import Color, Rectangle
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import BooleanProperty
 
 
 #an image button used to drag a module node within the tree section
@@ -60,7 +45,7 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
         self.relative_window = relative_window
 
         #icon for the drag button
-        self.add_widget(Image(source='drag.png'))
+        self.add_widget(Image(source='../assets/drag.png'))
 
     def on_touch_down(self, touch):
         """Prepare for a widget to be dragged
