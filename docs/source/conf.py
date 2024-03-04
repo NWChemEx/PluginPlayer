@@ -169,7 +169,7 @@ autoapi_dirs = [
 autoapi_add_toctree_entry = False
 autoapi_options = [
     'members',
-    'undoc-members', 
+    'undoc-members',
     'private-members',
     'show-inheritance',
     'show-module-summary',
