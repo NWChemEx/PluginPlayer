@@ -43,12 +43,8 @@ needs_sphinx = '1.3'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
+    'sphinx.ext.mathjax', 'sphinx.ext.githubpages', 'sphinx.ext.autodoc',
     'autoapi.extension'
 ]
 dir_path = os.path.dirname(os.path.realpath(__file__))

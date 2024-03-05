@@ -142,11 +142,10 @@ class PluginPlayer(App):
         :param size: The desired size of the new image
         :type size: (integer, integer)
         """
-        
+
         image = PILImage.open(filepath)
         resized_image = image.resize(size)
         resized_image.save(new_filepath)
-        
 
 
 if __name__ == "__main__":
