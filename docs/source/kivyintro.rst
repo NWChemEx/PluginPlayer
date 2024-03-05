@@ -23,28 +23,55 @@ Windows and Kivy Structures
 
 Widget Types
     BoxLayout
-        The `BoxLayout` widget in Kivy is a versatile layout manager that simplifies the arrangement of child widgets either horizontally or vertically. With its `orientation` property, developers can easily create rows or columns of widgets. The automatic sizing of children based on available space makes it convenient for creating dynamic interfaces that adapt to various screen sizes.
+        The `BoxLayout` widget in Kivy is a versatile layout manager that simplifies the 
+        arrangement of child widgets either horizontally or vertically. With its `orientation` 
+        property, developers can easily create rows or columns of widgets. The automatic sizing 
+        of children based on available space makes it convenient for creating dynamic interfaces 
+        that adapt to various screen sizes.
 
     Image
-        Kivy's `Image` widget is a powerful tool for displaying graphical content within applications. It supports a variety of image formats and provides features for manipulating and presenting images, including scaling and rotation. This widget is crucial for incorporating visual elements and enhancing the aesthetic appeal of Kivy applications.
+        Kivy's `Image` widget is a powerful tool for displaying graphical content within 
+        applications. It supports a variety of image formats and provides features for 
+        manipulating and presenting images, including scaling and rotation. This widget is 
+        crucial for incorporating visual elements and enhancing the aesthetic appeal of Kivy 
+        applications.
 
     Widget
-        The `Widget` class serves as the fundamental building block for all other widgets in Kivy. It offers a container for housing other widgets, providing essential properties and methods. Developers can either use it as a generic container or subclass it to create custom widgets with specific behaviors and functionalities.
+        The `Widget` class serves as the fundamental building block for all other widgets in Kivy. 
+        It offers a container for housing other widgets, providing essential properties and methods. 
+        Developers can either use it as a generic container or subclass it to create custom widgets 
+        with specific behaviors and functionalities.
 
     Button
-        The `Button` widget is a fundamental component for creating interactive user interfaces in Kivy applications. It represents a clickable element that can trigger predefined actions or functions when pressed. Buttons are commonly employed for user-initiated actions, such as submitting forms or navigating between different sections of an application.
+        The `Button` widget is a fundamental component for creating interactive user interfaces in 
+        Kivy applications. It represents a clickable element that can trigger predefined actions or 
+        functions when pressed. Buttons are commonly employed for user-initiated actions, such as 
+        submitting forms or navigating between different sections of an application.
 
     TextInput
-        The `TextInput` widget facilitates the input and display of multiline text in Kivy applications. It supports keyboard input and can be customized for various text-related functionalities, such as password masking or restricting input to numeric values. This widget is essential for capturing user-generated textual content.
+        The `TextInput` widget facilitates the input and display of multiline text in Kivy 
+        applications. It supports keyboard input and can be customized for various text-related 
+        functionalities, such as password masking or restricting input to numeric values. This 
+        widget is essential for capturing user-generated textual content.
 
     Line
-        Kivy's `Line` widget is a powerful tool for drawing lines and shapes within an application. It enables developers to create custom graphics and diagrams, allowing for enhanced visualization and artistic expression in the user interface.
+        Kivy's `Line` widget is a powerful tool for drawing lines and shapes within an application. 
+        It enables developers to create custom graphics and diagrams, allowing for enhanced 
+        visualization and artistic expression in the user interface.
 
     Popup
-        The `Popup` widget is a versatile tool for displaying temporary and context-specific information in Kivy applications. Whether used for alerts, notifications, or additional user input, the `Popup` widget creates a separate window that can be modal or non-modal, enhancing the user experience by providing focused interactions.
+        The `Popup` widget is a versatile tool for displaying temporary and context-specific 
+        information in Kivy applications. Whether used for alerts, notifications, or additional 
+        user input, the `Popup` widget creates a separate window that can be modal or non-modal, 
+        enhancing the user experience by providing focused interactions.
 
     Label
-        The `Label` widget in Kivy is essential for presenting textual information in the user interface. It supports various text formatting options and serves as a straightforward yet powerful means of conveying information, titles, or instructions within the application.
+        The `Label` widget in Kivy is essential for presenting textual information in the user 
+        interface. It supports various text formatting options and serves as a straightforward yet 
+        powerful means of conveying information, titles, or instructions within the application.
 
     ScrollView
-        The `ScrollView` widget is indispensable when dealing with content that exceeds the available screen space. It enables users to scroll through content, ensuring that all information remains accessible. This widget is particularly useful for presenting lengthy text, images, or other types of data without cluttering the main screen.
+        The `ScrollView` widget is indispensable when dealing with content that exceeds the 
+        available screen space. It enables users to scroll through content, ensuring that all 
+        information remains accessible. This widget is particularly useful for presenting lengthy 
+        text, images, or other types of data without cluttering the main screen.

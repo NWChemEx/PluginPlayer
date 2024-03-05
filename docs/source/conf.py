@@ -48,7 +48,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
-    # 'autoapi.extension'
+    'sphinx.ext.autodoc',
+    'autoapi.extension'
 ]
 dir_path = os.path.dirname(os.path.realpath(__file__))
 doc_path = os.path.dirname(dir_path)
@@ -173,8 +174,6 @@ autoapi_options = [
     'private-members',
     'show-inheritance',
     'show-module-summary',
-    'special-members',
-    'imported-members',
 ]
 
 # -- Options for intersphinx extension ---------------------------------------

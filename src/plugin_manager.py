@@ -311,8 +311,8 @@ class PluginManager:
 
         #Set the folder size
         new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
-        self.plugin_player.create_image('../assets/folder_icon.png',
-                                        '../assets/button_folder.png',
+        self.plugin_player.create_image('assets/folder_icon.png',
+                                        'assets/button_folder.png',
                                         (int(new_width), int(new_height)))
 
         number_of_added_plugins = 0
@@ -324,7 +324,7 @@ class PluginManager:
 
             #add image and route the popup function when pressed
             image_widget = Button(on_press=self.view_modules,
-                                  background_normal='button_folder.png',
+                                  background_normal='assets/button_folder.png',
                                   size_hint=(None, None),
                                   size=(new_width, new_height),
                                   text=self.saved_plugins[i].plugin_name,

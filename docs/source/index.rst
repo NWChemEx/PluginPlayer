@@ -16,8 +16,6 @@
 PluginPlayer
 ############
 
-PluginPlayer is a :term:`GUI <GUI>` for `PluginPlay <https://github.com/NWChemEx/PluginPlay>`__.
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -28,5 +26,13 @@ PluginPlayer is a :term:`GUI <GUI>` for `PluginPlay <https://github.com/NWChemEx
    nodewidgetmanager
    treemanager
    utilitymanager
+
+AutoAPI Documentation
+---------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   autoapi/src/index
 
 

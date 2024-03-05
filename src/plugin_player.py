@@ -83,7 +83,7 @@ class PluginPlayer(App):
 
         #add logo
         tree_section = build.ids.right_section.ids.tree_section
-        logo = Image(source='../assets/NWCHEMEX.png',
+        logo = Image(source='assets/NWCHEMEX.png',
                      fit_mode="fill",
                      size_hint=(None, None),
                      size=(200, 200),
@@ -133,9 +133,20 @@ class PluginPlayer(App):
         self.popup.open()
 
     def create_image(self, filepath, new_filepath, size):
+        """Resize an image using Pillow to fit the pixel size desired.
+
+        :param filepath: The filepath of the image to be resized
+        :type filepath: String(filepath)
+        :param new_filepath: The filepath of the new resized image
+        :type new_filepath: String(filepath)
+        :param size: The desired size of the new image
+        :type size: (integer, integer)
+        """
+        
         image = PILImage.open(filepath)
         resized_image = image.resize(size)
         resized_image.save(new_filepath)
+        
 
 
 if __name__ == "__main__":
