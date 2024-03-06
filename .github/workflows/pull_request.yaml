@@ -27,5 +27,5 @@ jobs:
       config_file: '.github/.licenserc.yaml'
       source_dir: ''
       compilers: ''
-      doc_target: ''
+      doc_target: 'sphinx'
     secrets: inherit
