@@ -33,6 +33,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
+
 class NodeWidgetManager():
     """Helper class for the PluginPlayer application to build widgets for viewing a module's run configuration
 

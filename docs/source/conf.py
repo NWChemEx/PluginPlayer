@@ -165,12 +165,8 @@ autoapi_dirs = [
 ]
 autoapi_add_toctree_entry = True
 autoapi_options = [
-    'members',
-    'undoc-members',
-    'private-members',
-    'show-inheritance',
-    'show-module-summary',
-    'special-members'
+    'members', 'undoc-members', 'private-members', 'show-inheritance',
+    'show-module-summary', 'special-members'
 ]
 
 # -- Options for intersphinx extension ---------------------------------------

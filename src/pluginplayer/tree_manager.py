@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 """
 Managing tree nodes
     The `TreeManager` class handles adding and deleting tree nodes and adding them to the `nodes` list.
@@ -119,8 +117,9 @@ class TreeManager():
 
         options.add_widget(Widget(size_hint_y=None, height=10))
 
-        self.plugin_player.create_image('src/pluginplayer/assets/drag_icon.png',
-                                        'src/pluginplayer/assets/drag.png', (20, 20))
+        self.plugin_player.create_image(
+            'src/pluginplayer/assets/drag_icon.png',
+            'src/pluginplayer/assets/drag.png', (20, 20))
         navigate_button = DraggableImageButton(
             node_widget=node_widget,
             relative_window=self.plugin_player.root.ids.right_section.ids.
@@ -129,8 +128,9 @@ class TreeManager():
             height=20)
         options.add_widget(navigate_button)
 
-        self.plugin_player.create_image('src/pluginplayer/assets/info_icon.png',
-                                        'src/pluginplayer/assets/info.png', (20, 20))
+        self.plugin_player.create_image(
+            'src/pluginplayer/assets/info_icon.png',
+            'src/pluginplayer/assets/info.png', (20, 20))
 
         info_button = Button(
             background_normal='src/pluginplayer/assets/info.png',
@@ -141,13 +141,15 @@ class TreeManager():
         info_button.id = f'{module_number} {plugin_number} 1'
         options.add_widget(info_button)
 
-        self.plugin_player.create_image('src/pluginplayer/assets/remove_icon.png',
-                                        'src/pluginplayer/assets/remove.png', (20, 20))
+        self.plugin_player.create_image(
+            'src/pluginplayer/assets/remove_icon.png',
+            'src/pluginplayer/assets/remove.png', (20, 20))
 
-        remove_button = Button(background_normal='src/pluginplayer/assets/remove.png',
-                               on_press=self.remove_node,
-                               size_hint_y=None,
-                               height=20)
+        remove_button = Button(
+            background_normal='src/pluginplayer/assets/remove.png',
+            on_press=self.remove_node,
+            size_hint_y=None,
+            height=20)
         remove_button.id = f'{len(self.plugin_player.nodes)}'
         options.add_widget(remove_button)
 

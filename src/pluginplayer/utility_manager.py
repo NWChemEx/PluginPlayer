@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """
 The need for a utility manager
     Throughout the GUI it is essential to keep track of added class types, adding new class types, and browsing files. The `UtilityManager` class handles this to allow for helper functions needed throughout the application.
@@ -41,6 +40,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+
 
 class UtilityManager():
     """Helper class for the PluginPlayer application to browse files, view class types, and import new class types.

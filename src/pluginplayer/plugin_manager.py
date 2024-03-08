@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 """
 
 Dynamically Importing Plugins
@@ -51,6 +49,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
+
 
 class PluginManager:
     """Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
@@ -332,9 +331,10 @@ class PluginManager:
 
         #Set the folder size
         new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
-        self.plugin_player.create_image('src/pluginplayer/assets/folder_icon.png',
-                                        'src/pluginplayer/assets/button_folder.png',
-                                        (int(new_width), int(new_height)))
+        self.plugin_player.create_image(
+            'src/pluginplayer/assets/folder_icon.png',
+            'src/pluginplayer/assets/button_folder.png',
+            (int(new_width), int(new_height)))
 
         number_of_added_plugins = 0
         for i in range(len(self.saved_plugins)):
@@ -344,15 +344,16 @@ class PluginManager:
                 continue
 
             #add image and route the popup function when pressed
-            image_widget = Button(on_press=self.view_modules,
-                                  background_normal='src/pluginplayer/assets/button_folder.png',
-                                  size_hint=(None, None),
-                                  size=(new_width, new_height),
-                                  text=self.saved_plugins[i].plugin_name,
-                                  font_size=11,
-                                  text_size=(new_width, None),
-                                  halign='center',
-                                  valign='bottom')
+            image_widget = Button(
+                on_press=self.view_modules,
+                background_normal='src/pluginplayer/assets/button_folder.png',
+                size_hint=(None, None),
+                size=(new_width, new_height),
+                text=self.saved_plugins[i].plugin_name,
+                font_size=11,
+                text_size=(new_width, None),
+                halign='center',
+                valign='bottom')
             image_widget.id = f'{i} 0'
             plugin_widget.add_widget(image_widget)
             number_of_added_plugins += 1
