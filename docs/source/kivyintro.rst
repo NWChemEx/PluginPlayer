@@ -77,3 +77,5 @@ Widget Types
         available screen space. It enables users to scroll through content, ensuring that all 
         information remains accessible. This widget is particularly useful for presenting lengthy 
         text, images, or other types of data without cluttering the main screen.
+
+    `Kivy Documentation <https://kivy.org/doc/stable/>`_
