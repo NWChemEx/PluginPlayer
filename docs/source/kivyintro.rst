@@ -17,11 +17,13 @@ Kivy
 #############################
 
 Windows and Kivy Structures
+===========================
     In Kivy, a Window serves as the main drawing area for your application. It is the top-level container that encompasses the entire graphical space. You can customize the window's properties, such as its size, title, and fullscreen mode. Additionally, Kivy supports multiple windows, allowing for more complex application structures.
 
     The primary building blocks of the user interface in Kivy are Widgets. Widgets are graphical elements that can be added to windows to create interactive user interfaces. Kivy provides a wide range of predefined widgets, including buttons, labels, text inputs, and more. Widgets can be arranged and nested in various layouts to achieve the desired user interface design. They handle user input events, such as touch or mouse interactions, and can be styled and customized to fit the application's visual theme. Understanding the structure of Windows and Widgets is fundamental to creating dynamic and responsive user interfaces in Kivy.
 
 Widget Types
+============
     BoxLayout
         The `BoxLayout` widget in Kivy is a versatile layout manager that simplifies the 
         arrangement of child widgets either horizontally or vertically. With its `orientation` 

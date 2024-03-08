@@ -161,15 +161,16 @@ texinfo_documents = [
 
 # -- Extension configuration -------------------------------------------------
 autoapi_dirs = [
-    '../../src',
+    '../../src/pluginplayer',
 ]
-autoapi_add_toctree_entry = False
+autoapi_add_toctree_entry = True
 autoapi_options = [
     'members',
     'undoc-members',
     'private-members',
     'show-inheritance',
     'show-module-summary',
+    'special-members'
 ]
 
 # -- Options for intersphinx extension ---------------------------------------

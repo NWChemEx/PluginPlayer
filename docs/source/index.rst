@@ -22,17 +22,7 @@ PluginPlayer
 
    introductory
    kivyintro
-   pluginmanager
-   nodewidgetmanager
-   treemanager
-   utilitymanager
-
-AutoAPI Documentation
----------------------
-
-.. toctree::
-   :maxdepth: 2
-
-   autoapi/src/index
+   
+   autoapi/index
 
 

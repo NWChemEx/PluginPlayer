@@ -44,7 +44,7 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
         self.relative_window = relative_window
 
         #icon for the drag button
-        self.add_widget(Image(source='assets/drag.png'))
+        self.add_widget(Image(source='src/pluginplayer/assets/drag.png'))
 
     def on_touch_down(self, touch):
         """Prepare for a widget to be dragged

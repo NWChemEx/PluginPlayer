@@ -12,6 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+"""
+Managing tree nodes
+    The `TreeManager` class handles adding and deleting tree nodes and adding them to the `nodes` list.
+
+    When a user wants to delete a node, they can press the delete X button on the node's widget to run the `delete_node` function which iterates through it's connections with other nodes, removes them, removes their lines, and then removes the widget from the tree.
+
+    When a user wants to add a node, they can choose to add a module to the tree within the `module_view` which will run the `add_node` function, calling `NodeWidgetManager` defined types to build a new widget and add it to the `nodes` list with empty connections.
+
+Running the tree
+    A user can run their connected module tree by clicking the Run Tree button in the tree section. This will call the `run_tree` function that will recursively iterate through the `nodes` list using Depth First Search and determine if a node relies on another, creating a run order. If each node has all run settings set, the run order will individually run each module through the `ModuleManager`, store its output, and use it on other dependent modules. 
+
+Deleting the tree
+    A user can delete their connected module tree by clicking the Delete Tree button in the tree section. This will call the `delete_tree` function that will iterate through the `nodes` list and call the `remove_node` function, removing all connections within the tree and its nodes.
+
+"""
+
 #helper widget classes for a draggable widget representing a module
 from node_widget import DraggableImageButton, DraggableWidget, ModuleNode
 
@@ -102,8 +119,8 @@ class TreeManager():
 
         options.add_widget(Widget(size_hint_y=None, height=10))
 
-        self.plugin_player.create_image('assets/drag_icon.png',
-                                        'assets/drag.png', (20, 20))
+        self.plugin_player.create_image('src/pluginplayer/assets/drag_icon.png',
+                                        'src/pluginplayer/assets/drag.png', (20, 20))
         navigate_button = DraggableImageButton(
             node_widget=node_widget,
             relative_window=self.plugin_player.root.ids.right_section.ids.
@@ -112,11 +129,11 @@ class TreeManager():
             height=20)
         options.add_widget(navigate_button)
 
-        self.plugin_player.create_image('assets/info_icon.png',
-                                        'assets/info.png', (20, 20))
+        self.plugin_player.create_image('src/pluginplayer/assets/info_icon.png',
+                                        'src/pluginplayer/assets/info.png', (20, 20))
 
         info_button = Button(
-            background_normal='assets/info.png',
+            background_normal='src/pluginplayer/assets/info.png',
             on_press=self.plugin_player.plugin_manager.view_module_info,
             size_hint_y=None,
             height=20)
@@ -124,10 +141,10 @@ class TreeManager():
         info_button.id = f'{module_number} {plugin_number} 1'
         options.add_widget(info_button)
 
-        self.plugin_player.create_image('assets/remove_icon.png',
-                                        'assets/remove.png', (20, 20))
+        self.plugin_player.create_image('src/pluginplayer/assets/remove_icon.png',
+                                        'src/pluginplayer/assets/remove.png', (20, 20))
 
-        remove_button = Button(background_normal='assets/remove.png',
+        remove_button = Button(background_normal='src/pluginplayer/assets/remove.png',
                                on_press=self.remove_node,
                                size_hint_y=None,
                                height=20)

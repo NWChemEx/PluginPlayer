@@ -12,6 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+"""
+
+Dynamically Importing Plugins
+    Modular packages must be imported into the system when creating a GUI interface to allow users to work with Plugins. Each CMake compiled modular project creates a Plugin file within the internal build directory, registered as a .so file. Each Plugin has the load_modules() function to import Modules into a ModuleManager. If the Plugin contains Modules that don’t define its inputs, outputs, or submodules, the Plugin will not be imported, and an error message will be displayed. The ModuleManager acts as a directory for all the Modules to be later configured and run.
+
+    The current GUI design for dynamically importing and viewing plugin information to create an efficient application build.
+
+    Users can enter a path to a plugin .so file or a directory to browse.
+
+    Once a Plugin is imported using the `plugin_loader` function, it is displayed as a folder in the Plugin Section, updated by the `plugin_view` function.
+
+Viewing Modules and API
+    A comprehensive GUI application should allow users to view each dynamically imported plugin’s Modules and their APIs, including a functional description, inputs, outputs, and required submodules, to gain information when creating an application design. Having documentation of each loaded Module allows for a more efficient application build.
+
+    When selecting a Plugin folder, a user is shown a popup, showing each of the Plugin’s Modules using the `view_modules` function. The user can also delete the Plugin and remove its Modules from the ModuleManager, add a Module to the Module tree for application building, and view its API info.
+
+    When selecting the “Info” button for the module, the following popup is displayed to show the Module’s description, inputs, outputs, and submodules using the `view_module_info` function. Information is provided for the Module’s parameters. If the Module does not provide information, “description unavailable” will be shown.
+
+
+"""
+
 import pluginplay as pp
 from collections import namedtuple
 
@@ -29,7 +51,6 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
-
 
 class PluginManager:
     """Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
@@ -311,8 +332,8 @@ class PluginManager:
 
         #Set the folder size
         new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
-        self.plugin_player.create_image('assets/folder_icon.png',
-                                        'assets/button_folder.png',
+        self.plugin_player.create_image('src/pluginplayer/assets/folder_icon.png',
+                                        'src/pluginplayer/assets/button_folder.png',
                                         (int(new_width), int(new_height)))
 
         number_of_added_plugins = 0
@@ -324,7 +345,7 @@ class PluginManager:
 
             #add image and route the popup function when pressed
             image_widget = Button(on_press=self.view_modules,
-                                  background_normal='assets/button_folder.png',
+                                  background_normal='src/pluginplayer/assets/button_folder.png',
                                   size_hint=(None, None),
                                   size=(new_width, new_height),
                                   text=self.saved_plugins[i].plugin_name,
