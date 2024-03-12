@@ -13,19 +13,17 @@
 # limitations under the License.
 #
 
-name: .github Pull Request Workflow
+name: .github Merge Workflow
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
 jobs:
-  Common-Pull-Request:
-    uses: NWChemEx/.github/.github/workflows/common_pull_request.yaml@master
+  Common-Merge:
+    uses: NWChemEx/.github/.github/workflows/common_merge.yaml@master
     with:
-      config_file: '.github/.licenserc.yaml'
-      source_dir: ''
-      compilers: ''
-      doc_target: 'sphinx'
+      doc_target: 'Sphinx'
+      generate_module_docs: false
     secrets: inherit

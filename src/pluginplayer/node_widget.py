@@ -12,35 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.popup import Popup
 from kivy.uix.image import Image
-from kivy.uix.filechooser import FileChooserListView
-from kivy.core.window import Window
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.graphics import Line
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.graphics import Color, Rectangle
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import BooleanProperty
 
 
-#an image button used to drag a module node within the tree section
 class DraggableImageButton(ButtonBehavior, BoxLayout):
     """An Image button used to drag a module node and is restricted within the tree section
 
-    :param ButtonBehavior: The kivy tool to modify a Button class
-    :type ButtonBehavior: ButtonBehavior
-    :param BoxLayout: The kivy tool to store multiple widgets in one
-    :type BoxLayout: BoxLayout
+    :param ButtonBehavior: The Kivy behavior for modifying a Button class
+    :type ButtonBehavior: kivy.uix.behaviors.ButtonBehavior
+    :param BoxLayout: The Kivy layout for arranging multiple widgets in one direction
+    :type BoxLayout: kivy.uix.boxlayout.BoxLayout
     """
 
     def __init__(self, node_widget, relative_window, **kwargs):
@@ -60,7 +43,7 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
         self.relative_window = relative_window
 
         #icon for the drag button
-        self.add_widget(Image(source='drag.png'))
+        self.add_widget(Image(source='src/pluginplayer/assets/drag.png'))
 
     def on_touch_down(self, touch):
         """Prepare for a widget to be dragged
@@ -116,8 +99,10 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
                     y2 = new_y + 50 if x_within_bounds else points[3]
                     out_line.points = [points[0], points[1], x2, y2]
                 #changes node position
-                self.node_widget.x = new_x
-                self.node_widget.y = new_y
+                if x_within_bounds:
+                    self.node_widget.x = new_x
+                if y_within_bounds:
+                    self.node_widget.y = new_y
 
             return True
         return super().on_touch_move(touch)

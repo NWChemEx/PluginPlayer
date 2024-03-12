@@ -16,11 +16,13 @@
 PluginPlayer
 ############
 
-PluginPlayer is a :term:`GUI <GUI>` for `PluginPlay <https://github.com/NWChemEx/PluginPlay>`__.
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   terminology
+   introductory
+   kivyintro
+   
+   autoapi/index
+
 

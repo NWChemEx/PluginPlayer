@@ -11,26 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+Building the node's widget
+    When building a modular application design, nodes of the tree can be added from the module view, and a node is placed on the tree with the Module’s name and the node number, a series of options buttons, and a configuration button. This node widget building process is done by `NodeWidgetManager` class that imports image files and module settings into a `ModuleNode` class. The `ModuleNode` class contains dictionaries of the inputs, outputs, property type, and submodules required for the run process. 
 
-from kivy.app import App
-from kivy.lang import Builder
+Button Options 
+    Within the options buttons the user to move the node with the navigation button, shown with a four-arrowed icon by dragging. The drag implementation is monitored by the `DraggableImageButton` and `DraggableWidget` class within `NodeWidgetManager` class to track user's touch and drag movements and move the widget based on the mouse location.  The user can access the API information for the Module the node contains by clicking the info button, shown with an “i” icon. The user can also remove the node by clicking the remove button, shown with an X icon. The remove functionality removes all connections in the tree and deletes the node from the tree through the `delete_node` function.
+
+Viewing the node's configuration
+    When a user clicks the “Configure” button, a popup will be shown to display the inputs, outputs, and Submodules for the nodes, as well as their connections in the tree if they are set. This popup is build by the `view_config` function within the `NodeManager` class, iterating through the node’s run settings and displaying each value that has been set or left empty. “Set” buttons are also next to each input, property type, and submodule displayed to set their connection in the tree.
+
+Setting a connection
+    The “Set” popup is displayed after the user decides to set either an input, property type, or submodule. Viewing the options for setting a run value is handled by the popup builder functions `add_input` and `add_submod` within the `NodeManager` class. Setting a property type requires only a text entry of the function type.
+
+"""
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
-from kivy.uix.image import Image
-from kivy.uix.filechooser import FileChooserListView
-from kivy.core.window import Window
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.graphics import Line
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.graphics import Color, Rectangle
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import BooleanProperty
 
 
 class NodeWidgetManager():

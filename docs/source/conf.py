@@ -43,12 +43,9 @@ needs_sphinx = '1.3'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.githubpages',
-    # 'autoapi.extension'
+    'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
+    'sphinx.ext.mathjax', 'sphinx.ext.githubpages', 'sphinx.ext.autodoc',
+    'autoapi.extension'
 ]
 dir_path = os.path.dirname(os.path.realpath(__file__))
 doc_path = os.path.dirname(dir_path)
@@ -163,19 +160,14 @@ texinfo_documents = [
 ]
 
 # -- Extension configuration -------------------------------------------------
-# autoapi_dirs = [
-#     '../../src',
-# ]
-# autoapi_add_toctree_entry = False
-# autoapi_options = [
-#     'members',
-#     'undoc-members',
-#     'private-members',
-#     'show-inheritance',
-#     'show-module-summary',
-#     'special-members',
-#     #    'imported-members',
-# ]
+autoapi_dirs = [
+    '../../src/pluginplayer',
+]
+autoapi_add_toctree_entry = True
+autoapi_options = [
+    'members', 'undoc-members', 'private-members', 'show-module-summary',
+    'special-members'
+]
 
 # -- Options for intersphinx extension ---------------------------------------
 
@@ -186,3 +178,15 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# -- Nitpick Ignore options --------------------------------------------------
+
+# Nitpick requires all references to be resolved
+# This will ignore those that references that can't be linked
+nitpick_ignore = []
+with open('nitpick_exceptions') as f:
+    for line in f:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            dtype, target = line.split(None, 1)
+            nitpick_ignore.append((dtype, target))

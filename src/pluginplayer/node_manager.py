@@ -11,7 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+Linking a connection
+    The Set input/submodule popup shows each module from each imported plugin and shows a “Set” button to set it as the input or submodule. On clicking a “Set” button, the ModuleManager will attempt to set it to the run settings using the `link_input`, `link_property_type`, or `link_submod` functions within the `NodeManager` class. If it succeeds, it will be set in the node’s run settings with its description and the connected node’s information. If an error occurs, a message will output the error, and no settings will be set.
 
+"""
 #kivy helpers
 from kivy.graphics import Line
 from kivy.uix.widget import Widget

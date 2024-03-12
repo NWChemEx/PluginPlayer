@@ -1,4 +1,4 @@
-# Copyright 2023 NWChemEx-Project
+# Copyright 2024 NWChemEx-Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,21 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-
-name: .github Pull Request Workflow
-
-on:
-  pull_request:
-    branches:
-      - master
-
-jobs:
-  Common-Pull-Request:
-    uses: NWChemEx/.github/.github/workflows/common_pull_request.yaml@master
-    with:
-      config_file: '.github/.licenserc.yaml'
-      source_dir: ''
-      compilers: ''
-      doc_target: 'sphinx'
-    secrets: inherit

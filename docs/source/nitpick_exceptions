@@ -1,0 +1,7 @@
+py:class kivy.uix.button.Button
+py:class kivy.uix.behaviors.ButtonBehavior
+py:class kivy.uix.boxlayout.BoxLayout
+py:class kivy.core.window.Event
+py:class kivy.app.App
+py:class kivy.uix.widget.Widget
+py:class kivy.uix.relativelayout.RelativeLayout
