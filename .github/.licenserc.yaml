@@ -24,5 +24,6 @@ header:
     - docs/requirements.txt
     - docs/source/bibliography/*.bib
     - plugin_player_setup.kv
+    - docs/source/nitpick_exceptions
 
   comment: never
