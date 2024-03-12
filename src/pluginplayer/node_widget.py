@@ -17,15 +17,15 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 
 
-#an image button used to drag a module node within the tree section
 class DraggableImageButton(ButtonBehavior, BoxLayout):
     """An Image button used to drag a module node and is restricted within the tree section
 
-    :param ButtonBehavior: The kivy tool to modify a Button class
-    :type ButtonBehavior: ButtonBehavior
-    :param BoxLayout: The kivy tool to store multiple widgets in one
-    :type BoxLayout: BoxLayout
+    :param ButtonBehavior: The Kivy behavior for modifying a Button class
+    :type ButtonBehavior: kivy.uix.behaviors.ButtonBehavior
+    :param BoxLayout: The Kivy layout for arranging multiple widgets in one direction
+    :type BoxLayout: kivy.uix.boxlayout.BoxLayout
     """
+
 
     def __init__(self, node_widget, relative_window, **kwargs):
         """Initialization of the DraggableImage button
@@ -100,9 +100,11 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
                     y2 = new_y + 50 if x_within_bounds else points[3]
                     out_line.points = [points[0], points[1], x2, y2]
                 #changes node position
-                self.node_widget.x = new_x
-                self.node_widget.y = new_y
-
+                if x_within_bounds:
+                    self.node_widget.x = new_x
+                if y_within_bounds:
+                    self.node_widget.y = new_y
+                
             return True
         return super().on_touch_move(touch)
 

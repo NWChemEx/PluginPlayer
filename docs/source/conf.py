@@ -165,7 +165,7 @@ autoapi_dirs = [
 ]
 autoapi_add_toctree_entry = True
 autoapi_options = [
-    'members', 'undoc-members', 'private-members', 'show-inheritance',
+    'members', 'undoc-members', 'private-members',
     'show-module-summary', 'special-members'
 ]
 
@@ -178,3 +178,16 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# -- Nitpick Ignore options --------------------------------------------------
+
+# Nitpick requires all references to be resolved
+# This will ignore those that references that can't be linked
+nitpick_ignore = []
+with open('nitpick_exceptions') as f:
+    for line in f:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            dtype, target = line.split(None, 1)
+            nitpick_ignore.append((dtype, target))
+

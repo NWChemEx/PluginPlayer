@@ -43,9 +43,9 @@ class PluginPlayer(App):
     Creating a tree structure, they are able to link modules together, add submodules, property types, and inputs for each module.
 
     :param App: The Kivy App class
-    :type App: kivy.app
+    :type App: kivy.app.App
     :return: returns a built app
-    :rtype: App
+    :rtype: kivy.app.App
     """
 
     #build the main window from the kv file
@@ -53,7 +53,7 @@ class PluginPlayer(App):
         """Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
 
         :return: The built Kivy application
-        :rtype: kivy.app
+        :rtype: kivy.app.App
         """
         self.popup = Popup()
 
@@ -99,7 +99,7 @@ class PluginPlayer(App):
         """Add a string message to the message section
 
         :param message: The string to add to the message section
-        :type message: String
+        :type message: str
         """
 
         #grab message widget
@@ -114,9 +114,9 @@ class PluginPlayer(App):
 
 
         :param widget: The widget to be displayed in the popup
-        :type widget: kivy.uix.widget
+        :type widget: kivy.uix.widget.Widget
         :param description: The description of the popup
-        :type description: String
+        :type description: str
         :param dismiss: True if you want the popup to autodismiss, False if not
         :type dismiss: bool
         """
@@ -136,11 +136,11 @@ class PluginPlayer(App):
         """Resize an image using Pillow to fit the pixel size desired.
 
         :param filepath: The filepath of the image to be resized
-        :type filepath: String(filepath)
+        :type filepath: str
         :param new_filepath: The filepath of the new resized image
-        :type new_filepath: String(filepath)
+        :type new_filepath: str
         :param size: The desired size of the new image
-        :type size: (integer, integer)
+        :type size: (int, int)
         """
 
         image = PILImage.open(filepath)

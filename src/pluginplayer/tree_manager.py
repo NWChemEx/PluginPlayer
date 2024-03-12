@@ -85,6 +85,7 @@ class TreeManager():
                                       size=(120, 80),
                                       orientation='vertical',
                                       spacing=0)
+        #set the relative window
         with node_widget.canvas.before:
             Color(37 / 255, 150 / 255, 190 / 255,
                   1)  # Set the color (R, G, B, A)
