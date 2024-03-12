@@ -1,0 +1,56 @@
+:py:mod:`pluginplayer.node_manager`
+===================================
+
+.. py:module:: pluginplayer.node_manager
+
+.. autoapi-nested-parse::
+
+   Linking a connection
+       The Set input/submodule popup shows each module from each imported plugin and shows a “Set” button to set it as the input or submodule. On clicking a “Set” button, the ModuleManager will attempt to set it to the run settings using the `link_input`, `link_property_type`, or `link_submod` functions within the `NodeManager` class. If it succeeds, it will be set in the node’s run settings with its description and the connected node’s information. If an error occurs, a message will output the error, and no settings will be set.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pluginplayer.node_manager.NodeManager
+
+
+
+
+.. py:class:: NodeManager(plugin_player)
+
+
+   NodeManager is a helper class for the PluginPlayer application handling the linking of inputs, outputs, submodules, and property types of modules.
+       
+
+   .. py:method:: link_input(instance)
+
+      Dictates the linkage of a module's input by assigning another module's output, or a custom value to the input and update the tree graph
+
+      :param instance: The instance of the button pressed to redirect to this function.
+      :type instance: kivy.uix.button.Button
+
+
+   .. py:method:: link_property_type(instance)
+
+      Dictates the linkage of a module's property type by assigning the inputted property type to the module
+
+      :param instance: The instance of the button pressed to redirect to this function.
+      :type instance: kivy.uix.button.Button
+
+
+   .. py:method:: link_submod(instance)
+
+      Dictates the linkage of a module's submodule by attempting to assign the inputted submodule to the module
+
+      :param instance: The instance of the button pressed to redirect to this function.
+      :type instance: kivy.uix.button.Button
+
+
+

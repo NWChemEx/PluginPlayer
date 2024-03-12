@@ -1,0 +1,102 @@
+:py:mod:`pluginplayer.node_widget`
+==================================
+
+.. py:module:: pluginplayer.node_widget
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pluginplayer.node_widget.DraggableImageButton
+   pluginplayer.node_widget.DraggableWidget
+   pluginplayer.node_widget.ModuleNode
+
+
+
+
+.. py:class:: DraggableImageButton(node_widget, relative_window, **kwargs)
+
+
+
+
+   An Image button used to drag a module node and is restricted within the tree section
+
+   :param ButtonBehavior: The Kivy behavior for modifying a Button class
+   :type ButtonBehavior: kivy.uix.behaviors.ButtonBehavior
+   :param BoxLayout: The Kivy layout for arranging multiple widgets in one direction
+   :type BoxLayout: kivy.uix.boxlayout.BoxLayout
+
+   .. py:method:: on_touch_down(touch)
+
+      Prepare for a widget to be dragged
+
+      This method is called when a touch event occurs. It checks whether the touch point is within
+      the boundaries of the widget, and if so, it prepares the widget for dragging by setting
+      necessary attributes.
+
+      :param touch: The point where a user has started clicking
+      :type touch: kivy.core.window.Event
+      :return: Returns True if the touch event is within the widget's boundaries, False otherwise.
+      :rtype: bool
+
+
+   .. py:method:: on_touch_move(touch)
+
+      Update the widget's position during a dragging motion.
+
+      This method is called when a touch move event occurs, and it updates the position of the widget
+      based on the user's dragging motion. It also adjusts the position of connected lines if the new
+      widget position is within the boundaries of the relative window.
+
+      :param touch: The touch event containing information about the user input.
+      :type touch: kivy.core.window.Event
+      :return: Returns True if the widget is currently being dragged, False otherwise.
+      :rtype: bool
+
+
+   .. py:method:: on_touch_up(touch)
+
+      Handle the completion of a dragging motion.
+
+      This method is called when a touch up event occurs, signifying the end of a dragging motion.
+      It resets the widget's dragging state, indicating that the dragging operation has concluded.
+
+      :param touch: The touch event containing information about the user input.
+      :type touch: kivy.core.window.Event
+      :return: Returns True if the widget was previously being dragged, False otherwise.
+      :rtype: bool
+
+
+
+.. py:class:: DraggableWidget(**kwargs)
+
+
+
+
+   A drag-and-drop widget used for nodes in the tree.
+
+   This class extends the Kivy BoxLayout to create a draggable widget that represents nodes
+   in a tree structure. It provides functionality for handling drag-and-drop operations and
+   visually connecting nodes through incoming and outgoing lines.
+
+   :param kwargs: Additional keyword arguments to be passed to the BoxLayout constructor.
+   :type kwargs: dict
+
+
+.. py:class:: ModuleNode(module, module_name)
+
+
+   Defines the visual element of a module as a node within a tree and its connections for run time
+       
+
+   .. py:method:: add_widget(widget)
+
+      Adds a widget that represents the node in the tree.
+
+
+

@@ -1,0 +1,76 @@
+:py:mod:`pluginplayer.plugin_player`
+====================================
+
+.. py:module:: pluginplayer.plugin_player
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pluginplayer.plugin_player.PluginPlayer
+
+
+
+
+.. py:class:: PluginPlayer
+
+
+
+
+   A class to open a python Kivy application for the PluginPlayer GUI. 
+
+   This GUI will allow users to import plugins from their filesystem, view each of their module's information, and create a tree structure of modules to run.
+   Creating a tree structure, they are able to link modules together, add submodules, property types, and inputs for each module.
+
+   :param App: The Kivy App class
+   :type App: kivy.app.App
+   :return: returns a built app
+   :rtype: kivy.app.App
+
+   .. py:method:: build()
+
+      Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
+
+      :return: The built Kivy application
+      :rtype: kivy.app.App
+
+
+   .. py:method:: add_message(message)
+
+      Add a string message to the message section
+
+      :param message: The string to add to the message section
+      :type message: str
+
+
+   .. py:method:: create_popup(widget, description, dismiss)
+
+      Set up a basic popup given a scrolling widget, name, description, and dismissal protocol
+
+
+      :param widget: The widget to be displayed in the popup
+      :type widget: kivy.uix.widget.Widget
+      :param description: The description of the popup
+      :type description: str
+      :param dismiss: True if you want the popup to autodismiss, False if not
+      :type dismiss: bool
+
+
+   .. py:method:: create_image(filepath, new_filepath, size)
+
+      Resize an image using Pillow to fit the pixel size desired.
+
+      :param filepath: The filepath of the image to be resized
+      :type filepath: str
+      :param new_filepath: The filepath of the new resized image
+      :type new_filepath: str
+      :param size: The desired size of the new image
+      :type size: (int, int)
+
+
+

@@ -1,0 +1,21 @@
+:py:mod:`pluginplayer`
+======================
+
+.. py:module:: pluginplayer
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   node_manager/index.rst
+   node_widget/index.rst
+   node_widget_manager/index.rst
+   plugin_manager/index.rst
+   plugin_player/index.rst
+   tree_manager/index.rst
+   utility_manager/index.rst
+
+

@@ -1,0 +1,70 @@
+:py:mod:`pluginplayer.utility_manager`
+======================================
+
+.. py:module:: pluginplayer.utility_manager
+
+.. autoapi-nested-parse::
+
+   The need for a utility manager
+       Throughout the GUI it is essential to keep track of added class types, adding new class types, and browsing files. The `UtilityManager` class handles this to allow for helper functions needed throughout the application.
+
+   Browsing files
+
+       Browsing files in kivy can be done by clicking the browse button to run the `browse` function and open a popup to view your system's files. The `browse` function reads text input from an entry and interprets it as a potential path to browse to in the system. Using a `ScrollView` widget, a user can navigate through their system and select a filepath of their plugin they would like to import.
+
+   Viewing class types
+       To add an input or property type to a module's run settings, a user may need to declare a special variable type, evaluating their statement with an extra list of imported classes is necessary to allow for a more complex module run. Viewing imported class types within the `view_config` and `add_input` widget runs the `class_types` function, opening a popup to view a list of imported class types and a button to import a new type.
+
+   Importing a new class type
+       Directed from the `class_types` popup, you can enter a python partial import statement defining the library to import from as well as the type name. Clicking the Import button, the `new_type` function runs `importlib` to import the new class type into the system's main modules which is used in evaluating import and property type statements. If a module is unable to be imported, a message is displayed and the system's modules are not modified.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pluginplayer.utility_manager.UtilityManager
+
+
+
+
+.. py:class:: UtilityManager
+
+
+   Helper class for the PluginPlayer application to browse files, view class types, and import new class types.
+       
+
+   .. py:method:: browse(plugin_player)
+
+      Browse for a new file from the file system and place in entry box
+
+      :param plugin_player: The PluginPlayer object to manage
+      :type plugin_player: PluginPlayer
+
+
+   .. py:method:: class_types(instance, plugin_player)
+
+      Show a popup to see all class types imported
+
+      :param instance: The button that called this function
+      :type instance: kivy.uix.button.Button
+      :param plugin_player: The PluginPlayer object to display the popup on
+      :type plugin_player: PluginPlayer
+
+
+   .. py:method:: new_type(instance, plugin_player)
+
+      Defines a new class type for custom inputs and property types
+
+      :param instance: The button used to call this function
+      :type instance: kivy.uix.button.Button
+      :param plugin_player: The PluginPlayer object to output messages on
+      :type plugin_player: PluginPlayer
+
+
+

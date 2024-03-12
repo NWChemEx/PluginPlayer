@@ -1,0 +1,66 @@
+:py:mod:`pluginplayer.node_widget_manager`
+==========================================
+
+.. py:module:: pluginplayer.node_widget_manager
+
+.. autoapi-nested-parse::
+
+   Building the node's widget
+       When building a modular application design, nodes of the tree can be added from the module view, and a node is placed on the tree with the Module’s name and the node number, a series of options buttons, and a configuration button. This node widget building process is done by `NodeWidgetManager` class that imports image files and module settings into a `ModuleNode` class. The `ModuleNode` class contains dictionaries of the inputs, outputs, property type, and submodules required for the run process. 
+
+   Button Options 
+       Within the options buttons the user to move the node with the navigation button, shown with a four-arrowed icon by dragging. The drag implementation is monitored by the `DraggableImageButton` and `DraggableWidget` class within `NodeWidgetManager` class to track user's touch and drag movements and move the widget based on the mouse location.  The user can access the API information for the Module the node contains by clicking the info button, shown with an “i” icon. The user can also remove the node by clicking the remove button, shown with an X icon. The remove functionality removes all connections in the tree and deletes the node from the tree through the `delete_node` function.
+
+   Viewing the node's configuration
+       When a user clicks the “Configure” button, a popup will be shown to display the inputs, outputs, and Submodules for the nodes, as well as their connections in the tree if they are set. This popup is build by the `view_config` function within the `NodeManager` class, iterating through the node’s run settings and displaying each value that has been set or left empty. “Set” buttons are also next to each input, property type, and submodule displayed to set their connection in the tree.
+
+   Setting a connection
+       The “Set” popup is displayed after the user decides to set either an input, property type, or submodule. Viewing the options for setting a run value is handled by the popup builder functions `add_input` and `add_submod` within the `NodeManager` class. Setting a property type requires only a text entry of the function type.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pluginplayer.node_widget_manager.NodeWidgetManager
+
+
+
+
+.. py:class:: NodeWidgetManager(plugin_player)
+
+
+   Helper class for the PluginPlayer application to build widgets for viewing a module's run configuration
+
+       
+
+   .. py:method:: view_config(instance)
+
+      Open a popup to view the configuration of a module's inputs, outputs, property type, and submodules with options to edit
+
+      :param instance: The button routing to this function
+      :type instance: kivy.uix.button.Button
+
+
+   .. py:method:: add_input(instance)
+
+      Opens a popup to ask a user to add an input. Can add a custom input value or link output from another node.
+
+      :param instance: Button routing to this function
+      :type instance: kivy.uix.button.Button
+
+
+   .. py:method:: add_submod(instance)
+
+      Opens a popup to prompt a user to select a submodule from the imported modules.
+
+      :param instance: Button routing to the function
+      :type instance: kivy.uix.button.Button
+
+
+
