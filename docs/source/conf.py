@@ -165,8 +165,8 @@ autoapi_dirs = [
 ]
 autoapi_add_toctree_entry = True
 autoapi_options = [
-    'members', 'undoc-members', 'private-members',
-    'show-module-summary', 'special-members'
+    'members', 'undoc-members', 'private-members', 'show-module-summary',
+    'special-members'
 ]
 
 # -- Options for intersphinx extension ---------------------------------------
@@ -190,4 +190,3 @@ with open('nitpick_exceptions') as f:
         if line and not line.startswith("#"):
             dtype, target = line.split(None, 1)
             nitpick_ignore.append((dtype, target))
-

@@ -26,7 +26,6 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
     :type BoxLayout: kivy.uix.boxlayout.BoxLayout
     """
 
-
     def __init__(self, node_widget, relative_window, **kwargs):
         """Initialization of the DraggableImage button
 
@@ -104,7 +103,7 @@ class DraggableImageButton(ButtonBehavior, BoxLayout):
                     self.node_widget.x = new_x
                 if y_within_bounds:
                     self.node_widget.y = new_y
-                
+
             return True
         return super().on_touch_move(touch)
 
