@@ -29,3 +29,16 @@ jobs:
       compilers: ''
       doc_target: 'sphinx'
     secrets: inherit
+
+  # This will be removed/replaced in later updates
+  Test-Stub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: fregante/setup-git-user@v1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Run Python Tests
+        run: |
+          python tests/python/test_pluginplayer.py
