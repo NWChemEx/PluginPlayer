@@ -219,13 +219,11 @@ class NodeWidgetManager():
 
         #create an entry to declare a property type
         custom_ptype = BoxLayout(orientation='horizontal', spacing=0)
-        text_entry = TextInput(hint_text="ex: Force()",
-                               size_hint_x=3 / 5,
-                               multiline=False)
 
+        if node.custom_declaration_widget.parent:
+            node.custom_declaration_widget.parent.remove_widget(node.custom_declaration_widget)
         #add text entry to the node's properties
-        node.custom_declaration_widget = text_entry
-        custom_ptype.add_widget(text_entry)
+        custom_ptype.add_widget(node.custom_declaration_widget)
 
         #add button to set the property type
         custom_entry_button = Button(

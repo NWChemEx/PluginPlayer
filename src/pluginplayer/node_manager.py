@@ -192,7 +192,7 @@ class NodeManager():
         key_name = list(node.submod_dict.keys())[key_number]
         plugin_number = int(instance.id.split()[2])
         submodule_number = int(instance.id.split()[3])
-        submodule_name = self.saved_plugins[plugin_number].modules[
+        submodule_name = self.plugin_player.plugin_manager.saved_plugins[plugin_number].modules[
             submodule_number]
 
         try:

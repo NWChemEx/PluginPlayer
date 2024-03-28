@@ -50,6 +50,9 @@ class UtilityManager():
         """Initialization of the UtilityManager class
         """
         self.imported_classes = []
+        self.custom_declaration_widget = TextInput(hint_text="from _____ import _____",
+                                   multiline=False,
+                                   size_hint_x=9 / 10)
 
     def browse(self, plugin_player):
         """Browse for a new file from the file system and place in entry box
@@ -131,13 +134,10 @@ class UtilityManager():
                              size_hint_y=None,
                              height=35,
                              spacing=0)
-        new_type_entry = TextInput(hint_text="from _____ import _____",
-                                   multiline=False,
-                                   size_hint_x=9 / 10)
-        new_type.add_widget(new_type_entry)
-
-        #set as global to pull from it when its submitted
-        self.custom_declaration_widget = new_type_entry
+        
+        if self.custom_declaration_widget.parent:
+            self.custom_declaration_widget.parent.remove_widget(self.custom_declaration_widget)
+        new_type.add_widget(self.custom_declaration_widget)
 
         #add an import button
         add_button = Button(text="Import",

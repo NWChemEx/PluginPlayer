@@ -15,6 +15,7 @@
 from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
 
 
 class DraggableImageButton(ButtonBehavior, BoxLayout):
@@ -199,7 +200,9 @@ class ModuleNode:
         self.module_widget = None
 
         #holds the widget of the custom declaration of the currently selected input
-        self.custom_declaration_widget = None
+        self.custom_declaration_widget = TextInput(hint_text="ex: Force()",
+                               size_hint_x=3 / 5,
+                               multiline=False)
 
         #show the mapping of inputs, outputs and submodules used for running the tree
         self.input_map = []
