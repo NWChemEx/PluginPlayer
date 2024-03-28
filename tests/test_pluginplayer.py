@@ -19,9 +19,6 @@ import parallelzone as pz
 import sys
 import unittest
 
-
-
-
 if __name__ == '__main__':
     rv = pz.runtime.RuntimeView()
 

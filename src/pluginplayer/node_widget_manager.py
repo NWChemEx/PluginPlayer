@@ -221,7 +221,8 @@ class NodeWidgetManager():
         custom_ptype = BoxLayout(orientation='horizontal', spacing=0)
 
         if node.custom_declaration_widget.parent:
-            node.custom_declaration_widget.parent.remove_widget(node.custom_declaration_widget)
+            node.custom_declaration_widget.parent.remove_widget(
+                node.custom_declaration_widget)
         #add text entry to the node's properties
         custom_ptype.add_widget(node.custom_declaration_widget)
 

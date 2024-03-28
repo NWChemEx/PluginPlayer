@@ -51,7 +51,6 @@ class TreeManager():
         self.plugin_player = plugin_player
         self.saved_outputs = []
 
-
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
         """

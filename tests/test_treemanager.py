@@ -1,3 +1,17 @@
+# Copyright 2024 NWChemEx-Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #stop automatic kivy methods
 from kivy.config import Config
 # Set Kivy to dummy backend to prevent window creation
@@ -15,7 +29,9 @@ import pluginplay as pp
 import pluginplay_examples as ppe
 from pluginplay_examples import PointCharge, ElectricField, Force
 
+
 class TestTreeManager(unittest.TestCase):
+
     def test_add_node(self):
         #get a new shell
         player = PluginPlayerShell.get_shell(self)
@@ -26,7 +42,8 @@ class TestTreeManager(unittest.TestCase):
         player.tree_manager.add_node(moduleButton)
 
         #check to see a node was added
-        self.assertEquals(len(player.nodes), 1, "No node was added to tree section")
+        self.assertEquals(len(player.nodes), 1,
+                          "No node was added to tree section")
 
     def test_delete_node(self):
         #get a new shell
@@ -41,7 +58,8 @@ class TestTreeManager(unittest.TestCase):
         player.tree_manager.remove_node(moduleButton)
 
         #check to see a node was deleted
-        self.assertEquals(player.nodes[0], None, "The Node was not set to None after deletion")
+        self.assertEquals(player.nodes[0], None,
+                          "The Node was not set to None after deletion")
 
         #get a new shell
         player = PluginPlayerShell.get_shell(self)
@@ -69,10 +87,15 @@ class TestTreeManager(unittest.TestCase):
         player.tree_manager.remove_node(moduleButton)
 
         #check to see if second node was deleted, the output link of the first node was removed, the input link of the third node was removed
-        self.assertEquals(player.nodes[1], None, "The Node was not set to None after deletion")
-        self.assertEquals(player.nodes[0].output_map[0], [], "Output link still exists after its linking node was deleted")
-        self.assertEquals(player.nodes[2].input_map[0], None, "Input link still exists after its linking node was deleted")
-    
+        self.assertEquals(player.nodes[1], None,
+                          "The Node was not set to None after deletion")
+        self.assertEquals(
+            player.nodes[0].output_map[0], [],
+            "Output link still exists after its linking node was deleted")
+        self.assertEquals(
+            player.nodes[2].input_map[0], None,
+            "Input link still exists after its linking node was deleted")
+
     def test_delete_tree(self):
         #get a new shell
         player = PluginPlayerShell.get_shell(self)
@@ -94,12 +117,13 @@ class TestTreeManager(unittest.TestCase):
         #remove all nodes in the tree
         player.tree_manager.delete_tree()
 
-        self.assertEquals(player.nodes, [], "There still exists nodes after tree deletion")
+        self.assertEquals(player.nodes, [],
+                          "There still exists nodes after tree deletion")
 
     def test_run_tree(self):
         mm = pp.ModuleManager()
         ppe.load_modules(mm)
-        
+
         force0_mod = mm.at("Classical Force")
         force1_mod = mm.at("Coulomb's Law")
         force2_mod = mm.at("Single-precision Coulomb's law")
@@ -156,7 +180,8 @@ class TestTreeManager(unittest.TestCase):
 
         #---------------------FORCE NODE--------------------------
         moduleButton.id = '-1 0 0 0'
-        player.nodes[0].custom_declaration_widget.text = 'PointCharge( 1.0, [0.0, 0.0, 0.0])'
+        player.nodes[
+            0].custom_declaration_widget.text = 'PointCharge( 1.0, [0.0, 0.0, 0.0])'
         player.node_manager.link_input(moduleButton)
 
         moduleButton.id = '-1 0 0 1'
@@ -168,7 +193,8 @@ class TestTreeManager(unittest.TestCase):
         player.node_manager.link_input(moduleButton)
 
         moduleButton.id = '-1 0 0 0'
-        player.nodes[0].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
+        player.nodes[
+            0].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
         player.node_manager.link_input(moduleButton)
 
         moduleButton.id = '0 0 0 3'
@@ -187,7 +213,8 @@ class TestTreeManager(unittest.TestCase):
         player.node_manager.link_input(moduleButton)
 
         moduleButton.id = '-1 0 1 1'
-        player.nodes[1].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
+        player.nodes[
+            1].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
         player.node_manager.link_input(moduleButton)
 
         #enter PointCharge() into the entry widget
@@ -203,7 +230,8 @@ class TestTreeManager(unittest.TestCase):
         player.node_manager.link_input(moduleButton)
 
         moduleButton.id = '-1 0 2 1'
-        player.nodes[2].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
+        player.nodes[
+            2].custom_declaration_widget.text = '[[1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]'
         player.node_manager.link_input(moduleButton)
 
         #enter PointCharge() into the entry widget
@@ -213,26 +241,17 @@ class TestTreeManager(unittest.TestCase):
         moduleButton.id = '1'
         player.node_manager.link_property_type(moduleButton)
 
-
-
         #Run the tree
         player.tree_manager.run_tree()
 
         #Check if the values are the same
-        self.assertEquals(result0, player.tree_manager.saved_outputs[0], "Module output did not ran as expected")
-        self.assertEquals(result1, player.tree_manager.saved_outputs[1], "Module output did not ran as expected")
-        self.assertEquals(result2, player.tree_manager.saved_outputs[2], "Module output did not ran as expected")
-
-        
-
-
-
-
-
+        self.assertEquals(result0, player.tree_manager.saved_outputs[0],
+                          "Module output did not ran as expected")
+        self.assertEquals(result1, player.tree_manager.saved_outputs[1],
+                          "Module output did not ran as expected")
+        self.assertEquals(result2, player.tree_manager.saved_outputs[2],
+                          "Module output did not ran as expected")
 
 
 if __name__ == "__main__":
     unittest.main()
-
-        
-

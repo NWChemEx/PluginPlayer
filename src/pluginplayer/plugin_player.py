@@ -74,8 +74,6 @@ class PluginPlayer(App):
         #helper class handling browsing, imported class types, and importing new classes
         self.utility_manager = UtilityManager()
 
-    
-
     #build the main window from the kv file
     def build(self):
         """Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
@@ -83,7 +81,7 @@ class PluginPlayer(App):
         :return: The built Kivy application
         :rtype: kivy.app.App
         """
-        
+
         self.popup = Popup()
 
         #The app's module manager

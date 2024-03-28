@@ -201,8 +201,8 @@ class ModuleNode:
 
         #holds the widget of the custom declaration of the currently selected input
         self.custom_declaration_widget = TextInput(hint_text="ex: Force()",
-                               size_hint_x=3 / 5,
-                               multiline=False)
+                                                   size_hint_x=3 / 5,
+                                                   multiline=False)
 
         #show the mapping of inputs, outputs and submodules used for running the tree
         self.input_map = []
