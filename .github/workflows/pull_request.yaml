@@ -53,6 +53,10 @@ jobs:
         run: |
           # Fix for git not liking owner of the checkout dir
           chown -R $(id -u):$(id -g) $PWD
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+        shell: bash
       - name: Build and Test
         env:
           CMAIZE_GITHUB_TOKEN: ${{secrets.CMAIZE_GITHUB_TOKEN}}
