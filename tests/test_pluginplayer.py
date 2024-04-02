@@ -23,8 +23,9 @@ if __name__ == '__main__':
     rv = pz.runtime.RuntimeView()
 
     my_dir = os.path.dirname(os.path.realpath(__file__))
-    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(my_dir)))
-    src_dir = os.path.join(root_dir, 'tests')
+    root_dir = os.path.dirname(my_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    print(src_dir)
     sys.path.append(src_dir)
 
     loader = unittest.TestLoader()

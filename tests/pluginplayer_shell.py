@@ -15,9 +15,9 @@
 #pluginplay helpers
 import pluginplay as pp
 import pluginplay_examples as ppe
-from plugin_manager import PluginInfo
+from pluginplayer.plugin_manager import PluginInfo
+from pluginplayer.plugin_player import PluginPlayer
 from unittest.mock import MagicMock
-from plugin_player import PluginPlayer
 
 
 class PluginPlayerShell:

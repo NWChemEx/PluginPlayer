@@ -19,11 +19,11 @@ import sys
 
 #helper classes for a PluginPlayer interface
 import pluginplay as pp
-from plugin_manager import PluginManager
-from tree_manager import TreeManager
-from node_widget_manager import NodeWidgetManager
-from node_manager import NodeManager
-from utility_manager import UtilityManager
+from pluginplayer.plugin_manager import PluginManager
+from pluginplayer.tree_manager import TreeManager
+from pluginplayer.node_widget_manager import NodeWidgetManager
+from pluginplayer.node_manager import NodeManager
+from pluginplayer.utility_manager import UtilityManager
 
 #kivy helpers
 from kivy.app import App

@@ -28,7 +28,9 @@ Deleting the tree
 """
 
 #helper widget classes for a draggable widget representing a module
-from node_widget import DraggableImageButton, DraggableWidget, ModuleNode
+from pluginplayer.node_widget import DraggableImageButton
+from pluginplayer.node_widget import DraggableWidget
+from pluginplayer.node_widget import ModuleNode
 
 #kivy helpers
 from kivy.uix.button import Button
