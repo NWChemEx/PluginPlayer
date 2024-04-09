@@ -34,7 +34,7 @@ class TestTreeManager(unittest.TestCase):
 
     def test_add_node(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a new node with instance routing to the first module from the first plugin
         moduleButton = Button()
@@ -47,7 +47,7 @@ class TestTreeManager(unittest.TestCase):
 
     def test_delete_node(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a new node with instance routing to the first module from the first plugin
         moduleButton = Button()
@@ -62,7 +62,7 @@ class TestTreeManager(unittest.TestCase):
                           "The Node was not set to None after deletion")
 
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add new nodes with instances routing to the first, second, and third module from the first plugin
         moduleButton.id = '0 0'
@@ -98,7 +98,7 @@ class TestTreeManager(unittest.TestCase):
 
     def test_delete_tree(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a new node with instance routing to the first module from the first plugin
         moduleButton = Button()
@@ -147,7 +147,7 @@ class TestTreeManager(unittest.TestCase):
         result1 = force1_mod.run_as(efield_pt, p0, pcs)
         result2 = force3_mod.run_as(efield_pt, p0, pcs)
         #get player shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add one of each nodes to the tree
         moduleButton = Button()

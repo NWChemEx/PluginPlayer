@@ -48,32 +48,6 @@ class PluginPlayer(App):
     :rtype: kivy.app.App
     """
 
-    def test_setup(self):
-        """Initializes the helpers and instance variables for the PluginPlayer class for testing
-        """
-        self.popup = Popup()
-
-        #The app's module manager
-        self.mm = pp.ModuleManager()
-
-        #saved tree containing the nodes and modules to be ran
-        self.nodes = []
-
-        #helper class handling addition/removal of nodes, deleting/running the tree
-        self.tree_manager = TreeManager(self)
-
-        #helper class handling the widget building for the node configuration
-        self.node_widget_manager = NodeWidgetManager(self)
-
-        #helper class handling the linking of inputs, submods, property types between modules
-        self.node_manager = NodeManager(self)
-
-        #helper class handling the loading, deleting, and viewing of plugins and their modules
-        self.plugin_manager = PluginManager(self)
-
-        #helper class handling browsing, imported class types, and importing new classes
-        self.utility_manager = UtilityManager()
-
     #build the main window from the kv file
     def build(self):
         """Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
@@ -179,6 +153,8 @@ class PluginPlayer(App):
         self.resized_images.append(new_filepath)
 
     def on_stop(self):
+        """On the closing of the application, the saved resized images used in the application are located and deleted.
+        """
         for filepath in self.resized_images:
             if os.path.exists(filepath):
                 os.remove(filepath)

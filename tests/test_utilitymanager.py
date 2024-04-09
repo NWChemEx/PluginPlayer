@@ -34,11 +34,11 @@ class TestutilityManager(unittest.TestCase):
 
     def test_class_types(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
     def test_new_type(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #set the id for the back button
         backButton = Button()

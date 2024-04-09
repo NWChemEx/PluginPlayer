@@ -32,7 +32,7 @@ class TestNodeManager(unittest.TestCase):
 
     def test_link_input(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add new nodes with instances routing to the first, second, and third module from the first plugin
         moduleButton = Button()
@@ -90,7 +90,7 @@ class TestNodeManager(unittest.TestCase):
 
     def test_link_property_type(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a node
         moduleButton = Button()
@@ -119,7 +119,7 @@ class TestNodeManager(unittest.TestCase):
     def test_link_submod(self):
 
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a node
         moduleButton = Button()

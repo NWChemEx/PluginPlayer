@@ -29,7 +29,7 @@ class TestPluginManager(unittest.TestCase):
 
     def test_plugin_import_from_shell(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #check if plugin is loaded
         self.assertNotEqual(
@@ -41,7 +41,7 @@ class TestPluginManager(unittest.TestCase):
 
     def test_delete_plugins(self):
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #Create button instance to delete the first plugin
         deleteButton = Button()
@@ -55,7 +55,7 @@ class TestPluginManager(unittest.TestCase):
         self.assertEqual(player.nodes, [])
 
         #get a new shell
-        player = PluginPlayerShell.get_shell(self)
+        player = PluginPlayerShell()
 
         #add a new node with instance routing to the first module from the first plugin
         moduleButton = Button()
