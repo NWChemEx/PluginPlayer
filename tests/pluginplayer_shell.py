@@ -33,14 +33,12 @@ from kivy.uix.popup import Popup
 from kivy.uix.image import Image
 
 
-
 class PluginPlayerShell:
     """The class representing the connecting helper class 
     components of PluginPlayer without triggering Kivy window production
     """
 
     def __init__(self):
-
         """Initializes the helpers and instance variables for the PluginPlayer class for testing
         """
         self.popup = Popup()

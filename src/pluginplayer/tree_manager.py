@@ -55,7 +55,7 @@ class TreeManager():
         self.saved_outputs = []
         self.tree_section_widget = None
         self.submodule_tree_layout = None
-    
+
     def view_submodule_tree(self, instance):
         """Reads the module manager, iterating through the submodules for the instance's module.
         A structured tree is then created, making a heiarchy to configure submodules.
@@ -64,15 +64,17 @@ class TreeManager():
         :type instance: kivy.uix.button.Button
         """
         self.submodule_tree_layout = BoxLayout(orientation="vertical")
-        self.submodule_tree_layout.add_widget(Label(text="This is the submodule tree configuration", font_size='20sp',
-                            color=(0, 0, 0, 1)))
+        self.submodule_tree_layout.add_widget(
+            Label(text="This is the submodule tree configuration",
+                  font_size='20sp',
+                  color=(0, 0, 0, 1)))
         back_button = Button(text="Exit", on_press=self.view_module_tree)
         self.submodule_tree_layout.add_widget(back_button)
         right_section = self.plugin_player.root.ids.right_section
         self.tree_section_widget = self.plugin_player.root.ids.right_section.ids.tree_section
         right_section.remove_widget(self.tree_section_widget)
         right_section.add_widget(self.submodule_tree_layout)
-    
+
     def view_module_tree(self, instance):
         """Modifies and prepares the inputs, outputs, and property types for non submodule nodes
 
@@ -82,8 +84,6 @@ class TreeManager():
         right_section = self.plugin_player.root.ids.right_section
         right_section.remove_widget(self.submodule_tree_layout)
         right_section.add_widget(self.tree_section_widget)
-
-
 
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
@@ -207,20 +207,17 @@ class TreeManager():
         node_widget.add_widget(config_button)
 
         #if the module has a submodule, add the option to view it in the submodule tree view
-        if(len(new_node.submod_dict) > 0):
-            submod_tree_button = Button(
-            size_hint=(None, None),
-            height=dp(20),
-            width=dp(90),
-            halign='center',
-            text='Submodules',
-            on_press=self.view_submodule_tree)
+        if (len(new_node.submod_dict) > 0):
+            submod_tree_button = Button(size_hint=(None, None),
+                                        height=dp(20),
+                                        width=dp(90),
+                                        halign='center',
+                                        text='Submodules',
+                                        on_press=self.view_submodule_tree)
             submod_tree_button.id = f'{len(self.plugin_player.nodes)}'
             node_widget.height += dp(20)
             node_widget.add_widget(submod_tree_button)
 
-
-        
         #add it to the screen and the main lists
         node_widget.pos = (1, 1)
         self.plugin_player.root.ids.right_section.ids.tree_section.add_widget(
