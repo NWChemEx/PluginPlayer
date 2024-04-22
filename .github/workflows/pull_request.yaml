@@ -60,7 +60,7 @@ jobs:
       - name: Install xvfb
          run: |
           apt-get update
-          apt-get install -y xvfb
+          apt-get install -y xvfb xclip xsel libmtdev1
        - name: Set environment display variable
          run: |
           export DISPLAY=:99
