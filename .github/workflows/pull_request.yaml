@@ -62,18 +62,13 @@ jobs:
           apt-get update
           apt-get install -y xvfb xclip xsel libmtdev1
         shell: bash
-      - name: Set environment display variable
-        run: |
-          export DISPLAY=:99
-        shell: bash
-      - name: Start xvfb
-        run: |
-          Xvfb :99 -screen 0 1024x768x16 &
-        shell: bash
       - name: Build and Test
         env:
           CMAIZE_GITHUB_TOKEN: ${{secrets.CMAIZE_GITHUB_TOKEN}}
         run:  |
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x16 &
+
           toolchain=/toolchains/nwx_gcc-11.cmake
           echo 'set(CMAIZE_GITHUB_TOKEN '${CMAIZE_GITHUB_TOKEN}')' >> $toolchain
 
