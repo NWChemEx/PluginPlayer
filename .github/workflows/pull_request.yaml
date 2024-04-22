@@ -57,6 +57,16 @@ jobs:
         run: |
           pip install -r requirements.txt
         shell: bash
+      - name: Install xvfb
+         run: |
+          apt-get update
+          apt-get install -y xvfb
+       - name: Set environment display variable
+         run: |
+          export DISPLAY=:99
+       - name: Start xvfb
+         run: |
+          Xvfb :99 -screen 0 1024x768x16 &
       - name: Build and Test
         env:
           CMAIZE_GITHUB_TOKEN: ${{secrets.CMAIZE_GITHUB_TOKEN}}
