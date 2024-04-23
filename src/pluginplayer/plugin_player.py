@@ -19,11 +19,11 @@ import sys
 
 #helper classes for a PluginPlayer interface
 import pluginplay as pp
-from plugin_manager import PluginManager
-from tree_manager import TreeManager
-from node_widget_manager import NodeWidgetManager
-from node_manager import NodeManager
-from utility_manager import UtilityManager
+from pluginplayer.plugin_manager import PluginManager
+from pluginplayer.tree_manager import TreeManager
+from pluginplayer.node_widget_manager import NodeWidgetManager
+from pluginplayer.node_manager import NodeManager
+from pluginplayer.utility_manager import UtilityManager
 
 #kivy helpers
 from kivy.app import App
@@ -55,6 +55,7 @@ class PluginPlayer(App):
         :return: The built Kivy application
         :rtype: kivy.app.App
         """
+
         self.popup = Popup()
 
         #The app's module manager
@@ -77,6 +78,9 @@ class PluginPlayer(App):
 
         #helper class handling browsing, imported class types, and importing new classes
         self.utility_manager = UtilityManager()
+
+        #string array holding the filepaths of resized images
+        self.resized_images = []
 
         #build the main application from the kivy script file
         build = Builder.load_file('plugin_player_setup.kv')
@@ -146,6 +150,14 @@ class PluginPlayer(App):
         image = PILImage.open(filepath)
         resized_image = image.resize(size)
         resized_image.save(new_filepath)
+        self.resized_images.append(new_filepath)
+
+    def on_stop(self):
+        """On the closing of the application, the saved resized images used in the application are located and deleted.
+        """
+        for filepath in self.resized_images:
+            if os.path.exists(filepath):
+                os.remove(filepath)
 
 
 if __name__ == "__main__":

@@ -28,7 +28,9 @@ Deleting the tree
 """
 
 #helper widget classes for a draggable widget representing a module
-from node_widget import DraggableImageButton, DraggableWidget, ModuleNode
+from pluginplayer.node_widget import DraggableImageButton
+from pluginplayer.node_widget import DraggableWidget
+from pluginplayer.node_widget import ModuleNode
 
 #kivy helpers
 from kivy.uix.button import Button
@@ -49,6 +51,7 @@ class TreeManager():
         :type plugin_player: PluginPlayer
         """
         self.plugin_player = plugin_player
+        self.saved_outputs = []
 
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
@@ -340,9 +343,9 @@ class TreeManager():
         self.plugin_player.add_message(run_order)
 
         #set up the array for saving ouputs
-        saved_outputs = []
+        self.saved_outputs = []
         for i in range(len(run_order)):
-            saved_outputs.append([])
+            self.saved_outputs.append([])
 
         #run each node
         for run_node in dfs_result:
@@ -384,7 +387,7 @@ class TreeManager():
                 self.plugin_player.add_message(
                     f"{run_node.module_name}({nodes.index(run_node)}) Output: {output}"
                 )
-                saved_outputs[nodes.index(run_node)].append(output)
+                self.saved_outputs[nodes.index(run_node)].append(output)
             except Exception as e:
                 self.plugin_player.add_message(
                     f"Could not run {run_node.module_name}({nodes.index(run_node)}): {e}"
