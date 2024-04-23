@@ -73,4 +73,10 @@ Classes
       :type size: (int, int)
 
 
+   .. py:method:: on_stop()
+
+      On the closing of the application, the saved resized images used in the application are located and deleted.
+              
+
+
 
