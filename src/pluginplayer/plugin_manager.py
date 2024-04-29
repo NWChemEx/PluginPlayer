@@ -72,47 +72,50 @@ class PluginManager:
         """
         #grab filepath from the entry
         selected_file_path = self.plugin_player.root.ids.file_entry.ids.file_path_input
-        filepath = selected_file_path.text
+        entered_text = selected_file_path.text
         selected_file_path.text = ""
         selected_file_path.hint_text = "Enter Filepath/Browsing Directory"
         # Check if the file exists and is a .so file
-        if not os.path.isfile(filepath):
-            self.plugin_player.add_message("File does not exist")
-        elif not filepath.endswith('.so'):
-            self.plugin_player.add_message("File is not a Plugin (.so) file")
-        else:
-            # Split the file path into directory and filename
-            directory_path, filename = os.path.split(filepath)
-
-            #remove the .so from the filename
-            filename = os.path.splitext(filename)[0]
-
+        if os.path.isfile(entered_text) and entered_text.endswith('.so'):
+            self.plugin_player.add_message("File" + entered_text + "recognized as .so Plugin file")
+            directory_path, filename = os.path.split(entered_text)
+            library = os.path.splitext(filename)[0]
+            
             #add to system path
             sys.path.append(directory_path)
+            
+        elif os.path.isfile(entered_text) and entered_text.endswith('.py'):
+            self.plugin_player.add_message("File" + entered_text + "recognized as .py Plugin file")
+            directory_path, filename = os.path.split(entered_text)
+            library = os.path.splitext(filename)[0]
+            #add to system path
+            sys.path.append(directory_path)
+        
+        else:
+            library = entered_text
 
-            #import the plugin library
+        #import the plugin library
+        try:
+            lib = importlib.import_module(library)
+            #try to load plugin modules into module manager
             try:
-                lib = importlib.import_module(filename)
-                #try to load plugin modules into module manager
-                try:
-                    lib.load_modules(self.plugin_player.mm)
-                    self.plugin_player.add_message(
-                        f"Successfuly loaded {filename} into ModuleManager")
-
+                lib.load_modules(self.plugin_player.mm)
+                self.plugin_player.add_message(
+                    f"Successfuly loaded {library} into ModuleManager")
                     #save info of the Plugin and its modules
-                    temp_MM = pp.ModuleManager()
-                    lib.load_modules(temp_MM)
-                    new_plugin = PluginInfo(plugin_name=filename,
-                                            modules=temp_MM.keys())
-                    self.saved_plugins.append(new_plugin)
-                    self.plugin_view(-1, None)
-                except Exception as e:
-                    self.plugin_player.add_message(
-                        f"Could not add {filename} to ModuleManager")
-                    self.plugin_player.add_message(f"{e}")
+                temp_MM = pp.ModuleManager()
+                lib.load_modules(temp_MM)
+                new_plugin = PluginInfo(plugin_name=library,
+                                        modules=temp_MM.keys())
+                self.saved_plugins.append(new_plugin)
+                self.plugin_view(-1, None)
             except Exception as e:
                 self.plugin_player.add_message(
-                    f"Could not import module {filename}: {e}")
+                    f"Could not add {library} to ModuleManager")
+                self.plugin_player.add_message(f"{e}")
+        except Exception as e:
+            self.plugin_player.add_message(
+                f"Could not import module {library}: {e}")
 
     def delete_plugin(self, instance):
         """delete a preinstalled plugin from the module manager, remove all it's module nodes, remove linkage from the tree that depend on it's modules, and remove the folder from the plugin view.
