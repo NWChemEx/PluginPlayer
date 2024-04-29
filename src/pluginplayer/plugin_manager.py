@@ -47,6 +47,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+from kivy.uix.textinput import TextInput
+
 
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
@@ -63,6 +65,7 @@ class PluginManager:
         """
         self.saved_plugins = []
         self.plugin_player = plugin_player
+        self.custom_declaration = None
 
     def plugin_loader(self):
         """Attempt to load in a plugin from a filepath stored in an entry box and update the plugin view and module manager
@@ -102,7 +105,7 @@ class PluginManager:
                     new_plugin = PluginInfo(plugin_name=filename,
                                             modules=temp_MM.keys())
                     self.saved_plugins.append(new_plugin)
-                    self.plugin_view()
+                    self.plugin_view(-1, None)
                 except Exception as e:
                     self.plugin_player.add_message(
                         f"Could not add {filename} to ModuleManager")
@@ -148,9 +151,10 @@ class PluginManager:
         for i in range(len(self.saved_plugins[folder_number].modules)):
             self.plugin_player.mm.erase(
                 self.saved_plugins[folder_number].modules[i])
-        self.saved_plugins[folder_number] = None
+        deletedPlugin = self.saved_plugins[folder_number]
+        self.saved_plugins.remove(deletedPlugin)
         self.plugin_player.add_message("Removed Plugin: " + name)
-        self.plugin_view()
+        self.plugin_view(-1, None)
 
     def view_module_info(self, instance):
         """View a module's information of its property types, submodules, inputs, outputs, and description
@@ -205,14 +209,6 @@ class PluginManager:
 
         #create main frame for popup
         new_frame = BoxLayout(orientation='vertical')
-        #add back button
-        back_button = Button(text="Back",
-                             size_hint=(None, None),
-                             size=(50, 20),
-                             halign='left',
-                             on_press=self.view_modules)
-        back_button.id = f'{plugin_number} {accessed_in_tree}'
-        new_frame.add_widget(back_button)
 
         #add info label
         info_label = Label(text=full_info, halign='left', color=(0, 0, 0, 1))
@@ -220,9 +216,84 @@ class PluginManager:
         scrolling_info = ScrollView(do_scroll_y=True, do_scroll_x=True)
         scrolling_info.add_widget(new_frame)
 
-        self.plugin_player.create_popup(scrolling_info, module_name + " Info",
-                                        False)
+        self.plugin_player.create_popup(scrolling_info, module_name + " Info", True, (800, 500))
 
+    def duplicate_module(self, instance):
+        """Duplicates a module into the Module Manager by asking for a new name through a popup
+
+        Args:
+            instance (kivy.uix.button): The "Clone" button pressed to trigger this action
+        """
+
+        moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
+        customNamePopup = BoxLayout(orientation='vertical', size=(100, 100))
+
+        customNamePopup.add_widget(Label(text="Enter name for clone of " + moduleName,
+                                color=(0,0,0,1),
+                                height = 30, 
+                                size_hint_y=None))
+        
+        self.custom_declaration = TextInput(multiline=False, 
+                                            hint_text="ex. Classical Force (2)",
+                                            height = 30, 
+                                            size_hint_y=None)
+        customNamePopup.add_widget(self.custom_declaration)
+
+
+        def initiate_clone(instance):
+            """Internal function of duplicate_module that initiates the cloning process and stores in the saved plugins
+
+            Args:
+                instance (_type_): _description_
+            """
+            moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
+
+            #If the cancel button was called, put a cancel message and dismiss the popup
+            if(instance.id.split()[0]=='0'):
+                self.plugin_player.add_message("Canceled module cloning of " + moduleName)
+                self.plugin_player.popup.dismiss()
+                return
+            
+            newModuleName = self.custom_declaration.text
+            #clone the module in the module manager
+            try:
+                self.plugin_player.mm.copy_module(moduleName, newModuleName)
+                self.saved_plugins[int(instance.id.split()[1])].modules.append(newModuleName)
+                self.plugin_player.add_message("Successfully created clone module " + newModuleName)
+
+                #create fake button to reset the plugin view
+                fakeButton = Widget()
+                fakeButton.id = f'0 {instance.id.split()[1]} 0'
+                self.view_modules(fakeButton)
+            except Exception as e:
+                self.plugin_player.add_message("Failed cloning module:\n" + f'{e}')
+
+        buttons = BoxLayout(orientation='horizontal', size=(20, 100))
+
+        #add button padding
+        buttons.add_widget(Widget(size_hint_x=1/5))
+
+        #add cancel button 
+        cancelButton = Button(on_press=initiate_clone, text="Cancel",  size_hint=(1,1/5))
+        cancelButton.id = f'0 {instance.id}'
+        buttons.add_widget(cancelButton)
+
+        #add button padding
+        buttons.add_widget(Widget(size_hint_x=1/5))
+
+        #add submit button
+        submitButton = Button(on_press=initiate_clone, text="Submit", size_hint=(1,1/5))
+        submitButton.id = f'1 {instance.id}'
+        buttons.add_widget(submitButton)
+
+        #add button padding
+        buttons.add_widget(Widget(size_hint_x=1/5))
+
+        customNamePopup.add_widget(buttons)
+        
+        self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (300, 200))
+        return
+    
     def view_modules(self, instance):
         """View modules from selecting a plugin giving options to add to the tree and view information
 
@@ -239,10 +310,15 @@ class PluginManager:
         #grab folder number from the id
         folder_number = int(instance.id.split()[0])
         accessed_in_tree = int(instance.id.split()[1])
-
         #exit if back button was pressed from the tree view
         if accessed_in_tree:
             return
+        #undrop the dropdown
+        elif (int(instance.id.split()[2]) == 1):
+            self.plugin_view(-1, None)
+            return
+
+
 
         #grab pluginSection widget
         plugin_section = self.plugin_player.root.ids.plugin_section
@@ -274,16 +350,24 @@ class PluginManager:
                                     height=30,
                                     spacing=5)
 
-            #add the name of the module
+            #add the name of the module, tabbed
             module_name = Label(
-                text=self.saved_plugins[folder_number].modules[i],
+                text="    " + self.saved_plugins[folder_number].modules[i],
                 color=(0, 0, 0, 1),
                 size_hint_x=1 / 2)
             view_module.add_widget(module_name)
 
+            duplicate = Button(
+                text='Clone',
+                size_hint_x =1 / 10,
+                on_press=self.duplicate_module
+            )
+            duplicate.id = f'{i} {folder_number}'
+            view_module.add_widget(duplicate)
+
             #add the add button to add to the tree
             add_to_tree = Button(
-                text='Add',
+                text='Graph',
                 size_hint_x=1 / 10,
                 on_press=self.plugin_player.tree_manager.add_node)
             #set the id for the module number in the plugin
@@ -304,62 +388,61 @@ class PluginManager:
         #fill in the empty scroll space
         space_filler = Label(height=plugin_section.height)
         module_widget.add_widget(space_filler)
+        self.plugin_view(folder_number, module_widget)
 
-        #add scrolling capabilities
-        scroll_view = ScrollView(scroll_y=1, do_scroll_y=True)
-        scroll_view.id = "scroll"
-        scroll_view.add_widget(module_widget)
-
-        self.plugin_player.popup = Popup(
-            content=scroll_view,
-            background_color=(255, 255, 255),
-            size_hint=(None, None),
-            size=plugin_section.size,
-            auto_dismiss=True,
-            title=self.saved_plugins[folder_number].plugin_name,
-            title_color=(0, 0, 0, 1))
-        self.plugin_player.popup.id = f'{folder_number}'
-        self.plugin_player.popup.open()
-
-    def plugin_view(self):
+    def plugin_view(self, dropped, widget):
         """update the loaded plugin visual display of folders"""
+
         #grab the plugin section
-        plugin_widget = self.plugin_player.root.ids.plugin_section
+        plugin_widget = self.plugin_player.root.ids.plugin_section.ids.plugin_container
 
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()
 
-        #Set the folder size
-        new_width, new_height = plugin_widget.width / 4 - 10, plugin_widget.width / 4 - 10
-        self.plugin_player.create_image(
-            'src/pluginplayer/assets/folder_icon.png',
-            'src/pluginplayer/assets/button_folder.png',
-            (int(new_width), int(new_height)))
+        #pad the scroller
+        plugin_widget.add_widget(Widget(height=40, size_hint_y=None))
 
-        number_of_added_plugins = 0
+        #resize dropdown images
+        self.plugin_player.create_image('src/pluginplayer/assets/drop_button.png', 'src/pluginplayer/assets/drop.png', (20,20))
+        self.plugin_player.create_image('src/pluginplayer/assets/dropped_button.png', 'src/pluginplayer/assets/dropped.png', (20, 20))
+
+
+        #add a section for each plugin
         for i in range(len(self.saved_plugins)):
 
-            #skip when encountering a deleted plugin
-            if not self.saved_plugins[i]:
-                continue
+            pluginBox = BoxLayout(orientation='horizontal', height=20)
+            pluginBox.id = f'{i}Plugin'
 
-            #add image and route the popup function when pressed
-            image_widget = Button(
-                on_press=self.view_modules,
-                background_normal='src/pluginplayer/assets/button_folder.png',
-                size_hint=(None, None),
-                size=(new_width, new_height),
-                text=self.saved_plugins[i].plugin_name,
-                font_size=11,
-                text_size=(new_width, None),
-                halign='center',
-                valign='bottom')
-            image_widget.id = f'{i} 0'
-            plugin_widget.add_widget(image_widget)
-            number_of_added_plugins += 1
+            #add the name
+            pluginBox.add_widget(Label(text=self.saved_plugins[i].plugin_name, 
+                                       size_hint_x=9/10,
+                                       height=20,
+                                       size_hint_y=None, 
+                                       color=(0, 0, 0, 1),
+                                       font_size='20dp'))
 
-        #fill in space for sizing
-        for i in range(4 - (number_of_added_plugins % 4)):
-            extra_widgets = BoxLayout(size_hint=(None, None),
-                                      size=(new_width, new_height))
-            plugin_widget.add_widget(extra_widgets)
+            if(dropped == i):
+                                #add a dropdown button
+                dropDown = Button(on_press=self.view_modules, 
+                                background_normal='src/pluginplayer/assets/dropped.png',
+                                size=(20,20), 
+                                size_hint=(None, None),
+                                valign='bottom')
+                dropDown.id = f'{i} 0 1'
+                pluginBox.add_widget(dropDown)
+                #add the widget to the main pluginView
+                plugin_widget.add_widget(pluginBox)
+                plugin_widget.add_widget(widget)
+
+            else:
+                #add a dropdown button
+                dropDown = Button(on_press=self.view_modules, 
+                                background_normal='src/pluginplayer/assets/drop.png',
+                                size=(20,20), 
+                                size_hint=(None, None),
+                                valign='bottom')
+                dropDown.id = f'{i} 0 0'
+
+                pluginBox.add_widget(dropDown)
+                #add the widget to the main pluginView
+                plugin_widget.add_widget(pluginBox)

@@ -322,7 +322,7 @@ class NodeWidgetManager():
 
         self.plugin_player.create_popup(
             scroll_view, f'Configuration for {module_name} ({node_number})',
-            True)
+            True, (800, 500))
         return
 
     #attempts to add an entered input
@@ -550,4 +550,4 @@ class NodeWidgetManager():
         scroll_view.add_widget(select_submod)
 
         self.plugin_player.create_popup(scroll_view,
-                                        f'Selecting submodule: {key}', False)
+                                        f'Selecting submodule: {key}', False, (800, 500))

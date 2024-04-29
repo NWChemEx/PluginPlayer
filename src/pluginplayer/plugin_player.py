@@ -113,7 +113,7 @@ class PluginPlayer(App):
         message_widget.ids.message_label.text += f"\n{message}"
         message_widget.scroll_y = 1
 
-    def create_popup(self, widget, description, dismiss):
+    def create_popup(self, widget, description, dismiss, size):
         """Set up a basic popup given a scrolling widget, name, description, and dismissal protocol
 
 
@@ -129,7 +129,7 @@ class PluginPlayer(App):
         self.popup.dismiss()
         self.popup = Popup(content=widget,
                            size_hint=(None, None),
-                           size=(800, 500),
+                           size=size,
                            background_color=(255, 255, 255),
                            auto_dismiss=dismiss,
                            title=description,

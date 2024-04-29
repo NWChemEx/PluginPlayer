@@ -9,6 +9,7 @@
         id: file_path_input
         multiline: False
         hint_text: "Enter Filepath/Browsing Directory"
+        text: "/home/ethgru/PluginPlay/build/pluginplay_examples.so"
         size_hint_x: 3
 
     Button:
@@ -23,7 +24,7 @@
     ScrollView:
         do_scroll_y: True
         do_scroll_x: False
-        scroll_y: 0
+        scroll_y: 1
         Label:
             id: message_label
             halign: 'left'
@@ -33,15 +34,18 @@
             text: ''
             color: 0, 0, 0, 1
 
-<PluginSection@GridLayout>:
-    cols: 4
-    size_hint_y: None
-    height: self.minimum_height
-    spacing: 10
-    #ScrollView:
-        #do_scroll_y: True
-        #do_scroll_x: False
-        #scroll_y: 1
+<PluginSection@ScrollView>:
+    ScrollView:
+        do_scroll_y: True
+        do_scroll_x: False
+        scroll_y: 1
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: 10
+            id: plugin_container
+
 
 
 <RightSection@BoxLayout>:
@@ -107,7 +111,7 @@ BoxLayout:
             size_hint_y:70/100
 
         Label:
-            text: "Messages"
+            text: "Console"
             color: 0, 0, 0, 1
             size_hint_y: 3/100
             canvas.before:

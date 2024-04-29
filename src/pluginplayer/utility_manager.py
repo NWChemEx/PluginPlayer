@@ -181,7 +181,7 @@ class UtilityManager():
                                  scroll_type=['content'])
         scroll_view.add_widget(types_box)
 
-        plugin_player.create_popup(scroll_view, "Class Types", False)
+        plugin_player.create_popup(scroll_view, "Class Types", False, (800, 500))
 
     def new_type(self, instance, plugin_player):
         """Defines a new class type for custom inputs and property types
