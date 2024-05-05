@@ -36,7 +36,7 @@ MODULE_RUN(MultiplyBy1) {
     const auto& [r] = Multiplier::unwrap_inputs(inputs);
     
     auto rv = results();
-    return ElectricField::wrap_results(rv, r);
+    return Multiplier::wrap_results(rv, r);
 }
 
 } // namespace pluginplay_examples
