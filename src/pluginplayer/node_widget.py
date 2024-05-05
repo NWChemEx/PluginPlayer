@@ -16,6 +16,7 @@ from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
+from kivy.metrics import dp
 
 
 class DraggableImageButton(ButtonBehavior, BoxLayout):

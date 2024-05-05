@@ -40,6 +40,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+from kivy.metrics import dp
 
 
 class UtilityManager():
@@ -85,7 +86,7 @@ class UtilityManager():
         popup = Popup(title='Select a file',
                       content=file_chooser,
                       size_hint=(None, None),
-                      size=(500, 500))
+                      size=(dp(500), dp(500)))
         file_chooser.bind(on_submit=select_file)
         popup.open()
 
@@ -114,7 +115,7 @@ class UtilityManager():
         on_press_func = plugin_player.node_widget_manager.view_config if back_to_main else plugin_player.node_widget_manager.add_input
         back_button = Button(text="Back",
                              size_hint=(None, None),
-                             size=(40, 20),
+                             size=(dp(40), dp(20)),
                              on_press=on_press_func)
         back_button.id = f'{node_number}' if back_to_main else f'{node_number} {key_number}'
         types_box.add_widget(back_button)
@@ -133,7 +134,7 @@ class UtilityManager():
         #create the entry to add an extra input
         new_type = BoxLayout(orientation='horizontal',
                              size_hint_y=None,
-                             height=35,
+                             height=dp(35),
                              spacing=0)
 
         if self.custom_declaration_widget.parent:
@@ -155,33 +156,33 @@ class UtilityManager():
         new_type.add_widget(add_button)
 
         types_box.add_widget(new_type)
-        height += 35
+        height += dp(35)
 
         types_box.add_widget(
             Label(text="Imported Types",
                   font_size="20sp",
                   size_hint_y=None,
-                  height=20))
-        height += 20
+                  height=dp(20)))
+        height += dp(20)
 
         for imported_type in self.imported_classes:
             types_box.add_widget(
                 Label(text=imported_type,
                       size_hint_y=None,
-                      height=15,
+                      height=dp(15),
                       color=(0, 0, 0, 1)))
             height += 15
 
         #add scrolling capabilities
         if height < 450:
             types_box.add_widget(
-                Widget(size_hint_y=None, height=(450 - height)))
+                Widget(size_hint_y=None, height=dp((450 - height))))
         scroll_view = ScrollView(scroll_y=0,
                                  do_scroll_y=True,
                                  scroll_type=['content'])
         scroll_view.add_widget(types_box)
 
-        plugin_player.create_popup(scroll_view, "Class Types", False, (800, 500))
+        plugin_player.create_popup(scroll_view, "Class Types", False, (dp(800), dp(500)))
 
     def new_type(self, instance, plugin_player):
         """Defines a new class type for custom inputs and property types

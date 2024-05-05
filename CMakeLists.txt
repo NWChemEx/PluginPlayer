@@ -67,6 +67,14 @@ if("${BUILD_TESTING}")
     include(CTest)
     include(nwx_pybind11)
     set(PYTHON_TEST_DIR "${CMAKE_CURRENT_LIST_DIR}/tests")
+    set(examples_src_dir "${CMAKE_CURRENT_LIST_DIR}/tests/pluginplayer_examples")
+
+    cmaize_add_library(
+        ${PROJECT_NAME}_examples
+        SOURCE_DIR ${examples_src_dir}
+        INCLUDE_DIRS ${examples_src_dir}
+        DEPENDS Catch2::Catch2 ${PROJECT_NAME}
+    )
 
     nwx_pybind11_tests(
         py_${PROJECT_NAME}

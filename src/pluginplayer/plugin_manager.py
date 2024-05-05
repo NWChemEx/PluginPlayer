@@ -48,6 +48,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 from kivy.uix.textinput import TextInput
+from kivy.metrics import dp
 
 
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
@@ -219,7 +220,7 @@ class PluginManager:
         scrolling_info = ScrollView(do_scroll_y=True, do_scroll_x=True)
         scrolling_info.add_widget(new_frame)
 
-        self.plugin_player.create_popup(scrolling_info, module_name + " Info", True, (800, 500))
+        self.plugin_player.create_popup(scrolling_info, module_name + " Info", True, (dp(800), dp(500)))
 
     def duplicate_module(self, instance):
         """Duplicates a module into the Module Manager by asking for a new name through a popup
@@ -229,16 +230,16 @@ class PluginManager:
         """
 
         moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
-        customNamePopup = BoxLayout(orientation='vertical', size=(100, 100))
+        customNamePopup = BoxLayout(orientation='vertical', size=(dp(100), dp(100)))
 
         customNamePopup.add_widget(Label(text="Enter name for clone of " + moduleName,
                                 color=(0,0,0,1),
-                                height = 30, 
+                                height = dp(30), 
                                 size_hint_y=None))
         
         self.custom_declaration = TextInput(multiline=False, 
                                             hint_text="ex. Classical Force (2)",
-                                            height = 30, 
+                                            height = dp(30), 
                                             size_hint_y=None)
         customNamePopup.add_widget(self.custom_declaration)
 
@@ -271,7 +272,7 @@ class PluginManager:
             except Exception as e:
                 self.plugin_player.add_message("Failed cloning module:\n" + f'{e}')
 
-        buttons = BoxLayout(orientation='horizontal', size=(20, 100))
+        buttons = BoxLayout(orientation='horizontal', size=(dp(20), dp(100)))
 
         #add button padding
         buttons.add_widget(Widget(size_hint_x=1/5))
@@ -294,7 +295,7 @@ class PluginManager:
 
         customNamePopup.add_widget(buttons)
         
-        self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (300, 200))
+        self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (dp(300), dp(200)))
         return
     
     def view_modules(self, instance):
@@ -329,15 +330,14 @@ class PluginManager:
         #create widget to fill with modules
         module_widget = BoxLayout(orientation='vertical',
                                   size_hint=(None, None),
-                                  size=(plugin_section.width - 20,
+                                  size=(plugin_section.width - dp(20),
                                         plugin_section.height),
                                   spacing=5)
 
         #add a delete plugin button
         delete_plugin = Button(text='Delete Plugin',
-                               color=(0, 0, 0, 1),
                                size_hint_y=None,
-                               height=20,
+                               height=dp(20),
                                on_press=self.delete_plugin)
 
         #use id as a value holder for the folder number
@@ -350,8 +350,8 @@ class PluginManager:
             #create main holding box
             view_module = BoxLayout(orientation='horizontal',
                                     size_hint_y=None,
-                                    height=30,
-                                    spacing=5)
+                                    height=dp(30),
+                                    spacing=dp(5))
 
             #add the name of the module, tabbed
             module_name = Label(
@@ -403,7 +403,7 @@ class PluginManager:
         plugin_widget.clear_widgets()
 
         #pad the scroller
-        plugin_widget.add_widget(Widget(height=40, size_hint_y=None))
+        plugin_widget.add_widget(Widget(height=dp(40), size_hint_y=None))
 
         #resize dropdown images
         self.plugin_player.create_image('src/pluginplayer/assets/drop_button.png', 'src/pluginplayer/assets/drop.png', (20,20))
@@ -413,22 +413,22 @@ class PluginManager:
         #add a section for each plugin
         for i in range(len(self.saved_plugins)):
 
-            pluginBox = BoxLayout(orientation='horizontal', height=20)
+            pluginBox = BoxLayout(orientation='horizontal', height=dp(20))
             pluginBox.id = f'{i}Plugin'
 
             #add the name
             pluginBox.add_widget(Label(text=self.saved_plugins[i].plugin_name, 
                                        size_hint_x=9/10,
-                                       height=20,
+                                       height=dp(20),
                                        size_hint_y=None, 
                                        color=(0, 0, 0, 1),
-                                       font_size='20dp'))
+                                       font_size='17dp'))
 
             if(dropped == i):
                                 #add a dropdown button
                 dropDown = Button(on_press=self.view_modules, 
                                 background_normal='src/pluginplayer/assets/dropped.png',
-                                size=(20,20), 
+                                size=(dp(20),dp(20)), 
                                 size_hint=(None, None),
                                 valign='bottom')
                 dropDown.id = f'{i} 0 1'
@@ -441,7 +441,7 @@ class PluginManager:
                 #add a dropdown button
                 dropDown = Button(on_press=self.view_modules, 
                                 background_normal='src/pluginplayer/assets/drop.png',
-                                size=(20,20), 
+                                size=(dp(20),dp(20)), 
                                 size_hint=(None, None),
                                 valign='bottom')
                 dropDown.id = f'{i} 0 0'

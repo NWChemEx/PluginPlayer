@@ -32,6 +32,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+from kivy.metrics import dp
 
 
 class NodeWidgetManager():
@@ -67,12 +68,12 @@ class NodeWidgetManager():
 
         #create main widget to hold everything
         config_widget = BoxLayout(orientation='vertical',
-                                  spacing=10,
+                                  spacing=dp(10),
                                   size_hint_y=None)
         config_widget.bind(minimum_height=config_widget.setter('height'))
 
         #add buffer for scrollview
-        config_widget.add_widget(Widget(size_hint_y=None, height=100))
+        config_widget.add_widget(Widget(size_hint_y=None, height=dp(100)))
 
         #-------------------------INPUT CONFIGURATION ---------------------
 
@@ -86,7 +87,7 @@ class NodeWidgetManager():
                             font_size='20sp',
                             color=(0, 0, 0, 1),
                             size_hint_y=None,
-                            height=30)
+                            height=dp(30))
         input_widget.add_widget(input_label)
 
         #add each input and a text input to add it
@@ -102,7 +103,7 @@ class NodeWidgetManager():
             #create the box to hold the input's options
             input_list = BoxLayout(orientation='horizontal',
                                    size_hint_y=None,
-                                   height=30,
+                                   height=dp(30),
                                    spacing=0)
 
             #create label for the name of the input
@@ -165,7 +166,7 @@ class NodeWidgetManager():
             #create the box to hold the output's options
             output_list = BoxLayout(orientation='horizontal',
                                     size_hint_y=None,
-                                    height=30,
+                                    height=dp(30),
                                     spacing=0)
 
             #create label for the name of the output
@@ -274,7 +275,7 @@ class NodeWidgetManager():
             #create the box to hold the submod's options
             submod_list = BoxLayout(orientation='horizontal',
                                     size_hint_y=None,
-                                    height=30,
+                                    height=dp(30),
                                     spacing=0)
 
             #create label for the name of the submodule
@@ -312,7 +313,7 @@ class NodeWidgetManager():
         config_widget.add_widget(submods_widget)
 
         #add buffer for scrollview
-        config_widget.add_widget(Widget(size_hint_y=None, height=100))
+        config_widget.add_widget(Widget(size_hint_y=None, height=dp(100)))
 
         #add scrolling capabilities
         scroll_view = ScrollView(do_scroll_x=False,
@@ -322,7 +323,7 @@ class NodeWidgetManager():
 
         self.plugin_player.create_popup(
             scroll_view, f'Configuration for {module_name} ({node_number})',
-            True, (800, 500))
+            True, (dp(800), dp(500)))
         return
 
     #attempts to add an entered input
@@ -342,7 +343,7 @@ class NodeWidgetManager():
         #start creating a widget for selecting an input
         select_input = BoxLayout(orientation='vertical',
                                  size_hint=(None, None),
-                                 size=(800, 500),
+                                 size=(dp(800), dp(500)),
                                  spacing=0)
 
         #keep track of height for scrolling padding
@@ -351,24 +352,24 @@ class NodeWidgetManager():
         #add back button
         back_button = Button(text="Back",
                              size_hint=(None, None),
-                             size=(40, 20),
+                             size=(dp(40), dp(20)),
                              on_press=self.view_config)
         back_button.id = f'{node_number}'
         select_input.add_widget(back_button)
-        height += 20
+        height += dp(20)
 
         #add an option to declare your own input
         select_input.add_widget(
             Label(text="Declare input value using Python",
                   color=(0, 0, 0, 1),
                   size_hint_y=None,
-                  height=20,
+                  height=dp(20),
                   halign='center'))
         height += 20
         custom_input = BoxLayout(orientation='horizontal',
                                  spacing=0,
                                  size_hint=(None, None),
-                                 size=(750, 30))
+                                 size=(dp(750), dp(30)))
         text_entry = TextInput(hint_text="ex: Point([-1.0, -1.0, -1.0])",
                                size_hint_x=9 / 10,
                                multiline=False)
@@ -396,7 +397,7 @@ class NodeWidgetManager():
         custom_input.add_widget(class_types_button)
 
         select_input.add_widget(custom_input)
-        height += 30
+        height += dp(30)
 
         output_node_number = 0
         output_number = 0
@@ -413,18 +414,18 @@ class NodeWidgetManager():
                 Label(
                     text=f"Node {output_node_number}: {node_iter.module_name}",
                     size_hint_y=None,
-                    height=20,
+                    height=dp(20),
                     halign='left',
                     font_size="15sp",
                     color=(0, 0, 0, 1)))
-            height += 30
+            height += dp(30)
 
             output_number = 0
             for output in list(node_iter.output_dict.keys()):
                 #create an output with an add button
                 output_box = BoxLayout(orientation='horizontal',
                                        size_hint=(None, None),
-                                       size=(750, 30),
+                                       size=(dp(750), dp(30)),
                                        spacing=0)
                 output_box.add_widget(
                     Label(text=output,
@@ -442,27 +443,27 @@ class NodeWidgetManager():
 
                 #add to main box
                 select_input.add_widget(output_box)
-                height += 30
+                height += dp(30)
                 output_number += 1
-            select_input.add_widget(Widget(size_hint_y=None, height=20))
-            height += 20
+            select_input.add_widget(Widget(size_hint_y=None, height=dp(20)))
+            height += dp(20)
             output_node_number += 1
 
         #add scrolling capabilities
-        if height < 450:
+        if height < dp(450):
             select_input.add_widget(
                 Widget(size_hint_y=None, height=(450 - height)))
         scroll_view = ScrollView(scroll_y=0,
                                  do_scroll_y=True,
                                  size_hint=(None, None),
-                                 size=(800, 500),
+                                 size=(dp(800), dp(500)),
                                  scroll_type=['content'])
         scroll_view.add_widget(select_input)
         self.plugin_player.popup.dismiss()
         self.plugin_player.popup = None
         self.plugin_player.popup = Popup(content=scroll_view,
                                          size_hint=(None, None),
-                                         size=(800, 500),
+                                         size=(dp(800), dp(500)),
                                          background_color=(255, 255, 255),
                                          auto_dismiss=False,
                                          title=f'Selecting input: {key}',
@@ -487,7 +488,7 @@ class NodeWidgetManager():
         #start creating a widget for selecting a submodule
         select_submod = BoxLayout(orientation='vertical',
                                   size_hint=(None, None),
-                                  size=(800, 500),
+                                  size=(dp(800), dp(500)),
                                   spacing=0)
 
         #keep track of height for scrolling padding
@@ -495,7 +496,7 @@ class NodeWidgetManager():
         #add back button
         back_button = Button(text="Back",
                              size_hint=(None, None),
-                             size=(40, 20),
+                             size=(dp(40), dp(20)),
                              on_press=self.view_config)
         back_button.id = f'{node_number}'
         select_submod.add_widget(back_button)
@@ -514,7 +515,7 @@ class NodeWidgetManager():
                 #create a module with an add button
                 module_box = BoxLayout(orientation='horizontal',
                                        size_hint=(None, None),
-                                       size=(750, 30),
+                                       size=(dp(750), dp(30)),
                                        spacing=0)
                 module_box.add_widget(
                     Label(text=module,
@@ -532,22 +533,22 @@ class NodeWidgetManager():
 
                 #add to main box
                 select_submod.add_widget(module_box)
-                height += 30
+                height += dp(30)
 
                 module_number += 1
         plugin_number += 1
         module_number = 0
 
         #add scrolling capabilities
-        if height < 450:
+        if height < dp(450):
             select_submod.add_widget(
-                Widget(size_hint_y=None, height=(450 - height)))
+                Widget(size_hint_y=None, height=(dp(450) - height)))
         scroll_view = ScrollView(scroll_y=0,
                                  do_scroll_y=True,
                                  size_hint=(None, None),
-                                 size=(800, 500),
+                                 size=(dp(800), dp(500)),
                                  scroll_type=['content'])
         scroll_view.add_widget(select_submod)
 
         self.plugin_player.create_popup(scroll_view,
-                                        f'Selecting submodule: {key}', False, (800, 500))
+                                        f'Selecting submodule: {key}', False, (dp(800), dp(500)))

@@ -20,6 +20,7 @@ Linking a connection
 from kivy.graphics import Line
 from kivy.uix.widget import Widget
 from kivy.graphics import Color
+from kivy.metrics import dp
 
 #system's classes
 import sys
@@ -124,10 +125,10 @@ class NodeManager():
 
             #add a line connecting the nodes
             connecting_line = Line(points=[
-                input_node.module_widget.x + 50,
-                input_node.module_widget.y + 50,
-                output_node.module_widget.x + 50,
-                output_node.module_widget.y + 50
+                input_node.module_widget.x + dp(50),
+                input_node.module_widget.y + dp(50),
+                output_node.module_widget.x + dp(50),
+                output_node.module_widget.y + dp(50)
             ],
                                    width=2)
             input_node.module_widget.incoming_lines.append(

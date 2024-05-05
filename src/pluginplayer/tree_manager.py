@@ -38,6 +38,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
+from kivy.metrics import dp
 
 
 class TreeManager():
@@ -85,7 +86,7 @@ class TreeManager():
 
         #create main widget
         node_widget = DraggableWidget(size_hint=(None, None),
-                                      size=(120, 80),
+                                      size=(dp(120), dp(80)),
                                       orientation='vertical',
                                       spacing=0)
         #set the relative window
@@ -104,8 +105,8 @@ class TreeManager():
         #add module name label
         widget_label = Label(
             size_hint=(None, None),
-            width=100,
-            height=80,
+            width=dp(100),
+            height=dp(80),
             halign='center',
             valign='center',
             text=f"{module_name} ({len(self.plugin_player.nodes)})")
@@ -115,45 +116,45 @@ class TreeManager():
         #add box for option buttons
         options = BoxLayout(orientation='vertical',
                             size_hint=(None, None),
-                            width=20,
-                            height=80,
+                            width=dp(20),
+                            height=dp(80),
                             spacing=0)
 
         options.add_widget(Widget(size_hint_y=None, height=10))
 
         self.plugin_player.create_image(
             'src/pluginplayer/assets/drag_icon.png',
-            'src/pluginplayer/assets/drag.png', (20, 20))
+            'src/pluginplayer/assets/drag.png', (dp(20), dp(20)))
         navigate_button = DraggableImageButton(
             node_widget=node_widget,
             relative_window=self.plugin_player.root.ids.right_section.ids.
             tree_section,
             size_hint_y=None,
-            height=20)
+            height=dp(20))
         options.add_widget(navigate_button)
 
         self.plugin_player.create_image(
             'src/pluginplayer/assets/info_icon.png',
-            'src/pluginplayer/assets/info.png', (20, 20))
+            'src/pluginplayer/assets/info.png', (dp(20), dp(20)))
 
         info_button = Button(
             background_normal='src/pluginplayer/assets/info.png',
             on_press=self.plugin_player.plugin_manager.view_module_info,
             size_hint_y=None,
-            height=20)
+            height=dp(20))
         #add id for module number, plugin number, and 1 (accessed in treeview)
         info_button.id = f'{module_number} {plugin_number} 1'
         options.add_widget(info_button)
 
         self.plugin_player.create_image(
             'src/pluginplayer/assets/remove_icon.png',
-            'src/pluginplayer/assets/remove.png', (20, 20))
+            'src/pluginplayer/assets/remove.png', (dp(20), dp(20)))
 
         remove_button = Button(
             background_normal='src/pluginplayer/assets/remove.png',
             on_press=self.remove_node,
             size_hint_y=None,
-            height=20)
+            height=dp(20))
         remove_button.id = f'{len(self.plugin_player.nodes)}'
         options.add_widget(remove_button)
 
@@ -165,13 +166,13 @@ class TreeManager():
         #add configure button
         config_button = Button(
             size_hint=(None, None),
-            height=20,
-            width=90,
+            height=dp(20),
+            width=dp(90),
             valign='center',
             text='Configure',
             on_press=self.plugin_player.node_widget_manager.view_config)
         config_button.id = f'{len(self.plugin_player.nodes)}'
-        node_widget.height += 20
+        node_widget.height += dp(20)
         node_widget.add_widget(config_button)
         #add it to the screen and the main lists
         node_widget.pos = (1, 1)

@@ -8,7 +8,7 @@
     TextInput:
         id: file_path_input
         multiline: False
-        hint_text: "Enter Filepath/Browsing Directory"
+        hint_text: "Enter Filepath/Plugin Name"
         text: "/home/ethgru/PluginPlay/build/pluginplay_examples.so"
         size_hint_x: 3
 
@@ -68,15 +68,22 @@
         Widget:
             size_hint_x: 4/5
         Button:
-            text: "Delete Tree"
-            on_press: app.tree_manager.delete_tree()
+            text: "Add Inputs"
+            on_press: app.tree_manager.view_config()
             size_hint_x: 1/10
 
 
         Button:
-            text: "Run Tree"
+            text: "Run Module"
             on_press: app.tree_manager.run_tree()
             size_hint_x: 1/10
+        
+        Button:
+            text: "Reset Tree"
+            on_press: app.tree_manager.delete_tree()
+            size_hint_x: 1/10
+        
+
         
 
     RelativeLayout:
@@ -97,16 +104,43 @@ BoxLayout:
         size_hint: 1/3, 1
         id: left_section
         Label:
-            text: "Add New Plugin File"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .2  #Transparent Grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            text: "Import New Plugin"
             color: 0, 0, 0, 1
             size_hint_y: 3/100
 
         FileEntry:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .2  #Transparent Grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             id: file_entry
             background_color: 1, 1, 1, 0
-            size_hint_y:5/100
+            size_hint_y:4/100
+        Widget:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .2  #Transparent Grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_y:1/100
+
         
         PluginSection:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, .3  #Transparent Grey Darker
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             id: plugin_section
             size_hint_y:70/100
 
@@ -116,7 +150,7 @@ BoxLayout:
             size_hint_y: 3/100
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .2  #Transparent Grey
+                    rgba: 0, 0, 0, .4  #Transparent Grey
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -132,6 +166,12 @@ BoxLayout:
             size_hint_y: 19/100
         
     RightSection:
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, .7  #Transparent Grey
+            Rectangle:
+                pos: self.pos
+                size: self.size
         id: right_section
         size_hint: 2/3, 1
     

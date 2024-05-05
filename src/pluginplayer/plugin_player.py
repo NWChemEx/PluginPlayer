@@ -30,6 +30,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
+from kivy.metrics import dp
 
 #image resizer
 from PIL import Image as PILImage
@@ -90,7 +91,7 @@ class PluginPlayer(App):
         logo = Image(source='src/pluginplayer/assets/NWCHEMEX.png',
                      fit_mode="fill",
                      size_hint=(None, None),
-                     size=(200, 200),
+                     size=(dp(200), dp(200)),
                      pos_hint={
                          'right': 1,
                          'y': 0
@@ -129,7 +130,7 @@ class PluginPlayer(App):
         self.popup.dismiss()
         self.popup = Popup(content=widget,
                            size_hint=(None, None),
-                           size=size,
+                           size=(int(size[0]), int(size[1])),
                            background_color=(255, 255, 255),
                            auto_dismiss=dismiss,
                            title=description,
@@ -148,7 +149,7 @@ class PluginPlayer(App):
         """
 
         image = PILImage.open(filepath)
-        resized_image = image.resize(size)
+        resized_image = image.resize((int(size[0]), int(size[1])))
         resized_image.save(new_filepath)
         self.resized_images.append(new_filepath)
 
