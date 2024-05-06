@@ -33,10 +33,10 @@ MODULE_CTOR(MultiplyBy1) {
 }
 
 MODULE_RUN(MultiplyBy1) {
-    const auto& [r] = Multiplier::unwrap_inputs(inputs);
-    
+    const int& r = std::get<0>(Multiplier::unwrap_inputs(inputs));
+    int rt = r;
     auto rv = results();
-    return Multiplier::wrap_results(rv, r);
+    return Multiplier::wrap_results(rv, rt);
 }
 
 } // namespace pluginplay_examples

@@ -229,7 +229,7 @@ class PluginManager:
             instance (kivy.uix.button): The "Clone" button pressed to trigger this action
         """
 
-        moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
+        moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[0])]
         customNamePopup = BoxLayout(orientation='vertical', size=(dp(100), dp(100)))
 
         customNamePopup.add_widget(Label(text="Enter name for clone of " + moduleName,
@@ -250,8 +250,9 @@ class PluginManager:
             Args:
                 instance (_type_): _description_
             """
-            moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
-
+            moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
+            
+            self.plugin_player("Cloning into")
             #If the cancel button was called, put a cancel message and dismiss the popup
             if(instance.id.split()[0]=='0'):
                 self.plugin_player.add_message("Canceled module cloning of " + moduleName)
@@ -329,9 +330,10 @@ class PluginManager:
 
         #create widget to fill with modules
         module_widget = BoxLayout(orientation='vertical',
-                                  size_hint=(None, None),
-                                  size=(plugin_section.width - dp(20),
-                                        plugin_section.height),
+                                  size_hint_x =None,
+                                  size_hint_y = None,
+                                  height = dp(20) + len(self.saved_plugins[folder_number].modules) * dp(35),
+                                  width=plugin_section.width - dp(20),
                                   spacing=5)
 
         #add a delete plugin button
@@ -365,7 +367,7 @@ class PluginManager:
                 size_hint_x =1 / 10,
                 on_press=self.duplicate_module
             )
-            duplicate.id = f'{i} {folder_number}'
+            duplicate.id = f'{folder_number} {i}'
             view_module.add_widget(duplicate)
 
             #add the add button to add to the tree
@@ -388,9 +390,6 @@ class PluginManager:
             #add the module widget to the main view
             module_widget.add_widget(view_module)
 
-        #fill in the empty scroll space
-        space_filler = Label(height=plugin_section.height)
-        module_widget.add_widget(space_filler)
         self.plugin_view(folder_number, module_widget)
 
     def plugin_view(self, dropped, widget):
@@ -402,9 +401,6 @@ class PluginManager:
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()
 
-        #pad the scroller
-        plugin_widget.add_widget(Widget(height=dp(40), size_hint_y=None))
-
         #resize dropdown images
         self.plugin_player.create_image('src/pluginplayer/assets/drop_button.png', 'src/pluginplayer/assets/drop.png', (20,20))
         self.plugin_player.create_image('src/pluginplayer/assets/dropped_button.png', 'src/pluginplayer/assets/dropped.png', (20, 20))
@@ -412,8 +408,7 @@ class PluginManager:
 
         #add a section for each plugin
         for i in range(len(self.saved_plugins)):
-
-            pluginBox = BoxLayout(orientation='horizontal', height=dp(20))
+            pluginBox = BoxLayout(orientation='horizontal', height=dp(20), size_hint_y=None)
             pluginBox.id = f'{i}Plugin'
 
             #add the name
@@ -425,7 +420,7 @@ class PluginManager:
                                        font_size='17dp'))
 
             if(dropped == i):
-                                #add a dropdown button
+                #add a dropdown button
                 dropDown = Button(on_press=self.view_modules, 
                                 background_normal='src/pluginplayer/assets/dropped.png',
                                 size=(dp(20),dp(20)), 
@@ -435,8 +430,7 @@ class PluginManager:
                 pluginBox.add_widget(dropDown)
                 #add the widget to the main pluginView
                 plugin_widget.add_widget(pluginBox)
-                plugin_widget.add_widget(widget)
-
+                plugin_widget.add_widget(widget)    
             else:
                 #add a dropdown button
                 dropDown = Button(on_press=self.view_modules, 
@@ -449,3 +443,5 @@ class PluginManager:
                 pluginBox.add_widget(dropDown)
                 #add the widget to the main pluginView
                 plugin_widget.add_widget(pluginBox)
+        plugin_widget.add_widget(Widget(height=dp(300), size_hint_y=None))
+                

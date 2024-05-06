@@ -30,17 +30,18 @@ namespace pluginplayer_examples {
 MODULE_CTOR(MultiplyBy2) {
     description(module_desc);
     satisfies_property_type<Multiplier>();
-    add_submodule<efield_type>("internal multiplier")
+    add_submodule<Multiplier>("internal multiplier")
       .set_description(
         "Used to multiply a value by another");
 }
 
 MODULE_RUN(MultiplyBy2) {
-    const auto& [r] = Multiplier::unwrap_inputs(inputs);
+    const int& input = std::get<0>(Multiplier::unwrap_inputs(inputs));
+    int r = input;
 
-    auto r = submods.at("internal multiplier").run_as<Multiplier>(r) * 2;
+    int rt = submods.at("internal multiplier").run_as<Multiplier>(input) * 2;
     auto rv = results();
-    return Multiplier::wrap_results(rv, r);
+    return Multiplier::wrap_results(rv, rt);
 }
 
 } // namespace pluginplay_examples

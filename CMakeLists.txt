@@ -75,6 +75,12 @@ if("${BUILD_TESTING}")
         INCLUDE_DIRS ${examples_src_dir}
         DEPENDS Catch2::Catch2 ${PROJECT_NAME}
     )
+    nwx_add_pybind11_module(
+        ${PROJECT_NAME}_examples
+        INSTALL OFF
+        SOURCE_DIR ${examples_src_dir}
+        DEPENDS parallelzone ${PROJECT_NAME} ${PROJECT_NAME}_examples
+    )
 
     nwx_pybind11_tests(
         py_${PROJECT_NAME}
