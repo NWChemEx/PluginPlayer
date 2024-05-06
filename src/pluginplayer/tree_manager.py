@@ -68,7 +68,7 @@ class TreeManager():
         self.plugin_player.add_message("Removed Tree")
 
     def add_node(self, instance):
-        """Add a new node to the tree section
+        """Add a new node to the tree section and its corresponding submodules
 
         :param instance: The button that calls this function
         :type instance: kivy.uix.button.Button
@@ -113,67 +113,38 @@ class TreeManager():
         widget_label.text_size = widget_label.size
         basis_box.add_widget(widget_label)
 
-        #add box for option buttons
-        options = BoxLayout(orientation='vertical',
-                            size_hint=(None, None),
-                            width=dp(20),
-                            height=dp(80),
-                            spacing=0)
-
-        options.add_widget(Widget(size_hint_y=None, height=10))
-
-        self.plugin_player.create_image(
-            'src/pluginplayer/assets/drag_icon.png',
-            'src/pluginplayer/assets/drag.png', (dp(20), dp(20)))
-        navigate_button = DraggableImageButton(
-            node_widget=node_widget,
-            relative_window=self.plugin_player.root.ids.right_section.ids.
-            tree_section,
-            size_hint_y=None,
-            height=dp(20))
-        options.add_widget(navigate_button)
-
         self.plugin_player.create_image(
             'src/pluginplayer/assets/info_icon.png',
-            'src/pluginplayer/assets/info.png', (dp(20), dp(20)))
+            'src/pluginplayer/assets/info.png', (dp(30), dp(30)))
 
         info_button = Button(
             background_normal='src/pluginplayer/assets/info.png',
             on_press=self.plugin_player.plugin_manager.view_module_info,
-            size_hint_y=None,
-            height=dp(20))
+            size_hint=(None,None),
+            pos_hint={'center_y':0.5},
+            size=(dp(30),dp(30)))
         #add id for module number, plugin number, and 1 (accessed in treeview)
         info_button.id = f'{module_number} {plugin_number} 1'
-        options.add_widget(info_button)
+        basis_box.add_widget(info_button)
 
-        self.plugin_player.create_image(
-            'src/pluginplayer/assets/remove_icon.png',
-            'src/pluginplayer/assets/remove.png', (dp(20), dp(20)))
-
-        remove_button = Button(
-            background_normal='src/pluginplayer/assets/remove.png',
-            on_press=self.remove_node,
-            size_hint_y=None,
-            height=dp(20))
-        remove_button.id = f'{len(self.plugin_player.nodes)}'
-        options.add_widget(remove_button)
-
-        options.add_widget(Widget(size_hint_y=None, height=10))
-
-        basis_box.add_widget(options)
         node_widget.add_widget(basis_box)
 
-        #add configure button
-        config_button = Button(
-            size_hint=(None, None),
-            height=dp(20),
-            width=dp(90),
-            valign='center',
-            text='Configure',
-            on_press=self.plugin_player.node_widget_manager.view_config)
-        config_button.id = f'{len(self.plugin_player.nodes)}'
-        node_widget.height += dp(20)
-        node_widget.add_widget(config_button)
+        if(new_node.submod_map):
+            #add configure button if it has submodules
+            config_button = Button(
+                size_hint=(None, None),
+                height=dp(20),
+                width=dp(90),
+                valign='center',
+                halign='center',
+                pos_hint={'center_x':0.5},
+                text='Map',
+                on_press=self.plugin_player.node_widget_manager.config_submod)
+            config_button.id = f'{len(self.plugin_player.nodes)}'
+            node_widget.height += dp(20)
+            
+            node_widget.add_widget(config_button)
+
         #add it to the screen and the main lists
         node_widget.pos = (1, 1)
         self.plugin_player.root.ids.right_section.ids.tree_section.add_widget(
@@ -384,7 +355,7 @@ class TreeManager():
             try:
                 #Implement a way to select the property type using the class types imports
                 output = self.plugin_player.mm.at(run_node.module_name).run_as(
-                    run_node.property_type[1], *run_inputs)
+                    run_node.property_type[1], 5) #*run_inputs)
                 self.plugin_player.add_message(
                     f"{run_node.module_name}({nodes.index(run_node)}) Output: {output}"
                 )

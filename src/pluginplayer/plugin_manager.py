@@ -229,7 +229,7 @@ class PluginManager:
             instance (kivy.uix.button): The "Clone" button pressed to trigger this action
         """
 
-        moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[0])]
+        moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
         customNamePopup = BoxLayout(orientation='vertical', size=(dp(100), dp(100)))
 
         customNamePopup.add_widget(Label(text="Enter name for clone of " + moduleName,
@@ -250,15 +250,15 @@ class PluginManager:
             Args:
                 instance (_type_): _description_
             """
-            moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
-            
-            self.plugin_player("Cloning into")
+            moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
+
             #If the cancel button was called, put a cancel message and dismiss the popup
-            if(instance.id.split()[0]=='0'):
-                self.plugin_player.add_message("Canceled module cloning of " + moduleName)
+            if(instance.id.split()[0]=='-1'):
+                self.plugin_player.add_message("Canceled module cloning" + moduleName)
                 self.plugin_player.popup.dismiss()
                 return
             
+
             newModuleName = self.custom_declaration.text
             #clone the module in the module manager
             try:
@@ -268,10 +268,12 @@ class PluginManager:
 
                 #create fake button to reset the plugin view
                 fakeButton = Widget()
-                fakeButton.id = f'0 {instance.id.split()[1]} 0'
+                fakeButton.id = f'{int(instance.id.split()[1])} 0 0'
                 self.view_modules(fakeButton)
             except Exception as e:
                 self.plugin_player.add_message("Failed cloning module:\n" + f'{e}')
+                self.plugin_player.popup.dismiss()
+
 
         buttons = BoxLayout(orientation='horizontal', size=(dp(20), dp(100)))
 
@@ -280,7 +282,7 @@ class PluginManager:
 
         #add cancel button 
         cancelButton = Button(on_press=initiate_clone, text="Cancel",  size_hint=(1,1/5))
-        cancelButton.id = f'0 {instance.id}'
+        cancelButton.id = f'-1 {instance.id}'
         buttons.add_widget(cancelButton)
 
         #add button padding

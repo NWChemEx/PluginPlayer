@@ -225,6 +225,7 @@ class NodeWidgetManager():
             node.custom_declaration_widget.parent.remove_widget(
                 node.custom_declaration_widget)
         #add text entry to the node's properties
+        node.custom_declaration_widget.text=""
         custom_ptype.add_widget(node.custom_declaration_widget)
 
         #add button to set the property type
@@ -249,7 +250,37 @@ class NodeWidgetManager():
 
         config_widget.add_widget(ptype_widget)
 
-        #-----------------------------SUBMODULE CONFIGURATION--------------------------------
+        #add buffer for scrollview
+        config_widget.add_widget(Widget(size_hint_y=None, height=dp(100)))
+
+        #add scrolling capabilities
+        scroll_view = ScrollView(do_scroll_x=False,
+                                 do_scroll_y=True,
+                                 scroll_type=['bars'])
+        scroll_view.add_widget(config_widget)
+
+        self.plugin_player.create_popup(
+            scroll_view, f'Configuration for {module_name} ({node_number})',
+            True, (dp(800), dp(500)))
+        return
+
+    def config_submod(self, instance):
+        """Generates a popup for setting the submodule for a module
+
+        Args:
+            instance (kivy.uix.button): The configuration button being clicked
+        """
+
+        #attempt to close any popups
+        try:
+            self.plugin_player.popup.dismiss()
+        except:
+            pass
+        #grab the node's index and its corresponding module
+        node_number = int(instance.id)
+        node = self.plugin_player.nodes[node_number]
+        module = node.module
+        module_name = node.module_name
 
         #create a widget to display the submodules
         submods_widget = BoxLayout(orientation='vertical',
@@ -309,30 +340,21 @@ class NodeWidgetManager():
         if len(node.submod_dict.items()) == 0:
             submods_widget.add_widget(
                 Label(text="No Submodules", halign='left', color=(0, 0, 0, 1)))
-        #add to main configuration holder
-        config_widget.add_widget(submods_widget)
-
-        #add buffer for scrollview
-        config_widget.add_widget(Widget(size_hint_y=None, height=dp(100)))
-
-        #add scrolling capabilities
-        scroll_view = ScrollView(do_scroll_x=False,
-                                 do_scroll_y=True,
-                                 scroll_type=['bars'])
-        scroll_view.add_widget(config_widget)
-
+        
+        #add to the popup
         self.plugin_player.create_popup(
-            scroll_view, f'Configuration for {module_name} ({node_number})',
-            True, (dp(800), dp(500)))
-        return
+            submods_widget, f'Submodule Configuration for {module_name} ({node_number})',
+            True, (dp(600), dp(400)))
+        
 
-    #attempts to add an entered input
     def add_input(self, instance):
         """Opens a popup to ask a user to add an input. Can add a custom input value or link output from another node.
 
         :param instance: Button routing to this function
         :type instance: kivy.uix.button.Button
         """
+
+        
         #grab needed info form the id and
         node_number = int(instance.id.split()[0])
         key_number = int(instance.id.split()[1])
