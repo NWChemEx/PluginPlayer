@@ -5,7 +5,10 @@ import unittest
 
 
 class TestExampleModules(unittest.TestCase):
-
+    def test_module_loading(self):
+        mm = pp.ModuleManager()
+        ppe.load_modules(mm)
+        self.assertTrue(len(mm.keys())==2)
     def test_module1(self):
         mm = pp.ModuleManager()
         ppe.load_modules(mm)

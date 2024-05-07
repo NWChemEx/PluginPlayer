@@ -50,6 +50,7 @@
 
 <RightSection@BoxLayout>:
     orientation: 'vertical'
+    id: right_section
     canvas.before:
         Color:
             rgba: 1, 1, 1, 1
@@ -68,10 +69,13 @@
         Widget:
             size_hint_x: 4/5
         Button:
-            text: "Add Inputs"
-            on_press: app.tree_manager.view_config()
+            text: "Inputs"
+            #on_press: app.config_manager.inputs_config()
             size_hint_x: 1/10
-
+        Button:
+            text: "Property Type"
+            #on_press: app.config_manager.property_type_config()
+            size_hint_x: 1/10
 
         Button:
             text: "Run Module"
@@ -85,9 +89,19 @@
         
 
         
+    ScrollView:
+        do_scroll_y: True
+        do_scroll_x: True
+        scroll_y: 1
+        scroll_x: .5
+        BoxLayout:
+            id: tree_section
+            orientation: 'vertical'
+            size_hint_y: None
+            size_hint_x: None
+            height: self.minimum_height
+            spacing: 50
 
-    RelativeLayout:
-        id: tree_section
     
 
 BoxLayout:

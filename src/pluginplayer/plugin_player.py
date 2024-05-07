@@ -86,18 +86,18 @@ class PluginPlayer(App):
         #build the main application from the kivy script file
         build = Builder.load_file('plugin_player_setup.kv')
 
-        #add logo
-        tree_section = build.ids.right_section.ids.tree_section
-        logo = Image(source='src/pluginplayer/assets/NWCHEMEX.png',
-                     fit_mode="fill",
-                     size_hint=(None, None),
-                     size=(dp(200), dp(200)),
-                     pos_hint={
-                         'right': 1,
-                         'y': 0
-                     })
-        tree_section.add_widget(logo)
-
+        # #add logo
+        # tree_section = build.ids.right_section.ids.tree_section
+        # logo = Image(source='src/pluginplayer/assets/NWCHEMEX.png',
+        #              fit_mode="fill",
+        #              size_hint=(None, None),
+        #              size=(dp(200), dp(200)),
+        #              pos_hint={
+        #                  'right': 1,
+        #                  'y': 0
+        #              })
+        # tree_section.add_widget(logo)
+    
         return build
 
     def add_message(self, message):

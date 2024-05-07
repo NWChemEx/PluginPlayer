@@ -129,32 +129,12 @@ class PluginManager:
         plugin = self.saved_plugins[folder_number]
         name = plugin.plugin_name
 
-        #delete dependencies on the tree that are of the plugin's modules
-        for module_name in plugin.modules:
-            node_number = 0
-            for node in self.plugin_player.nodes:
-                if not node:
-                    pass
-                #remove nodes using the plugin's modules
-                elif node.module_name == module_name:
-                    temp_widget = Widget()
-                    temp_widget.id = f'{node_number}'
-                    self.plugin_player.tree_manager.remove_node(temp_widget)
-
-                #remove all set submodules
-                else:
-                    for submodule in node.submod_map:
-                        #check if the submodule is set to use the module
-                        if submodule[1] == module_name:
-                            submodule = (submodule[0], None)
-                            self.plugin_player.add_message(
-                                f"Removed Submodule: {submodule[0]}, {module_name} from Node {node_number}"
-                            )
-                node_number += 1
-
         for i in range(len(self.saved_plugins[folder_number].modules)):
+            module = self.saved_plugins[folder_number].modules[i]
+            if(module == self.plugin_player.tree_manager.tree_module):
+                self.plugin_player.tree_manager.delete_tree()
             self.plugin_player.mm.erase(
-                self.saved_plugins[folder_number].modules[i])
+                module)
         deletedPlugin = self.saved_plugins[folder_number]
         self.saved_plugins.remove(deletedPlugin)
         self.plugin_player.add_message("Removed Plugin: " + name)
@@ -166,11 +146,14 @@ class PluginManager:
         :param instance: Button that calls this function
         :type instance: kivy.uix.button.Button
         """
-        #grab info from the instance id's
-        module_number = int(instance.id.split()[0])
-        plugin_number = int(instance.id.split()[1])
-        accessed_in_tree = int(instance.id.split()[2])
-        module_name = self.saved_plugins[plugin_number].modules[module_number]
+        accessed_in_tree = int(instance.id.split()[0])
+        if(accessed_in_tree):
+            module_name = instance.id[2:]
+        else:
+            #grab info from the instance id's
+            module_number = int(instance.id.split()[1])
+            plugin_number = int(instance.id.split()[2])
+            module_name = self.saved_plugins[plugin_number].modules[module_number]
         module = self.plugin_player.mm.at(module_name)
 
         #find the information of inputs, outputs, submodules, description
@@ -376,9 +359,9 @@ class PluginManager:
             add_to_tree = Button(
                 text='Graph',
                 size_hint_x=1 / 10,
-                on_press=self.plugin_player.tree_manager.add_node)
+                on_press=self.plugin_player.tree_manager.set_module)
             #set the id for the module number in the plugin
-            add_to_tree.id = f'{i} {folder_number}'
+            add_to_tree.id = f'{folder_number} {i}'
             view_module.add_widget(add_to_tree)
 
             #add the info button for extended information
@@ -386,7 +369,7 @@ class PluginManager:
                                size_hint_x=1 / 10,
                                on_press=self.view_module_info)
             #set the id for the module number and plugin number and 0 (accessed in folder)
-            view_info.id = f'{i} {folder_number} 0'
+            view_info.id = f'0 {i} {folder_number}'
             view_module.add_widget(view_info)
 
             #add the module widget to the main view

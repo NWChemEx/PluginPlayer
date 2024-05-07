@@ -37,7 +37,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, Rectangle, RoundedRectangle
 from kivy.metrics import dp
 
 
@@ -52,56 +52,50 @@ class TreeManager():
         :type plugin_player: PluginPlayer
         """
         self.plugin_player = plugin_player
-        self.saved_outputs = []
+        self.saved_output = None
+        self.tree_module = None
+        self.module_inputs = []
 
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
         """
-        #remove each node one by one
-        self.plugin_player.add_message("Initiating Tree Removal")
-        for i in range(len(self.plugin_player.nodes)):
-            if self.plugin_player.nodes[i]:
-                temp_widget = Widget()
-                temp_widget.id = f'{i}'
-                self.remove_node(temp_widget)
-        self.plugin_player.nodes = []
-        self.plugin_player.add_message("Removed Tree")
+        #remove all widgets and reset inputs and module variables
+        self.module_inputs = []
+        tree_module = self.tree_module
+        self.tree_module = None
+        self.plugin_player.root.ids.right_section.ids.tree_section.clear_widgets()
+        
+        self.plugin_player.add_message(f"Removed Module Tree: {tree_module}")
 
-    def add_node(self, instance):
-        """Add a new node to the tree section and its corresponding submodules
+    def create_node(self, module_name):
+        """Create a new node to add the tree section
 
-        :param instance: The button that calls this function
-        :type instance: kivy.uix.button.Button
+        :param module_name: The name of the module the node will represent
+        :type module_name: String
         """
-        #grab info from instance
-        self.plugin_player.popup.dismiss()
-        module_number = int(instance.id.split()[0])
-        plugin_number = int(instance.id.split()[1])
-        module_name = self.plugin_player.plugin_manager.saved_plugins[
-            plugin_number].modules[module_number]
-        module = self.plugin_player.mm.at(module_name)
-
-        #create a node object
-        new_node = ModuleNode(module=module, module_name=module_name)
-
         #create main widget
-        node_widget = DraggableWidget(size_hint=(None, None),
-                                      size=(dp(120), dp(80)),
-                                      orientation='vertical',
-                                      spacing=0)
-        #set the relative window
+        node_widget = Widget(size_hint=(None, None),
+                                      size=(dp(140), dp(80)),
+                                      pos_hint={'center_y':.5, 'center_x':.5})
+        
+        #set the background color
         with node_widget.canvas.before:
             Color(37 / 255, 150 / 255, 190 / 255,
                   1)  # Set the color (R, G, B, A)
-            rect = Rectangle(size=node_widget.size, pos=node_widget.pos)
+            rect = RoundedRectangle(size=node_widget.size, pos=node_widget.pos, radius=[dp(20), dp(20), dp(20), dp(20)])
 
-        # Bind size and pos to the rectangle (optional)
+        # Bind size and pos to the rectangle
         node_widget.bind(
             size=lambda instance, value: setattr(rect, 'size', value),
             pos=lambda instance, value: setattr(rect, 'pos', value))
+        
         #set id to node number
         #node_widget.id = f'{node_number}'
-        basis_box = BoxLayout(orientation='horizontal', spacing=0)
+        basis_box = BoxLayout(orientation='horizontal', spacing=0, size=(dp(140), dp(80)), size_hint=(None,None))
+
+        #left side reserved for label and configure button
+        basis_left = BoxLayout(orientation='vertical', spacing= 0)
+
         #add module name label
         widget_label = Label(
             size_hint=(None, None),
@@ -109,28 +103,12 @@ class TreeManager():
             height=dp(80),
             halign='center',
             valign='center',
-            text=f"{module_name} ({len(self.plugin_player.nodes)})")
+            text=f"{module_name}")
         widget_label.text_size = widget_label.size
-        basis_box.add_widget(widget_label)
-
-        self.plugin_player.create_image(
-            'src/pluginplayer/assets/info_icon.png',
-            'src/pluginplayer/assets/info.png', (dp(30), dp(30)))
-
-        info_button = Button(
-            background_normal='src/pluginplayer/assets/info.png',
-            on_press=self.plugin_player.plugin_manager.view_module_info,
-            size_hint=(None,None),
-            pos_hint={'center_y':0.5},
-            size=(dp(30),dp(30)))
-        #add id for module number, plugin number, and 1 (accessed in treeview)
-        info_button.id = f'{module_number} {plugin_number} 1'
-        basis_box.add_widget(info_button)
-
-        node_widget.add_widget(basis_box)
-
-        if(new_node.submod_map):
-            #add configure button if it has submodules
+        basis_left.add_widget(widget_label)
+        
+        #add configure button if it has submodules
+        if(self.plugin_player.mm.at(module_name).submods()):
             config_button = Button(
                 size_hint=(None, None),
                 height=dp(20),
@@ -140,314 +118,196 @@ class TreeManager():
                 pos_hint={'center_x':0.5},
                 text='Map',
                 on_press=self.plugin_player.node_widget_manager.config_submod)
-            config_button.id = f'{len(self.plugin_player.nodes)}'
+            config_button.id = f'{module_name}'
             node_widget.height += dp(20)
             
-            node_widget.add_widget(config_button)
+            basis_left.add_widget(config_button)
 
-        #add it to the screen and the main lists
-        node_widget.pos = (1, 1)
-        self.plugin_player.root.ids.right_section.ids.tree_section.add_widget(
-            node_widget)
-        new_node.add_widget(node_widget)
-        self.plugin_player.nodes.append(new_node)
-        self.plugin_player.add_message(
-            f"Added new node {module_name} to the tree")
+        basis_box.add_widget(basis_left)
+        
 
-    #remove a node's widget and connecting edges
-    def remove_node(self, instance):
-        """Remove a node's widget and connecting edges
+        #resize info button
+        self.plugin_player.create_image(
+            'src/pluginplayer/assets/info_icon.png',
+            'src/pluginplayer/assets/info.png', (dp(30), dp(30)))
 
-        :param instance: The button that calls this function
-        :type instance: kivy.uix.button.Button
-        """
-        #get the node number
-        node_number = int(instance.id)
-        node = self.plugin_player.nodes[node_number]
+        #make info button
+        info_button = Button(
+            background_normal='src/pluginplayer/assets/info.png',
+            on_press=self.plugin_player.plugin_manager.view_module_info,
+            size_hint=(None,None),
+            pos_hint={'center_y':0.5},
+            size=(dp(30),dp(30)))
+        
+        #Shift info button if a submodule existed
+        if(self.plugin_player.mm.at(module_name).submods()): 
+            info_button.pos_hint={'center_y':.65}
+        
+        #add id for module number, plugin number, and 1 (accessed in treeview)
+        info_button.id = f'1 {module_name}'
+        basis_box.add_widget(info_button)
 
-        self.plugin_player.add_message(
-            f"Initiating removal of {node.module_name} Node: {node_number}")
+        node_widget.add_widget(basis_box)
+        
+        # Bind posiion of widget to the basis box
+        node_widget.bind(pos=lambda instance, value: setattr(basis_box, 'pos', value))
 
-        #remove the widget
-        self.plugin_player.root.ids.right_section.ids.tree_section.remove_widget(
-            node.module_widget)
-
-        #remove input edges that are mapped
-        input_number = 0
-        for input_edge in node.input_map:
-            if input_edge and input_edge[0] != -1:
-                input_key = list(node.input_dict.keys())[input_number]
-                #find output node its mapped to
-                output_node_number = input_edge[0]
-                output_number = input_edge[1]
-                output_node = self.plugin_player.nodes[output_node_number]
-                output_key = list(
-                    output_node.output_dict.keys())[output_number]
-
-                #delete old lines connecting to the output node
-                for line_set in output_node.module_widget.outgoing_lines:
-                    if line_set[1] == (node_number, input_number):
-                        output_node.module_widget.outgoing_lines.remove(
-                            line_set)
-                        self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.remove(
-                            line_set[0])
-
-                #remove its connection and create message
-                output_node.output_map[output_number].remove(
-                    (node_number, input_number))
-                self.plugin_player.add_message(
-                    f"Removed Output {output_key} of Node {output_node_number} to {input_key} from Node {node_number}"
-                )
-            input_number += 1
-
-        #remove output edges that are mapped
-        output_number = 0
-        for output in node.output_map:
-            for output_edge in output:
-                if output_edge:
-                    output_key = list(node.output_dict.keys())[output_number]
-                    #find input node its mapped to
-                    input_node_number = output_edge[0]
-                    input_number = output_edge[1]
-                    input_node = self.plugin_player.nodes[input_node_number]
-                    input_key = list(
-                        input_node.input_dict.keys())[input_number]
-
-                    #delete old lines connecting to the input node
-                    for line_set in input_node.module_widget.incoming_lines:
-                        if line_set[1] == (node_number, output_number):
-                            input_node.module_widget.incoming_lines.remove(
-                                line_set)
-                            self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.remove(
-                                line_set[0])
-
-                    #remove its connection and create message
-                    input_node.input_map[input_number] = None
-                    self.plugin_player.add_message(
-                        f"Removed Input: {input_key} of Node {input_node_number} to {output_key} from Node {node_number}"
-                    )
-            output_number += 1
-
-        #delete data from tree list
-        self.plugin_player.nodes[node_number] = None
-
-        self.plugin_player.add_message(
-            f"Removed {node.module_name} Node: {node_number} from the tree")
-        return
+        return node_widget
 
     def run_tree(self):
         """Run the series of nodes through the connected tree
         """
-        #grab the tree
-        nodes = self.plugin_player.nodes
-
-        #create the stack for nodes to be processed including only nodes not dependent on others
-        dfs_stack = []
-        visited = []
-
-        #run initial checks before traversal
-        for node in nodes:
-
-            #ignore deleted nodes
-            if not node:
-                continue
-
-            #check if all nodes have a routed or set input and if they have a dependency
-            has_dependency = False
-            for input in node.input_map:
-                if not input:
-                    self.plugin_player.add_message(
-                        f"Run Failure: {node.module_name}({nodes.index(node)}) has a missing input"
-                    )
-                    return
-                if input[0] != -1:
-                    has_dependency = True
-
-            has_outputs = False
-            for output_set in node.output_map:
-                for output in output_set:
-                    if output:
-                        has_outputs = True
-
-            #check if each submodule is satisfied
-            for submod in node.submod_map:
-                if not submod[1]:
-                    self.plugin_player.add_message(
-                        f"Run Failure: {node.module_name}({nodes.index(node)} has missing submodule"
-                    )
-                    return
-
-            #check if property type is set
-            if not node.property_type:
-                self.plugin_player.add_message(
-                    f"Run Failure: {node.module_name}({nodes.index(node)}) has no property type set"
-                )
-                return
-
-            #check if node has no edges for inputs or outputs
-            #if not has_dependency and not has_outputs:
-            #    self.add_message(f"Unlinked node detected: {node.module_name}({nodes.index(node)})")
-
-            #if it doesn't have a dependency, add it to the queue
-            if not has_dependency:
-                dfs_stack.append(node)
-                visited.append(node)
-
-        #check if it doesn't have any starting points
-        if len(dfs_stack) == 0:
-            self.plugin_player.add_message(
-                "Could not find starting node with no routed inputs")
-            return
-
-        #do a dfs search
-        dfs_result = self.dfs_traversal(nodes, dfs_stack, visited)
-
-        #stop if no run order was given
-        if not dfs_result:
-            return
-
-        #Print success and show run order
-        self.plugin_player.add_message("Successful initial scan of the tree")
-        run_order = "Running in order: "
-        for next_node in dfs_result:
-            run_order += f"{next_node.module_name}({nodes.index(next_node)}), "
-        run_order[:-2]
-        self.plugin_player.add_message(run_order)
-
-        #set up the array for saving ouputs
-        self.saved_outputs = []
-        for i in range(len(run_order)):
-            self.saved_outputs.append([])
-
-        #run each node
-        for run_node in dfs_result:
-
-            #set up array for inputs to use
-            run_inputs = []
-
-            #gather each input
-            for input in run_node.input_map:
-
-                #grab custom input
-                if input[0] == -1:
-                    run_inputs.append(input[1])
-
-                #grab saved output
-                else:
-                    output_node = run_inputs.input_map[0]
-                    output_number = run_inputs.input_map[1]
-                    saved_output = saved_output[output_node][output_number]
-                    run_inputs.append(saved_output)
-
-            #set the submodules
-            for submod_set in run_node.submod_map:
-                try:
-                    self.plugin_player.mm.change_submod(
-                        run_node.module_name, submod_set[0], submod_set[1])
-                except Exception as e:
-                    self.plugin_player.add_message(
-                        f"Couldn't add submodule {submod_set[0]} to {run_node.module_name}"
-                    )
-                    self.plugin_player.add_message(f"Aborting tree run")
-                    return
-
-            #attempt to run the module with the inputs
-            try:
-                #Implement a way to select the property type using the class types imports
-                output = self.plugin_player.mm.at(run_node.module_name).run_as(
-                    run_node.property_type[1], 5) #*run_inputs)
-                self.plugin_player.add_message(
-                    f"{run_node.module_name}({nodes.index(run_node)}) Output: {output}"
-                )
-                self.saved_outputs[nodes.index(run_node)].append(output)
-            except Exception as e:
-                self.plugin_player.add_message(
-                    f"Could not run {run_node.module_name}({nodes.index(run_node)}): {e}"
-                )
-                self.plugin_player.add_message(f"Aborting tree run")
-                return
-        self.plugin_player.add_message("Successfully ran tree")
+        
         return
 
-    #recursively traverse the tree and returns run order list, catches cycles and non-used nodes
-    def dfs_traversal(self, nodes, dfs_stack, visited):
-        """recursively traverse the tree and return a list for run order, catches cycles, and non-used nodes
+    def set_module(self, instance):
+        """Adds a module to the tree and saves its information to the tree
 
-        :param nodes: The array of nodes in the tree
-        :type nodes: ModuleNode[]
-        :param dfs_stack: The array of nodes needing to be processed and visited for cycles and links
-        :type dfs_stack: ModuleNode[]
-        :param visited: The array of nodes already processed and visited
-        :type visited: ModuleNode[]
-        :return: The array of updated visited/processed nodes
-        :rtype: ModuleNode[]
+        Args:
+            instance (kivy.uix.button): The button clicked to add the module to the tree
         """
 
-        #START DFS TRAVERSAL
+        #remove the tree if its currently set
+        if self.tree_module:
+            self.delete_tree()
 
-        #take top item in the stack
-        current_node = dfs_stack[-1]
 
-        #make an array to track the nodes already routed from this node
-        routed = []
+        #get the module you would like to add to the tree view
+        plugin = self.plugin_player.plugin_manager.saved_plugins[int(instance.id.split()[0])]
+        self.tree_module = plugin.modules[int(instance.id.split()[1])]
 
-        #find a node its dependent on
-        for output_array in current_node.output_map:
-            for output in output_array:
-                next_node_number = output[0]
-                next_input_number = output[1]
-                next_node = self.plugin_player.nodes[next_node_number]
+        #clear the inputs field for the module
+        self.module_inputs = []
 
-                #check if the next node has already been processed by this node (two outputs from this node mapped to next node)
-                if next_node in routed:
-                    continue
+        try:
+            #generate the submodule dependencies 
+            module_tree = self.submodule_dependencies()
+            self.plugin_player.add_message("Successfully Mapped Submodules")
 
-                #dependency of current node can be ignored (already satisfied)
-                if next_node == current_node:
-                    continue
+            #generate the new tree
+            tree_nodes = self.generate_tree(module_tree)
+            self.plugin_player.add_message("Successfully Generated Module Nodes")
 
-                #check if node has already been processed by a different branch
-                if next_node in visited:
+            #add connections to the tree
+            self.add_connections(module_tree, tree_nodes)
+            self.plugin_player.add_message("Successfully Created Module Connections")
 
-                    #back edge / cycle detected
-                    self.plugin_player.add_message(
-                        f"Cycle in tree detected from {next_node.module_name}({next_node_number}) to {current_node.module_name}({nodes.index(current_node)}))"
-                    )
-                    return None
 
-                #no cycle detected, add it to the routed nodes list
-                routed.append(next_node)
+        except Exception as e:
+            self.plugin_player.add_message(f"Module Tree Generation Unsuccessful \n {e}")
 
-                #check if the next node can now run with the given input
-                has_dependency = False
-                for input in next_node.input_map:
 
-                    #ignore custom inputs
-                    if input[0] == -1:
-                        continue
+        self.plugin_player.add_message("Successfully Created Module Tree")
 
-                    #grab node it is dependent on
-                    dependent_node = self.plugin_player.nodes[input[0]]
+    def submodule_dependencies(self):
+        """generates a 2D array of each level of the tree
+        """
 
-                    if dependent_node in visited:
-                        pass
+        #grab the module manager
+        mm = self.plugin_player.mm
 
-                    #set break if it has a dependency not yet ran
-                    else:
-                        has_dependency = True
-                        break
+        #start the 2D array
+        module_tree = []
 
-                #make node the next in the tree traversal if it has no dependencies
-                if not has_dependency:
-                    dfs_stack.append(next_node)
-                    visited.append(next_node)
-                    back_edges = self.dfs_traversal(nodes, dfs_stack, visited)
+        #fill the first element of the array with the root (module added to the tree)
+        module_tree.append([(-1, self.tree_module)])
 
-                    #if back edge was recursively detected, return None
-                    if not back_edges:
-                        return None
+        module_index = 0
+        tree_layer = 0
+        has_dependency = True
 
-        #after fully traversing from the node, remove from the stack
-        dfs_stack.remove(current_node)
-        #return false, no back_edges were detected
-        return visited
+        #start iterating through, inserting the dependent submodules in the array
+        while(has_dependency):
+
+            #assume the layer does not have a dependency unless proved otherwise
+            has_dependency = False
+
+            #check if the current tree layer has dependencies
+            while(module_index < len(module_tree[tree_layer])):
+
+                next_layer = []
+
+                #get module and its submodule list
+                submodule_list = mm.at(module_tree[tree_layer][module_index][1]).submods()
+
+                #if it has a submodule dependency that's set, add it to the next tree layer
+                if(submodule_list):
+                    for value in submodule_list.values():
+                        if(value.has_name()):
+                            next_layer.append((module_index, value.get_name()))
+                            has_dependency = True
+
+                #increment to check out next module
+                module_index += 1
+            
+            #add the next layer if its full, reset counters
+            if(len(next_layer) > 0):
+                module_tree.append(next_layer)
+                next_layer = []
+
+            module_index = 0
+            tree_layer += 1
+        return module_tree
+    
+    def generate_tree(self, module_tree):
+        """Generates the visual tree map, filling with module nodes
+
+        Args:
+            module_tree (Array): The 2d Array filled with the module layers of the trees
+        """
+
+        #Create the same 2D array module mapper, but fill with its corresponding widgets
+        tree_nodes = []
+        
+        tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
+
+        tree_section.clear_widgets()
+        tree_section.width = self.plugin_player.root.ids.right_section.width
+
+        layer_count = 0
+
+        #create each layer in the tree
+        for layer in module_tree:
+
+            #add place for the node widgets to go
+            tree_nodes.append([])
+
+            layer_layout = BoxLayout(orientation='horizontal', spacing=dp(50), size_hint=(None,None), pos_hint={'center_x':.5, 'center_y':.5})
+
+            #for each module mapping in the layer, place a node, its connecting line, and a configure button if it has submods
+            for module_mapping in layer:
+                
+                #create the widget for the module node
+                node_widget = self.create_node(module_mapping[1])
+                tree_nodes[layer_count].append(node_widget)
+                layer_layout.add_widget(node_widget)
+            
+            #extend the tree_section width if its content width is greater, initiating scrolling on x
+            if(layer_layout.width > tree_section.width):
+                tree_section.width = layer_layout.width
+            
+            tree_section.add_widget(layer_layout)
+            layer_count += 1
+
+        return tree_nodes
+
+
+
+        return
+    
+    def add_connections(self, module_tree, tree_nodes):
+        """Adds the lines to connect nodes
+
+        Args:
+            module_tree (Array): 2d Array mapping the modules and their submodule dependencies by layer
+            tree_nodes (Array): 2d Array holding the module's node widgets by layer
+        """
+
+        return
+
+
+
+    
+
+        
+

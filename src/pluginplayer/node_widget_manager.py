@@ -277,10 +277,7 @@ class NodeWidgetManager():
         except:
             pass
         #grab the node's index and its corresponding module
-        node_number = int(instance.id)
-        node = self.plugin_player.nodes[node_number]
-        module = node.module
-        module_name = node.module_name
+        module_name = instance.id
 
         #create a widget to display the submodules
         submods_widget = BoxLayout(orientation='vertical',
@@ -293,6 +290,7 @@ class NodeWidgetManager():
                              color=(0, 0, 0, 1))
         submods_widget.add_widget(submod_label)
 
+        
         #add each submodule and a text input to add it
         for i in range(len(node.submod_dict.items())):
             #grab the key for the submodule
