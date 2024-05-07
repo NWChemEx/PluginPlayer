@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "multiplier.hpp"
 #include "modules.hpp"
+#include "multiplier.hpp"
 #include <numeric> // for std::inner_product
 
 static constexpr auto module_desc = R"(
@@ -33,10 +33,11 @@ MODULE_CTOR(MultiplyBy1) {
 }
 
 MODULE_RUN(MultiplyBy1) {
-    const int& r = std::get<0>(Multiplier::unwrap_inputs(inputs));
-    int rt = r;
+    const auto& [r] = Multiplier::unwrap_inputs(inputs);
+
+    int rt  = r;
     auto rv = results();
     return Multiplier::wrap_results(rv, rt);
 }
 
-} // namespace pluginplay_examples
+} // namespace pluginplayer_examples

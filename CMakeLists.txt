@@ -79,7 +79,7 @@ if("${BUILD_TESTING}")
         ${PROJECT_NAME}_examples
         INSTALL OFF
         SOURCE_DIR ${examples_src_dir}
-        DEPENDS parallelzone ${PROJECT_NAME} ${PROJECT_NAME}_examples
+        DEPENDS parallelzone pluginplay ${PROJECT_NAME} ${PROJECT_NAME}_examples
     )
 
     nwx_pybind11_tests(

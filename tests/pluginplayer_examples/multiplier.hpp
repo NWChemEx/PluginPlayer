@@ -19,12 +19,10 @@
 
 namespace pluginplayer_examples {
 DECLARE_PROPERTY_TYPE(Multiplier);
-PROPERTY_TYPE_INPUTS(Multiplier){
-    auto rv = pluginplay::declare_input()
-                .add_field<const int&>("r");
+PROPERTY_TYPE_INPUTS(Multiplier) {
+    auto rv = pluginplay::declare_input().add_field<const int&>("r");
 
-    rv.at("r").set_description(
-      "The number to be multiplied");
+    rv.at("r").set_description("The number to be multiplied");
     return rv;
 }
 PROPERTY_TYPE_RESULTS(Multiplier) {

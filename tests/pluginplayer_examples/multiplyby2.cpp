@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "multiplier.hpp"
 #include "modules.hpp"
+#include "multiplier.hpp"
 #include <numeric> // for std::inner_product
 
 static constexpr auto module_desc = R"(
@@ -31,17 +31,16 @@ MODULE_CTOR(MultiplyBy2) {
     description(module_desc);
     satisfies_property_type<Multiplier>();
     add_submodule<Multiplier>("internal multiplier")
-      .set_description(
-        "Used to multiply a value by another");
+      .set_description("Used to multiply a value by another");
 }
 
 MODULE_RUN(MultiplyBy2) {
-    const int& input = std::get<0>(Multiplier::unwrap_inputs(inputs));
-    int r = input;
+    const auto& [input] = Multiplier::unwrap_inputs(inputs);
 
-    int rt = submods.at("internal multiplier").run_as<Multiplier>(input) * 2;
+    int rt  = input * 2;
+    rt      = submods.at("internal multiplier").run_as<Multiplier>(rt);
     auto rv = results();
     return Multiplier::wrap_results(rv, rt);
 }
 
-} // namespace pluginplay_examples
+} // namespace pluginplayer_examples
