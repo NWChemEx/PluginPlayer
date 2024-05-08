@@ -47,24 +47,25 @@ class UtilityManager():
     """Helper class for the PluginPlayer application to browse files, view class types, and import new class types.
     """
 
-    def __init__(self):
+    def __init__(self, plugin_player):
         """Initialization of the UtilityManager class
+
+        Args:
+            plugin_player (PluginPlayer): the PluginPlayer object this UtilityManager is associated with
         """
+        self.plugin_player = plugin_player
         self.imported_classes = []
         self.custom_declaration_widget = TextInput(
             hint_text="from _____ import _____",
             multiline=False,
             size_hint_x=9 / 10)
 
-    def browse(self, plugin_player):
+    def browse(self, instance):
         """Browse for a new file from the file system and place in entry box
-
-        :param plugin_player: The PluginPlayer object to manage
-        :type plugin_player: PluginPlayer
         """
 
         #grab text from entry
-        entry_text = plugin_player.root.ids.file_entry.ids.file_path_input.text
+        entry_text = self.plugin_player.root.ids.file_entry.ids.file_path_input.text
 
         #if entry text is a directory, open popup to directory
         if os.path.isdir(entry_text):
@@ -76,9 +77,9 @@ class UtilityManager():
         def select_file(instance, selection, *args):
             if selection:
                 # Set selected file path in TextInput
-                file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget = self.plugin_player.root.ids.file_entry.ids.file_path_input
                 file_entry_widget.text = selection[0]
-                file_entry_widget = plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget = self.plugin_player.root.ids.file_entry.ids.file_path_input
                 file_entry_widget.text = selection[0]
                 popup.dismiss()
 
@@ -90,36 +91,12 @@ class UtilityManager():
         file_chooser.bind(on_submit=select_file)
         popup.open()
 
-    def class_types(self, instance, plugin_player):
+    def class_types(self):
         """Show a popup to see all class types imported
-
-        :param instance: The button that called this function
-        :type instance: kivy.uix.button.Button
-        :param plugin_player: The PluginPlayer object to display the popup on
-        :type plugin_player: PluginPlayer
         """
 
-        #grab needed info
-        node_number = int(instance.id.split()[0])
-        key_number = int(instance.id.split()[1])
-
         #start creating the new popup
-        types_box = BoxLayout(orientation='vertical')
-
-        #height of the popup to be updated later to fill whitespace
-        height = 0
-
-        #create a back button
-        #return to main config page or back to the add input page
-        back_to_main = (key_number == -1)
-        on_press_func = plugin_player.node_widget_manager.view_config if back_to_main else plugin_player.node_widget_manager.add_input
-        back_button = Button(text="Back",
-                             size_hint=(None, None),
-                             size=(dp(40), dp(20)),
-                             on_press=on_press_func)
-        back_button.id = f'{node_number}' if back_to_main else f'{node_number} {key_number}'
-        types_box.add_widget(back_button)
-        height += 20
+        types_box = BoxLayout(orientation='vertical', minimum_height=dp(500))
 
         types_box.add_widget(
             Label(
@@ -127,9 +104,7 @@ class UtilityManager():
                 "Add a new class type by filling in the blanks separated by a space",
                 color=(0, 0, 0, 1),
                 size_hint_y=None,
-                height=20))
-
-        height += 20
+                height=dp(20)))
 
         #create the entry to add an extra input
         new_type = BoxLayout(orientation='horizontal',
@@ -146,24 +121,15 @@ class UtilityManager():
         add_button = Button(text="Import",
                             size_hint_x=1 / 10,
                             on_press=self.new_type)
-        add_button = Button(text="Import",
-                            size_hint_x=1 / 10,
-                            on_press=lambda instance, *args: self.new_type(
-                                instance, plugin_player))
-        #if its a property type assignt the id to route back to view_config,
-        #otherwise route to input page
-        add_button.id = f'{node_number} {key_number}'
+        
         new_type.add_widget(add_button)
 
         types_box.add_widget(new_type)
-        height += dp(35)
 
         types_box.add_widget(
             Label(text="Imported Types",
                   font_size="20sp",
-                  size_hint_y=None,
-                  height=dp(20)))
-        height += dp(20)
+                  size_hint_y=None))
 
         for imported_type in self.imported_classes:
             types_box.add_widget(
@@ -171,44 +137,31 @@ class UtilityManager():
                       size_hint_y=None,
                       height=dp(15),
                       color=(0, 0, 0, 1)))
-            height += 15
 
-        #add scrolling capabilities
-        if height < 450:
-            types_box.add_widget(
-                Widget(size_hint_y=None, height=dp((450 - height))))
-        scroll_view = ScrollView(scroll_y=0,
+        scroll_view = ScrollView(
                                  do_scroll_y=True,
-                                 scroll_type=['content'])
+                                 scroll_y=1,
+                                 scroll_type=['bars'],
+                                 size=(dp(800), dp(500)),
+                                 size_hint=(None,None))
         scroll_view.add_widget(types_box)
 
-        plugin_player.create_popup(scroll_view, "Class Types", False, (dp(800), dp(500)))
+        self.plugin_player.create_popup(scroll_view, "Class Types", True, (dp(800), dp(500)))
 
-    def new_type(self, instance, plugin_player):
+    def new_type(self, instance):
         """Defines a new class type for custom inputs and property types
-
-        :param instance: The button used to call this function
-        :type instance: kivy.uix.button.Button
-        :param plugin_player: The PluginPlayer object to output messages on
-        :type plugin_player: PluginPlayer
         """
         try:
             import_name = self.custom_declaration_widget.text.split()[0]
             class_name = self.custom_declaration_widget.text.split()[1]
         except Exception as e:
-            plugin_player.add_message(
+            self.plugin_player.add_message(
                 "Invalid Entry, enter the blanks with a space in between from the Python import statement"
             )
-            plugin_player.add_message(e)
-            plugin_player.add_message(
-                "Invalid Entry, enter the blanks with a space in between from the Python import statement"
-            )
-            plugin_player.add_message(e)
+            self.plugin_player.add_message(f'{e}')
             return
         if class_name in self.imported_classes:
-            plugin_player.add_message(
-                f"Class type {class_name} previously imported")
-            plugin_player.add_message(
+            self.plugin_player.add_message(
                 f"Class type {class_name} previously imported")
             return
         try:
@@ -223,15 +176,13 @@ class UtilityManager():
             self.imported_classes.append(class_name)
 
             #send success message
-            plugin_player.add_message(f"Imported class type {class_name}")
+            self.plugin_player.add_message(f"Imported class type {class_name}")
 
         except Exception as e:
             #Failure Message
-            plugin_player.add_message(
+            self.plugin_player.add_message(
                 f"Couldn't import type {class_name}: {e}")
 
-            plugin_player.add_message(
-                f"Couldn't import type {class_name}: {e}")
 
         #recall the popup to update the newly loaded values and show hint text
-        self.class_types(instance, plugin_player)
+        self.class_types()

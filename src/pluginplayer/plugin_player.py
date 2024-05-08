@@ -21,9 +21,8 @@ import sys
 import pluginplay as pp
 from pluginplayer.plugin_manager import PluginManager
 from pluginplayer.tree_manager import TreeManager
-from pluginplayer.node_widget_manager import NodeWidgetManager
-from pluginplayer.node_manager import NodeManager
 from pluginplayer.utility_manager import UtilityManager
+from pluginplayer.run_manager import RunManager
 
 #kivy helpers
 from kivy.app import App
@@ -62,23 +61,17 @@ class PluginPlayer(App):
         #The app's module manager
         self.mm = pp.ModuleManager()
 
-        #saved tree containing the nodes and modules to be ran
-        self.nodes = []
-
         #helper class handling addition/removal of nodes, deleting/running the tree
         self.tree_manager = TreeManager(self)
 
-        #helper class handling the widget building for the node configuration
-        self.node_widget_manager = NodeWidgetManager(self)
-
-        #helper class handling the linking of inputs, submods, property types between modules
-        self.node_manager = NodeManager(self)
+        #helper class handling the widget building for the module configuration
+        self.run_manager = RunManager(self)
 
         #helper class handling the loading, deleting, and viewing of plugins and their modules
         self.plugin_manager = PluginManager(self)
 
         #helper class handling browsing, imported class types, and importing new classes
-        self.utility_manager = UtilityManager()
+        self.utility_manager = UtilityManager(self)
 
         #string array holding the filepaths of resized images
         self.resized_images = []

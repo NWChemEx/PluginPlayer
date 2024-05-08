@@ -27,17 +27,13 @@ Deleting the tree
 
 """
 
-#helper widget classes for a draggable widget representing a module
-from pluginplayer.node_widget import DraggableImageButton
-from pluginplayer.node_widget import DraggableWidget
-from pluginplayer.node_widget import ModuleNode
 
 #kivy helpers
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.graphics import Color, Rectangle, RoundedRectangle
+from kivy.graphics import Color, RoundedRectangle, Line
 from kivy.metrics import dp
 
 
@@ -54,15 +50,17 @@ class TreeManager():
         self.plugin_player = plugin_player
         self.saved_output = None
         self.tree_module = None
-        self.module_inputs = []
 
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
         """
         #remove all widgets and reset inputs and module variables
-        self.module_inputs = []
         tree_module = self.tree_module
         self.tree_module = None
+        self.plugin_player.run_manager.module_dict[tree_module].property_type = None
+        self.plugin_player.run_manager.module_dict[tree_module].inputs = [None] * len(self.plugin_player.mm.at(tree_module).inputs())
+        self.plugin_player.run_manager.module_dict[tree_module].evaluated_property_type = None
+
         self.plugin_player.root.ids.right_section.ids.tree_section.clear_widgets()
         
         self.plugin_player.add_message(f"Removed Module Tree: {tree_module}")
@@ -117,8 +115,7 @@ class TreeManager():
                 halign='center',
                 pos_hint={'center_x':0.5},
                 text='Map',
-                on_press=self.plugin_player.node_widget_manager.config_submod)
-            config_button.id = f'{module_name}'
+                on_press=self.plugin_player.run_manager.submods_config)
             node_widget.height += dp(20)
             
             basis_left.add_widget(config_button)
@@ -154,12 +151,6 @@ class TreeManager():
 
         return node_widget
 
-    def run_tree(self):
-        """Run the series of nodes through the connected tree
-        """
-        
-        return
-
     def set_module(self, instance):
         """Adds a module to the tree and saves its information to the tree
 
@@ -176,8 +167,6 @@ class TreeManager():
         plugin = self.plugin_player.plugin_manager.saved_plugins[int(instance.id.split()[0])]
         self.tree_module = plugin.modules[int(instance.id.split()[1])]
 
-        #clear the inputs field for the module
-        self.module_inputs = []
 
         try:
             #generate the submodule dependencies 
@@ -302,6 +291,59 @@ class TreeManager():
             module_tree (Array): 2d Array mapping the modules and their submodule dependencies by layer
             tree_nodes (Array): 2d Array holding the module's node widgets by layer
         """
+
+        layer_count = 0
+
+        #iterate through the module tree and make a line that connects the two modules
+        for module_map_list in module_tree:
+
+            #check if its the first module map, then skip it
+            if (layer_count == 0):
+                layer_count += 1
+                continue
+
+            module_count = 0
+
+            #check each module map and add the line
+            for module_map in module_map_list:
+                parent_module_index = module_map[0]
+
+                # grab the widget of the parent module
+                parent_module = tree_nodes[layer_count - 1][parent_module_index]
+
+                # grab the dependent module
+                child_module = tree_nodes[layer_count][module_count]
+                
+                tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
+                #find the y coordinates of the parent and child be counting the hieght of each layer, and padding and centering
+                child_y = (layer_count * dp(80) + layer_count * dp(50) + dp(50))
+                parent_y =((layer_count - 1) * dp(80) + (layer_count - 1) * dp(50) + dp(50))
+
+                #find the x coordinates of the parent and child be finding the distance between start of tree_section and the layer widget, added by the distance between start of layer widget and the module widget
+                child_x = ((tree_section.width - child_module.parent.width) / 2) + child_module.x + dp(65)
+                parent_x = ((tree_section.width - parent_module.parent.width) / 2) + parent_module.x + dp(65)
+
+                # create the connecting line
+                connecting_line = Line(points=[
+                    parent_x,
+                    parent_y,
+                    child_x,
+                    child_y
+                ], width=2)
+
+                # add the line to the layout
+                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(Color(0, 0, 0))
+                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(connecting_line)
+                
+                #add the line to the layout
+                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(
+                    Color(0, 0, 0))
+                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(
+                    connecting_line)
+
+                module_count += 1
+            
+            layer_count += 1
 
         return
 

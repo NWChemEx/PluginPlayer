@@ -24,7 +24,7 @@
     ScrollView:
         do_scroll_y: True
         do_scroll_x: False
-        scroll_y: 1
+        scroll_y: 0
         Label:
             id: message_label
             halign: 'left'
@@ -67,27 +67,38 @@
         size_hint_y: 1/20
         spacing: 10
         Widget:
-            size_hint_x: 4/5
+            size_hint_x: 1/5
+        Button:
+            text: "Libraries"
+            on_press: app.utility_manager.class_types()
+            size_hint_x: 1/10
         Button:
             text: "Inputs"
-            #on_press: app.config_manager.inputs_config()
+            on_press: app.run_manager.inputs_config()
             size_hint_x: 1/10
+            id: input_button
         Button:
             text: "Property Type"
-            #on_press: app.config_manager.property_type_config()
+            on_press: app.run_manager.property_type_config()
             size_hint_x: 1/10
+            id: property_type_button
 
         Button:
             text: "Run Module"
-            on_press: app.tree_manager.run_tree()
+            on_press: app.run_manager.run()
             size_hint_x: 1/10
         
         Button:
             text: "Reset Tree"
             on_press: app.tree_manager.delete_tree()
             size_hint_x: 1/10
+        Widget:
+            size_hint_x: 1/5
         
 
+    Widget:
+        size_hint_y: None
+        height:20
         
     ScrollView:
         do_scroll_y: True
@@ -180,12 +191,12 @@ BoxLayout:
             size_hint_y: 19/100
         
     RightSection:
-        canvas.before:
-            Color:
-                rgba: 0, 0, 0, .7  #Transparent Grey
-            Rectangle:
-                pos: self.pos
-                size: self.size
+        #canvas.before:
+        #    Color:
+        #        rgba: 0, 0, 0, .7  #Transparent Grey
+        #    Rectangle:
+        #        pos: self.pos
+        #        size: self.size
         id: right_section
         size_hint: 2/3, 1
     

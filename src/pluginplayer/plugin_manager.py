@@ -53,6 +53,11 @@ from kivy.metrics import dp
 
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
+class ModuleValues:
+    def __init__(self, module_name, mm):
+        self.inputs = [None] * len(mm.at(module_name).inputs())
+        self.property_type = None
+        self.evaluated_property_type = None
 
 class PluginManager:
     """Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
@@ -103,17 +108,26 @@ class PluginManager:
                 lib.load_modules(self.plugin_player.mm)
                 self.plugin_player.add_message(
                     f"Successfuly loaded {library} into ModuleManager")
-                    #save info of the Plugin and its modules
+                
+                #save info of the Plugin and its modules
                 temp_MM = pp.ModuleManager()
                 lib.load_modules(temp_MM)
                 new_plugin = PluginInfo(plugin_name=library,
                                         modules=temp_MM.keys())
                 self.saved_plugins.append(new_plugin)
+
+                #add each module into the module dictionary for saving inputs and property types
+                for key in temp_MM.keys():
+                    self.plugin_player.run_manager.module_dict[key] = ModuleValues(key, self.plugin_player.mm)
+                
+                #create the plugin view
                 self.plugin_view(-1, None)
+                
             except Exception as e:
                 self.plugin_player.add_message(
                     f"Could not add {library} to ModuleManager")
                 self.plugin_player.add_message(f"{e}")
+
         except Exception as e:
             self.plugin_player.add_message(
                 f"Could not import module {library}: {e}")
@@ -129,14 +143,28 @@ class PluginManager:
         plugin = self.saved_plugins[folder_number]
         name = plugin.plugin_name
 
+        #delete each module from the ModuleManager and the module dictionary
         for i in range(len(self.saved_plugins[folder_number].modules)):
+            
+            #grab module
             module = self.saved_plugins[folder_number].modules[i]
+            
+            #check if its currently in the tree, if so, delete the tree
             if(module == self.plugin_player.tree_manager.tree_module):
                 self.plugin_player.tree_manager.delete_tree()
+
+            #remove from module manager
             self.plugin_player.mm.erase(
                 module)
+            
+            #remove from dictionary
+            self.plugin_player.run_manager.module_dict.pop(module)
+            
+        #remove from the saved plugins
         deletedPlugin = self.saved_plugins[folder_number]
         self.saved_plugins.remove(deletedPlugin)
+        
+        #send message and update screen
         self.plugin_player.add_message("Removed Plugin: " + name)
         self.plugin_view(-1, None)
 
@@ -211,19 +239,25 @@ class PluginManager:
         Args:
             instance (kivy.uix.button): The "Clone" button pressed to trigger this action
         """
-
+        #grab the module's name
         moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
+        
+        #create the main holder
         customNamePopup = BoxLayout(orientation='vertical', size=(dp(100), dp(100)))
 
+        #prompt user to enter new clone name
         customNamePopup.add_widget(Label(text="Enter name for clone of " + moduleName,
                                 color=(0,0,0,1),
                                 height = dp(30), 
                                 size_hint_y=None))
         
+        #create text input
         self.custom_declaration = TextInput(multiline=False, 
                                             hint_text="ex. Classical Force (2)",
                                             height = dp(30), 
                                             size_hint_y=None)
+        
+        #add to holder
         customNamePopup.add_widget(self.custom_declaration)
 
 
@@ -281,6 +315,7 @@ class PluginManager:
 
         customNamePopup.add_widget(buttons)
         
+        #create popup
         self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (dp(300), dp(200)))
         return
     
@@ -300,15 +335,15 @@ class PluginManager:
         #grab folder number from the id
         folder_number = int(instance.id.split()[0])
         accessed_in_tree = int(instance.id.split()[1])
+        
         #exit if back button was pressed from the tree view
         if accessed_in_tree:
             return
+        
         #undrop the dropdown
         elif (int(instance.id.split()[2]) == 1):
             self.plugin_view(-1, None)
             return
-
-
 
         #grab pluginSection widget
         plugin_section = self.plugin_player.root.ids.plugin_section

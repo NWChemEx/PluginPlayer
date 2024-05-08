@@ -25,6 +25,17 @@ class TestExampleModules(unittest.TestCase):
         mult_pt = ppe.Multiplier()
         result = mult2.run_as(mult_pt, 3)
         self.assertTrue(result == 6)
+        
+    def test_module3(self):
+        mm = pp.ModuleManager()
+        ppe.load_modules(mm)
+        mult2 = mm.at("Multiply by 2")
+        mm.change_submod("Multiply by 2", "internal multiplier", "Multiply by 1")
+        mult_pt = ppe.Multiplier()
+        mult2.change_input("r", 3)
+        result = mult2.run(mult2.inputs())
+        print(f'{pp.result_table(result)}')
+        self.assertTrue(result == 6)
 
 
 if __name__ == "__main__":
