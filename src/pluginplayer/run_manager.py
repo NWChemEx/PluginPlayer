@@ -78,7 +78,6 @@ class RunManager():
         #create a widget to display the inputs
         input_widget = BoxLayout(orientation='vertical',
                                  spacing=0,
-                                 minimum_height=dp(500),
                                  size_hint_y=None)
         input_label = Label(text="Input Configuration",
                             valign='center',
@@ -147,18 +146,22 @@ class RunManager():
             #add it to main input holder
             input_widget.add_widget(input_list)
             input_widget.add_widget(input_entry_list)
-            
-        
+                
+        total_height = 0
+        for child in input_widget.children:
+            total_height += child.height
+        input_widget.height = total_height
+                    
         #add scrolling capabilities
         scroll_view = ScrollView(do_scroll_x=False,
                                  do_scroll_y=True,
-                                 scroll_y=0,
-                                 scroll_type=['bars'])
+                                 scroll_y=1,
+                                 scroll_type=['bars', 'content'])
         scroll_view.add_widget(input_widget)
 
         self.plugin_player.create_popup(
             scroll_view, f'Input Configuration: {module_name})',
-            True, (dp(500), dp(500)))
+            True, (dp(400), dp(400)))
         return
     
     def add_input(self, instance):
@@ -229,7 +232,7 @@ class RunManager():
 
         #add a declaration widget to set the input
         self.custom_declaration = TextInput(hint_text="ex: Force()",
-                                               height=dp(40),
+                                               height=dp(30),
                                                size_hint_y=None,
                                                size_hint_x=4 / 5,
                                                multiline=False)
@@ -242,7 +245,7 @@ class RunManager():
         #add button to set the property type
         custom_entry_button = Button(
             text="Set",
-            height=dp(40),
+            height=dp(30),
             size_hint_y=None,
             size_hint_x=1 / 5,
             on_press=self.add_property_type)
@@ -254,7 +257,7 @@ class RunManager():
 
         self.plugin_player.create_popup(
             ptype_widget, f'Property Type Configuration: {module_name})',
-            True, (dp(500), dp(300)))
+            True, (dp(450), dp(150)))
         return
 
     def add_property_type(self, instance):
@@ -316,12 +319,13 @@ class RunManager():
         #create a widget to display the submodules
         submods_widget = BoxLayout(orientation='vertical',
                                    spacing=0,
-                                   size_hint_y=None,
-                                   minimum_height=dp(400))
+                                   size_hint_y=None)
         submod_label = Label(text="Submodule Configuration",
                              valign='center',
                              halign='center',
                              font_size='20sp',
+                             height=dp(30),
+                             size_hint_y=None,
                              color=(0, 0, 0, 1))
         submods_widget.add_widget(submod_label)
 
@@ -348,11 +352,15 @@ class RunManager():
                 Label(text=key,
                       size_hint_x=1 / 5,
                       halign='left',
+                      height=dp(30),
+                      size_hint_y=None,
                       color=(0, 0, 0, 1)))
 
             #create label for submodule description
             submod_description = Label(text=f'{value_description}',
                                        halign='left',
+                                       height=dp(30),
+                                       size_hint_y=None,
                                        color=(0, 0, 0, 1),
                                        size_hint_x=3 / 5)
             submod_list.add_widget(submod_description)
@@ -362,7 +370,7 @@ class RunManager():
                 submod_description.text = f'Set: {value.get_name()}'
 
             #create the add button that routes to an adding submodule function
-            submod_add_button = Button(text='Set', size_hint_x=1 / 5)
+            submod_add_button = Button(text='Set', height=dp(30), size_hint_y=None, size_hint_x=1 / 5)
             submod_add_button.id = f'{i}'
             submod_add_button.bind(on_press=self.select_submod)
             submod_list.add_widget(submod_add_button)
@@ -373,17 +381,23 @@ class RunManager():
         #add a "no submodules" label if there are none
         if len(module.submods().items()) == 0:
             submods_widget.add_widget(
-                Label(text="No Submodules", halign='left', color=(0, 0, 0, 1)))
+                Label(text="No Submodules", height=dp(30), size_hint_y=None, halign='left', color=(0, 0, 0, 1)))
         
+        total_height = 0
+        for child in submods_widget.children:
+            total_height += child.height
+        submods_widget.height = total_height
+            
         #add scrolling capabilities
         scroll_view = ScrollView(do_scroll_x=False,
                                  do_scroll_y=True,
-                                 scroll_type=['bars'])
+                                 scroll_y=1,
+                                 scroll_type=['bars', 'content'])
         scroll_view.add_widget(submods_widget)
         #add to the popup
         self.plugin_player.create_popup(
             scroll_view, f'Submodule Configuration for {module_name}',
-            True, (dp(600), dp(400)))
+            True, (dp(500), dp(300)))
         
 
     def select_submod(self, instance):
@@ -399,40 +413,50 @@ class RunManager():
 
         #start creating a widget for selecting a submodule
         select_submod = BoxLayout(orientation='vertical',
-                                  size_hint=(None, None),
-                                  width=dp(800),
-                                  minimum_height = dp(500),
+                                  size_hint_y = None,
                                   spacing=0)
 
-        #keep track of height for scrolling padding
-        height = 0
         #add back button
         back_button = Button(text="Back",
                              size_hint=(None, None),
                              size=(dp(40), dp(20)),
                              on_press=self.submods_config)
         select_submod.add_widget(back_button)
-        height += 20
 
         plugin_number = 0
         module_number = 0
         #for each module in each plugin, place a module and option to add
         for plugin in self.plugin_player.plugin_manager.saved_plugins:
-
+            
+            #write the plugin it belongs to
+            select_submod.add_widget(
+                Label(text=plugin.plugin_name,
+                      color=(0, 0, 0, 1),
+                      font_size='20sp',
+                      halign='left',
+                      height= dp(45),
+                      size_hint_y=None))
+            
+            
             for module in plugin.modules:
                 #create a module with an add button
                 module_box = BoxLayout(orientation='horizontal',
-                                       size_hint=(None, None),
-                                       size=(dp(750), dp(30)),
+                                       size_hint_y=None,
+                                       width= dp(400),
+                                       height = dp(25),
                                        spacing=0)
                 module_box.add_widget(
                     Label(text=module,
                           color=(0, 0, 0, 1),
                           halign='left',
+                          height= dp(25),
+                          size_hint_y=None,
                           size_hint_x=9 / 10))
 
                 add_button = Button(
                     text="Set",
+                    height= dp(25),
+                    size_hint_y=None,
                     size_hint_x=1 / 10,
                     on_press=self.add_submod)
                 #add id to identify the submodule from the node, and the module to be the submodule
@@ -441,22 +465,26 @@ class RunManager():
 
                 #add to main box
                 select_submod.add_widget(module_box)
-                height += dp(30)
 
                 module_number += 1
             plugin_number += 1
             module_number = 0
+        
+        total_height = 0
+        for child in select_submod.children:
+            total_height += child.height
+        select_submod.height = total_height
 
         #add scrolling capabilities
-        scroll_view = ScrollView(scroll_y=0,
+        scroll_view = ScrollView(
                                  do_scroll_y=True,
-                                 size_hint=(None, None),
-                                 size=(dp(800), dp(500)),
-                                 scroll_type=['content'])
+                                 do_scroll_x = False,
+                                 scroll_y = 1,
+                                 scroll_type=['content', 'bars'])
         scroll_view.add_widget(select_submod)
-
+        
         self.plugin_player.create_popup(scroll_view,
-                                        f'Selecting submodule: {key}', False, (dp(800), dp(500)))
+                                        f'Selecting submodule: {key}', False, (dp(500), dp(300)))
         
     #attempts to add a submodule type to a node
     def add_submod(self, instance):

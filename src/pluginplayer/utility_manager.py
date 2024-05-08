@@ -93,7 +93,7 @@ class UtilityManager():
         """
 
         #start creating the new popup
-        types_box = BoxLayout(orientation='vertical', minimum_height=dp(500))
+        types_box = BoxLayout(orientation='vertical', size_hint_y = None)
 
         types_box.add_widget(
             Label(
@@ -117,6 +117,8 @@ class UtilityManager():
 
         #add an import button
         add_button = Button(text="Import",
+                            height= dp(30),
+                            size_hint_y = None,
                             size_hint_x=1 / 10,
                             on_press=self.new_type)
         
@@ -137,14 +139,19 @@ class UtilityManager():
                       size_hint_y=None,
                       height=dp(15),
                       color=(0, 0, 0, 1)))
-
+            
+        total_height = 0
+        for child in types_box.children:
+            total_height += child.height
+        types_box.height = total_height
+        
         scroll_view = ScrollView(
                                  do_scroll_y=True,
                                  scroll_y=1,
                                  scroll_type=['bars'])
         scroll_view.add_widget(types_box)
 
-        self.plugin_player.create_popup(scroll_view, "Class Types", True, (dp(800), dp(500)))
+        self.plugin_player.create_popup(scroll_view, "Class Types", True, (dp(600), dp(400)))
 
     def new_type(self, instance):
         """Defines a new class type for custom inputs and property types

@@ -57,11 +57,6 @@ class TreeManager():
         #remove all widgets and reset inputs and module variables
         tree_module = self.tree_module
         self.tree_module = None
-        self.plugin_player.run_manager.module_dict[tree_module].property_type = None
-        self.plugin_player.run_manager.module_dict[tree_module].inputs = [None] * len(self.plugin_player.mm.at(tree_module).inputs())
-        self.plugin_player.run_manager.module_dict[tree_module].evaluated_inputs = [None] * len(self.plugin_player.mm.at(tree_module).inputs())
-
-        self.plugin_player.run_manager.module_dict[tree_module].evaluated_property_type = None
 
         self.plugin_player.root.ids.right_section.ids.tree_section.clear_widgets()
         
