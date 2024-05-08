@@ -56,6 +56,7 @@ PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 class ModuleValues:
     def __init__(self, module_name, mm):
         self.inputs = [None] * len(mm.at(module_name).inputs())
+        self.evaluated_inputs = [None] * len(mm.at(module_name).inputs())
         self.property_type = None
         self.evaluated_property_type = None
 
@@ -209,6 +210,7 @@ class PluginManager:
             for key, value in submod_dict.items():
                 try:
                     submodule_add = f"    {key}: {value.description()} \n"
+                    submodules += submodule_add
                 except:
                     submodule_add = f"    {key} description unavailable"
                     submodules += submodule_add
@@ -220,7 +222,7 @@ class PluginManager:
             description = "Not Supported"
 
         #put into massive string
-        full_info = f"Description:{description}\nInputs:\n{inputs}Outputs:\n{outputs}Submods:\n{submodules}"
+        full_info = f"Description:{description}\nInputs:\n{inputs}Outputs:\n{outputs}Submodules:\n{submodules}"
 
         #create main frame for popup
         new_frame = BoxLayout(orientation='vertical')
@@ -281,6 +283,7 @@ class PluginManager:
             try:
                 self.plugin_player.mm.copy_module(moduleName, newModuleName)
                 self.saved_plugins[int(instance.id.split()[1])].modules.append(newModuleName)
+                self.plugin_player.run_manager.module_dict[newModuleName] = ModuleValues(newModuleName, self.plugin_player.mm)
                 self.plugin_player.add_message("Successfully created clone module " + newModuleName)
 
                 #create fake button to reset the plugin view

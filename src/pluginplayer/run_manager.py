@@ -189,6 +189,7 @@ class RunManager():
             
             #if successful add it to the module dictionary to save and add success message
             self.module_dict[module_name].inputs[key_number] = custom_declaration
+            self.module_dict[module_name].evaluated_inputs[key_number] = custom_input
             
             self.plugin_player.add_message(f'Input {key} of {module_name} successfully set as {custom_declaration} in ModuleManager')
             
@@ -228,6 +229,8 @@ class RunManager():
 
         #add a declaration widget to set the input
         self.custom_declaration = TextInput(hint_text="ex: Force()",
+                                               height=dp(40),
+                                               size_hint_y=None,
                                                size_hint_x=4 / 5,
                                                multiline=False)
             
@@ -239,6 +242,8 @@ class RunManager():
         #add button to set the property type
         custom_entry_button = Button(
             text="Set",
+            height=dp(40),
+            size_hint_y=None,
             size_hint_x=1 / 5,
             on_press=self.add_property_type)
         
@@ -249,7 +254,7 @@ class RunManager():
 
         self.plugin_player.create_popup(
             ptype_widget, f'Property Type Configuration: {module_name})',
-            True, (dp(500), dp(500)))
+            True, (dp(500), dp(300)))
         return
 
     def add_property_type(self, instance):
@@ -373,7 +378,6 @@ class RunManager():
         #add scrolling capabilities
         scroll_view = ScrollView(do_scroll_x=False,
                                  do_scroll_y=True,
-                                 scroll_y =1,
                                  scroll_type=['bars'])
         scroll_view.add_widget(submods_widget)
         #add to the popup
@@ -440,8 +444,8 @@ class RunManager():
                 height += dp(30)
 
                 module_number += 1
-        plugin_number += 1
-        module_number = 0
+            plugin_number += 1
+            module_number = 0
 
         #add scrolling capabilities
         scroll_view = ScrollView(scroll_y=0,
@@ -492,8 +496,9 @@ class RunManager():
         self.submods_config(fakeButton)
 
         
-        
     def run(self):
+        """Run the module with the set inputs and property type if it's ready
+        """
         
         #get the module name
         module_name = self.plugin_player.tree_manager.tree_module
@@ -507,47 +512,28 @@ class RunManager():
         mm = self.plugin_player.mm
         module = mm.at(module_name)
         
-            
-        # #get the reasons why its not ready
-        # not_ready = module.list_not_ready()
-            
-        # #display inputs that aren't ready
-        # if(not_ready["Inputs"]):
-                
-        #     #display error message
-        #     self.plugin_player.add_message(f"Run Error: Module {module_name} is not ready to be ran")
-            
-        #     self.plugin_player.add_message("Inputs are not set:")
-            
-        #     for value in not_ready["Inputs"]:
-        #         self.plugin_player.add_message(f"{value}")
-
-        #     #skip rest of function
-        #     return
-                    
-        # #display submodules that aren't ready
-        # if(not_ready["Submodules"]):
-        #     #display error message
-        #     self.plugin_player.add_message(f"Run Error: Module {module_name} is not ready to be ran")
-            
-        #     self.plugin_player.add_message("Submodules are not set:")
-            
-        #     for value in not_ready["Submodules"]:
-        #         self.plugin_player.add_message(f"{value}")
-                
-        #     #skip rest of function
-        #     return                
+        #TODO implement with ready() or not_read_list             
         
         if(self.module_dict[module_name].property_type == None):
             self.plugin_player.add_message("Property Type is not set")
             #skip rest of function
             return
-            
+        
+        inputs_set = True
+        for i in range(len(self.module_dict[module_name].inputs)):
+            if(self.module_dict[module_name].inputs[i] == None):
+                inputs_set = False
+                self.plugin_player.add_message(f"Input {list(module.inputs().keys())[i]} not set")
+        
+        if(inputs_set == False):
+            self.plugin_player.add_message(f"Aborting Tree Run")
+            return
+                
         
         #attempt to run the module
         try:
-            output = module.run(self.module_dict[module_name].evaluated_property_type)
-            
+            output = module.run_as(self.module_dict[module_name].evaluated_property_type, *self.module_dict[module_name].evaluated_inputs)
+          
             #print success message and output
             self.plugin_player.add_message(f"Successfully ran {module_name}\nOutput: {output}")
 

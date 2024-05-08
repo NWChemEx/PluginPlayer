@@ -55,10 +55,7 @@ class UtilityManager():
         """
         self.plugin_player = plugin_player
         self.imported_classes = []
-        self.custom_declaration_widget = TextInput(
-            hint_text="from _____ import _____",
-            multiline=False,
-            size_hint_x=9 / 10)
+        self.custom_declaration_widget = None
 
     def browse(self, instance):
         """Browse for a new file from the file system and place in entry box
@@ -112,9 +109,10 @@ class UtilityManager():
                              height=dp(35),
                              spacing=0)
 
-        if self.custom_declaration_widget.parent:
-            self.custom_declaration_widget.parent.remove_widget(
-                self.custom_declaration_widget)
+        self.custom_declaration_widget =  TextInput(
+            hint_text="from _____ import _____",
+            multiline=False,
+            size_hint_x=5/10)
         new_type.add_widget(self.custom_declaration_widget)
 
         #add an import button
@@ -129,6 +127,8 @@ class UtilityManager():
         types_box.add_widget(
             Label(text="Imported Types",
                   font_size="20sp",
+                  height= dp(30),
+                  color=(0, 0, 0, 1),
                   size_hint_y=None))
 
         for imported_type in self.imported_classes:
@@ -141,9 +141,7 @@ class UtilityManager():
         scroll_view = ScrollView(
                                  do_scroll_y=True,
                                  scroll_y=1,
-                                 scroll_type=['bars'],
-                                 size=(dp(800), dp(500)),
-                                 size_hint=(None,None))
+                                 scroll_type=['bars'])
         scroll_view.add_widget(types_box)
 
         self.plugin_player.create_popup(scroll_view, "Class Types", True, (dp(800), dp(500)))
