@@ -1,3 +1,7 @@
+<Button>:
+    background_color: "#8ad8ff" #"#5c90c0" #NWChemExBlue
+
+
 <LeftSection@BoxLayout>:
     orientation: 'vertical'
 
@@ -9,7 +13,7 @@
         id: file_path_input
         multiline: False
         hint_text: "Enter Filepath/Plugin Name"
-        text: "/home/ethgru/PluginPlay/build/pluginplay_examples.so"
+        text: "/home/ethgru/PluginPlayer/build/pluginplayer_examples.so"
         size_hint_x: 3
 
     Button:
@@ -32,7 +36,7 @@
             height: self.texture_size[1]
             text_size: self.width, None
             text: ''
-            color: 0, 0, 0, 1
+            color: 0,0,0,1
 
 <PluginSection@ScrollView>:
     ScrollView:
@@ -53,12 +57,13 @@
     id: right_section
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1
+            rgba: 1, 1, 1, 1  
         Rectangle:
             size: self.size
             pos: self.pos
     Label:
         text: "Tree Builder"
+        font_size: 18
         size_hint_y: 1/30
         color: 0, 0, 0, 1
 
@@ -116,13 +121,20 @@
     
 
 BoxLayout:
+    canvas.before:
+        Color: 
+            rgba: 46/255,73/255,96/255,1  #NWChemExBlue
+        Rectangle
+            pos: self.pos
+            size: self.size
+            
     padding: 10
     spacing: 10
     orientation: 'horizontal'
     LeftSection:
         canvas.before:
             Color:
-                rgba: 37,150,190,1
+                rgba: 1, 1, 1, 1 
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -131,18 +143,19 @@ BoxLayout:
         Label:
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .2  #Transparent Grey
+                    rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
             text: "Import New Plugin"
+            font_size:18
             color: 0, 0, 0, 1
             size_hint_y: 3/100
 
         FileEntry:
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .2  #Transparent Grey
+                    rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -152,7 +165,7 @@ BoxLayout:
         Widget:
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .2  #Transparent Grey
+                    rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -162,7 +175,7 @@ BoxLayout:
         PluginSection:
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .3  #Transparent Grey Darker
+                    rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -172,10 +185,11 @@ BoxLayout:
         Label:
             text: "Console"
             color: 0, 0, 0, 1
+            font_size: 15
             size_hint_y: 3/100
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .4  #Transparent Grey
+                    rgba: 155/255, 159/255, 144/255, 1  #NWChemEX darker beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -184,19 +198,13 @@ BoxLayout:
             id: message_section
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, .2  #Transparent Grey
+                    rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
             size_hint_y: 19/100
         
     RightSection:
-        #canvas.before:
-        #    Color:
-        #        rgba: 0, 0, 0, .7  #Transparent Grey
-        #    Rectangle:
-        #        pos: self.pos
-        #        size: self.size
         id: right_section
         size_hint: 2/3, 1
     

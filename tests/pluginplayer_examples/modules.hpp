@@ -21,5 +21,6 @@ namespace pluginplayer_examples {
 
 DECLARE_MODULE(MultiplyBy2);
 DECLARE_MODULE(MultiplyBy1);
+DECLARE_MODULE(MultiplyBySubmods);
 
 } // namespace pluginplay_examples

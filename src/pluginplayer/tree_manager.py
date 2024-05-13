@@ -50,6 +50,8 @@ class TreeManager():
         self.plugin_player = plugin_player
         self.saved_output = None
         self.tree_module = None
+        self.node_height = dp(80)
+        self.node_width = dp(140)
 
     def delete_tree(self):
         """Delete the entire tree, its edges, and nodes.
@@ -59,6 +61,7 @@ class TreeManager():
         self.tree_module = None
 
         self.plugin_player.root.ids.right_section.ids.tree_section.clear_widgets()
+        self.plugin_player.root.ids.right_section.ids.tree_section.canvas.clear()
         
         self.plugin_player.add_message(f"Removed Module Tree: {tree_module}")
 
@@ -70,13 +73,12 @@ class TreeManager():
         """
         #create main widget
         node_widget = Widget(size_hint=(None, None),
-                                      size=(dp(140), dp(80)),
-                                      pos_hint={'center_y':.5, 'center_x':.5})
+                                      size=(self.node_width, self.node_height),
+                                      pos_hint={'center_y':.5})
         
         #set the background color
-        with node_widget.canvas.before:
-            Color(37 / 255, 150 / 255, 190 / 255,
-                  1)  # Set the color (R, G, B, A)
+        with node_widget.canvas.before: 
+            Color(155/255, 159/255, 144/255)  # NWChemEx Dark Beige
             rect = RoundedRectangle(size=node_widget.size, pos=node_widget.pos, radius=[dp(20), dp(20), dp(20), dp(20)])
 
         # Bind size and pos to the rectangle
@@ -86,7 +88,7 @@ class TreeManager():
         
         #set id to node number
         #node_widget.id = f'{node_number}'
-        basis_box = BoxLayout(orientation='horizontal', spacing=0, size=(dp(140), dp(80)), size_hint=(None,None))
+        basis_box = BoxLayout(orientation='horizontal', spacing=0, size=(self.node_width, self.node_height), size_hint=(None,None))
 
         #left side reserved for label and configure button
         basis_left = BoxLayout(orientation='vertical', spacing= 0)
@@ -98,6 +100,7 @@ class TreeManager():
             height=dp(80),
             halign='center',
             valign='center',
+            color=(0,0,0,1),
             text=f"{module_name}")
         widget_label.text_size = widget_label.size
         basis_left.add_widget(widget_label)
@@ -114,6 +117,7 @@ class TreeManager():
                 text='Map',
                 on_press=self.plugin_player.run_manager.submods_config)
             node_widget.height += dp(20)
+            config_button.id=module_name
             
             basis_left.add_widget(config_button)
 
@@ -171,19 +175,20 @@ class TreeManager():
             self.plugin_player.add_message("Successfully Mapped Submodules")
 
             #generate the new tree
-            tree_nodes = self.generate_tree(module_tree)
+            tree_nodes= self.generate_tree(module_tree)
             self.plugin_player.add_message("Successfully Generated Module Nodes")
 
             #add connections to the tree
             self.add_connections(module_tree, tree_nodes)
             self.plugin_player.add_message("Successfully Created Module Connections")
+            
+            self.plugin_player.add_message("Successfully Created Module Tree")
 
 
         except Exception as e:
             self.plugin_player.add_message(f"Module Tree Generation Unsuccessful \n {e}")
 
 
-        self.plugin_player.add_message("Successfully Created Module Tree")
 
     def submodule_dependencies(self):
         """generates a 2D array of each level of the tree
@@ -208,10 +213,12 @@ class TreeManager():
             #assume the layer does not have a dependency unless proved otherwise
             has_dependency = False
 
+            next_layer = []
+            
             #check if the current tree layer has dependencies
             while(module_index < len(module_tree[tree_layer])):
 
-                next_layer = []
+
 
                 #get module and its submodule list
                 submodule_list = mm.at(module_tree[tree_layer][module_index][1]).submods()
@@ -229,7 +236,6 @@ class TreeManager():
             #add the next layer if its full, reset counters
             if(len(next_layer) > 0):
                 module_tree.append(next_layer)
-                next_layer = []
 
             module_index = 0
             tree_layer += 1
@@ -244,10 +250,14 @@ class TreeManager():
 
         #Create the same 2D array module mapper, but fill with its corresponding widgets
         tree_nodes = []
+        layers = []
         
         tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
 
+        #clear all lines and widgets
         tree_section.clear_widgets()
+        tree_section.canvas.before.clear()
+                
         tree_section.width = self.plugin_player.root.ids.right_section.width
 
         layer_count = 0
@@ -258,7 +268,8 @@ class TreeManager():
             #add place for the node widgets to go
             tree_nodes.append([])
 
-            layer_layout = BoxLayout(orientation='horizontal', spacing=dp(50), size_hint=(None,None), pos_hint={'center_x':.5, 'center_y':.5})
+            layer_layout = BoxLayout(orientation='horizontal', width = 0, size_hint=(None, None), spacing=dp(50))
+            
 
             #for each module mapping in the layer, place a node, its connecting line, and a configure button if it has submods
             for module_mapping in layer:
@@ -266,20 +277,27 @@ class TreeManager():
                 #create the widget for the module node
                 node_widget = self.create_node(module_mapping[1])
                 tree_nodes[layer_count].append(node_widget)
+                layer_layout.width += node_widget.width
+                if(len(tree_nodes[layer_count])):
+                    layer_layout.width += layer_layout.spacing
                 layer_layout.add_widget(node_widget)
+
+                
             
             #extend the tree_section width if its content width is greater, initiating scrolling on x
             if(layer_layout.width > tree_section.width):
                 tree_section.width = layer_layout.width
             
             tree_section.add_widget(layer_layout)
+            layers.append(layer_layout)
             layer_count += 1
+            
+        for layer in layers:
+            #add edit the positioning of the widgets according to their length
+            position_x = (1- (layer.width / tree_section.width)) / 2 + (layer.width / tree_section.width)/2
+            layer.pos_hint={'center_x': position_x}
 
         return tree_nodes
-
-
-
-        return
     
     def add_connections(self, module_tree, tree_nodes):
         """Adds the lines to connect nodes
@@ -290,7 +308,9 @@ class TreeManager():
         """
 
         layer_count = 0
-
+        tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
+        tree_section.canvas.before.clear()
+        
         #iterate through the module tree and make a line that connects the two modules
         for module_map_list in module_tree:
 
@@ -300,6 +320,7 @@ class TreeManager():
                 continue
 
             module_count = 0
+            
 
             #check each module map and add the line
             for module_map in module_map_list:
@@ -310,33 +331,22 @@ class TreeManager():
 
                 # grab the dependent module
                 child_module = tree_nodes[layer_count][module_count]
+            
+                # Create a Line object
+                connecting_line = Line(width=dp(3), points=[parent_module.center_x, parent_module.center_y, child_module.center_x, child_module.center_y])
                 
-                tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
-                #find the y coordinates of the parent and child be counting the hieght of each layer, and padding and centering
-                child_y = (layer_count * dp(80) + layer_count * dp(50) + dp(50))
-                parent_y =((layer_count - 1) * dp(80) + (layer_count - 1) * dp(50) + dp(50))
-
-                #find the x coordinates of the parent and child be finding the distance between start of tree_section and the layer widget, added by the distance between start of layer widget and the module widget
-                child_x = ((tree_section.width - child_module.parent.width) / 2) + child_module.x + dp(65)
-                parent_x = ((tree_section.width - parent_module.parent.width) / 2) + parent_module.x + dp(65)
-
-                # create the connecting line
-                connecting_line = Line(points=[
-                    parent_x,
-                    parent_y,
-                    child_x,
-                    child_y
-                ], width=2)
-
-                # add the line to the layout
-                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(Color(0, 0, 0))
-                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(connecting_line)
+                #add to the screen
+                tree_section.canvas.before.add(Color(192/255,59/255,20/255))  #NWChemEX Red
+                tree_section.canvas.before.add(connecting_line)
                 
-                #add the line to the layout
-                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(
-                    Color(0, 0, 0))
-                self.plugin_player.root.ids.right_section.ids.tree_section.canvas.before.add(
-                    connecting_line)
+                #set binding function to attach to the widgets
+                update_line = lambda instance, value, connecting_line=connecting_line, parent_module=parent_module, child_module=child_module: setattr(
+                    connecting_line, 'points',
+                    [parent_module.center_x, parent_module.center_y, child_module.center_x, child_module.center_y])
+
+                # Bind the update_line function to the center positions
+                parent_module.bind(center=update_line)
+                child_module.bind(center=update_line)
 
                 module_count += 1
             

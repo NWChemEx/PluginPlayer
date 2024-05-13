@@ -273,7 +273,7 @@ class PluginManager:
 
             #If the cancel button was called, put a cancel message and dismiss the popup
             if(instance.id.split()[0]=='-1'):
-                self.plugin_player.add_message("Canceled module cloning" + moduleName)
+                self.plugin_player.add_message("Canceled module cloning " + moduleName)
                 self.plugin_player.popup.dismiss()
                 return
             
@@ -309,7 +309,7 @@ class PluginManager:
         buttons.add_widget(Widget(size_hint_x=1/5))
 
         #add submit button
-        submitButton = Button(on_press=initiate_clone, text="Submit", size_hint=(1,1/5))
+        submitButton = Button( on_press=initiate_clone, text="Submit", size_hint=(1,1/5))
         submitButton.id = f'1 {instance.id}'
         buttons.add_widget(submitButton)
 
@@ -319,7 +319,7 @@ class PluginManager:
         customNamePopup.add_widget(buttons)
         
         #create popup
-        self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (dp(300), dp(200)))
+        self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (dp(600), dp(200)))
         return
     
     def view_modules(self, instance):
@@ -360,7 +360,7 @@ class PluginManager:
                                   spacing=5)
 
         #add a delete plugin button
-        delete_plugin = Button(text='Delete Plugin',
+        delete_plugin = Button(text="Delete",
                                size_hint_y=None,
                                height=dp(20),
                                on_press=self.delete_plugin)
@@ -403,8 +403,9 @@ class PluginManager:
             view_module.add_widget(add_to_tree)
 
             #add the info button for extended information
-            view_info = Button(text='Info',
+            view_info = Button(
                                size_hint_x=1 / 10,
+                               text="Info",
                                on_press=self.view_module_info)
             #set the id for the module number and plugin number and 0 (accessed in folder)
             view_info.id = f'0 {i} {folder_number}'
@@ -444,7 +445,7 @@ class PluginManager:
 
             if(dropped == i):
                 #add a dropdown button
-                dropDown = Button(on_press=self.view_modules, 
+                dropDown = Button( on_press=self.view_modules, 
                                 background_normal='src/pluginplayer/assets/dropped.png',
                                 size=(dp(20),dp(20)), 
                                 size_hint=(None, None),

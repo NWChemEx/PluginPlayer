@@ -138,7 +138,7 @@ class RunManager():
             self.custom_declaration.append(custom_declaration_widget)
 
             #create the add button that routes to an adding input function
-            input_add_button = Button(text='Set', size_hint_x=1 / 5)
+            input_add_button = Button( text='Set', size_hint_x=1 / 5)
             input_add_button.id = f'{i} {module_name}'
             input_add_button.bind(on_press=self.add_input)
             input_entry_list.add_widget(input_add_button)
@@ -161,7 +161,7 @@ class RunManager():
 
         self.plugin_player.create_popup(
             scroll_view, f'Input Configuration: {module_name})',
-            True, (dp(400), dp(400)))
+            True, (dp(800), dp(400)))
         return
     
     def add_input(self, instance):
@@ -312,7 +312,7 @@ class RunManager():
         except:
             pass
         #grab the node's index and its corresponding module
-        module_name = self.plugin_player.tree_manager.tree_module
+        module_name = instance.id
         mm = self.plugin_player.mm
         module = mm.at(module_name)
 
@@ -371,7 +371,7 @@ class RunManager():
 
             #create the add button that routes to an adding submodule function
             submod_add_button = Button(text='Set', height=dp(30), size_hint_y=None, size_hint_x=1 / 5)
-            submod_add_button.id = f'{i}'
+            submod_add_button.id = f'{i} {module_name}'
             submod_add_button.bind(on_press=self.select_submod)
             submod_list.add_widget(submod_add_button)
 
@@ -397,7 +397,7 @@ class RunManager():
         #add to the popup
         self.plugin_player.create_popup(
             scroll_view, f'Submodule Configuration for {module_name}',
-            True, (dp(500), dp(300)))
+            True, (dp(800), dp(300)))
         
 
     def select_submod(self, instance):
@@ -407,8 +407,8 @@ class RunManager():
         :type instance: kivy.uix.button.Button
         """
         #grab needed info form the id and
-        key_number = int(instance.id)
-        module_name = self.plugin_player.tree_manager.tree_module
+        key_number = int(instance.id.split()[0])
+        module_name = ' '.join(instance.id.split()[1:])
         key = list(self.plugin_player.mm.at(module_name).submods().keys())[key_number]
 
         #start creating a widget for selecting a submodule
@@ -417,14 +417,15 @@ class RunManager():
                                   spacing=0)
 
         #add back button
-        back_button = Button(text="Back",
+        back_button = Button( text="Back",
                              size_hint=(None, None),
                              size=(dp(40), dp(20)),
                              on_press=self.submods_config)
+        back_button.id = module_name
         select_submod.add_widget(back_button)
 
         plugin_number = 0
-        module_number = 0
+        submodule_number = 0
         #for each module in each plugin, place a module and option to add
         for plugin in self.plugin_player.plugin_manager.saved_plugins:
             
@@ -460,15 +461,15 @@ class RunManager():
                     size_hint_x=1 / 10,
                     on_press=self.add_submod)
                 #add id to identify the submodule from the node, and the module to be the submodule
-                add_button.id = f'{key_number} {plugin_number} {module_number}'
+                add_button.id = f'{key_number} {plugin_number} {submodule_number} {module_name}'
                 module_box.add_widget(add_button)
 
                 #add to main box
                 select_submod.add_widget(module_box)
 
-                module_number += 1
+                submodule_number += 1
             plugin_number += 1
-            module_number = 0
+            submodule_number = 0
         
         total_height = 0
         for child in select_submod.children:
@@ -484,7 +485,7 @@ class RunManager():
         scroll_view.add_widget(select_submod)
         
         self.plugin_player.create_popup(scroll_view,
-                                        f'Selecting submodule: {key}', False, (dp(500), dp(300)))
+                                        f'Selecting submodule: {key}', False, (dp(800), dp(300)))
         
     #attempts to add a submodule type to a node
     def add_submod(self, instance):
@@ -495,7 +496,8 @@ class RunManager():
         """
 
         mm = self.plugin_player.mm
-        module_name = self.plugin_player.tree_manager.tree_module
+        module_name = ' '.join(instance.id.split()[3:])
+        print("\n\n\n\n\n\n\n" +module_name)
         
         #get info from the instance id
         key_number = int(instance.id.split()[0])
@@ -504,6 +506,14 @@ class RunManager():
         submodule_number = int(instance.id.split()[2])
         submodule_name = self.plugin_player.plugin_manager.saved_plugins[
             plugin_number].modules[submodule_number]
+        
+        #Check if the submodule is itself, causes recursion, not good
+        if(submodule_name == module_name):
+            self.plugin_player.add_message("A module's submodule cannot be itself, create a clone to add it as a submodule.")
+            fakeButton =  Widget()
+            fakeButton = module_name
+            self.submods_config(fakeButton)
+
 
         #attempt to add the submodule in the Module Manager
         try:
@@ -521,6 +531,7 @@ class RunManager():
         tree_nodes = self.plugin_player.tree_manager.generate_tree(module_tree)
         self.plugin_player.tree_manager.add_connections(module_tree, tree_nodes)
         fakeButton =  Widget()
+        fakeButton.id = module_name
         self.submods_config(fakeButton)
 
         
@@ -540,13 +551,7 @@ class RunManager():
         mm = self.plugin_player.mm
         module = mm.at(module_name)
         
-        #TODO implement with ready() or not_read_list             
-        
-        if(self.module_dict[module_name].property_type == None):
-            self.plugin_player.add_message("Property Type is not set")
-            #skip rest of function
-            return
-        
+        #check if all the inputs are in
         inputs_set = True
         for i in range(len(self.module_dict[module_name].inputs)):
             if(self.module_dict[module_name].inputs[i] == None):
@@ -556,6 +561,17 @@ class RunManager():
         if(inputs_set == False):
             self.plugin_player.add_message(f"Aborting Tree Run")
             return
+        
+        #check using the ready(), catches bad inputs and not set submodules
+        if(not module.ready()): 
+            self.plugin_player.add_message("Module is not ready to run, check all submodules and inputs are mapped") 
+            return    
+        
+        if(self.module_dict[module_name].property_type == None):
+            self.plugin_player.add_message("Property Type is not set")
+            #skip rest of function
+            return
+    
                 
         
         #attempt to run the module

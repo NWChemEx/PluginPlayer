@@ -20,9 +20,11 @@
 namespace pluginplayer_examples {
 
 void load_modules(pluginplay::ModuleManager& mm) {
+    mm.add_module<MultiplyBySubmods>("Multiply by Submods");
     mm.add_module<MultiplyBy2>("Multiply by 2");
     mm.add_module<MultiplyBy1>("Multiply by 1");
     mm.change_submod("Multiply by 2", "internal multiplier", "Multiply by 1");
+    
 }
 
 } // namespace pluginplay_examples
