@@ -12,22 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Building the node's widget
-    When building a modular application design, nodes of the tree can be added from the module view, and a node is placed on the tree with the Module’s name and the node number, a series of options buttons, and a configuration button. This node widget building process is done by `NodeWidgetManager` class that imports image files and module settings into a `ModuleNode` class. The `ModuleNode` class contains dictionaries of the inputs, outputs, property type, and submodules required for the run process. 
+Setting a submodule
+    By clicking the Map button on the module node, you can set the module's submodule by interacting with a popup created by `submods_config`,
+    listing each submodule the module has with a button to edit the cooresponding submodule.
+    
+    `select_submod` then creates a popup listing all modules to select to add as a submodule.
+    
+    `add_submod` then takes the selected module and adds it to the module's submodule, outputting its success/error messages
+       
+Setting an input
+    By clicking the Add Inputs button, you can trigger `inputs_config`, which will create a popup with a space to enter a python variable as an input.
+    When clicking set, `add_input` will change the input both in the module manager and the local storage for inputs.
 
-Button Options 
-    Within the options buttons the user to move the node with the navigation button, shown with a four-arrowed icon by dragging. The drag implementation is monitored by the `DraggableImageButton` and `DraggableWidget` class within `NodeWidgetManager` class to track user's touch and drag movements and move the widget based on the mouse location.  The user can access the API information for the Module the node contains by clicking the info button, shown with an “i” icon. The user can also remove the node by clicking the remove button, shown with an X icon. The remove functionality removes all connections in the tree and deletes the node from the tree through the `delete_node` function.
+Setting a property type
+    By clicking the Add Property Type button, you can trigger `property_type_config`, which will create a popup with a space to enter a python variable as a property type.
+    When clicking set, `add_property_type` will change the property type in the local storage for run time.
 
-Viewing the node's configuration
-    When a user clicks the “Configure” button, a popup will be shown to display the inputs, outputs, and Submodules for the nodes, as well as their connections in the tree if they are set. This popup is build by the `view_config` function within the `NodeManager` class, iterating through the node’s run settings and displaying each value that has been set or left empty. “Set” buttons are also next to each input, property type, and submodule displayed to set their connection in the tree.
-
-Setting a connection
-    The “Set” popup is displayed after the user decides to set either an input, property type, or submodule. Viewing the options for setting a run value is handled by the popup builder functions `add_input` and `add_submod` within the `NodeManager` class. Setting a property type requires only a text entry of the function type.
+Running the tree
+    Runs the module tree by using the `ready` module function and checking the local storage of inputs and property types. This combination
+    of verification of tree readiness will gaurantee that the tree has all inputs, property types, and submodules set before its attempted to be ran
+    and output.
 
 """
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
@@ -38,14 +46,13 @@ import sys
 
 
 class RunManager():
-    """Helper class for the PluginPlayer application to build widgets for viewing a module's run configuration
-
+    """Helper class for the PluginPlayer application to set a modules inputs, property types, and submodules for viewing a module's run configuration
     """
 
     def __init__(self, plugin_player):
-        """Initialization to set the PluginPlayer for which the UtilityManager will be managing
+        """Initialization to set the PluginPlayer for which the RunManager will be managing
 
-        :param plugin_player: The PluginPlayer object that the UtilityManager will manage
+        :param plugin_player: The PluginPlayer object that the RunManager will manage
         :type plugin_player: PluginPlayer
         """
         self.plugin_player = plugin_player
@@ -147,6 +154,7 @@ class RunManager():
             input_widget.add_widget(input_list)
             input_widget.add_widget(input_entry_list)
                 
+        #fix the height of the widget
         total_height = 0
         for child in input_widget.children:
             total_height += child.height
@@ -159,6 +167,7 @@ class RunManager():
                                  scroll_type=['bars', 'content'])
         scroll_view.add_widget(input_widget)
 
+        #create the popup 
         self.plugin_player.create_popup(
             scroll_view, f'Input Configuration: {module_name})',
             True, (dp(800), dp(400)))
@@ -262,9 +271,9 @@ class RunManager():
 
     def add_property_type(self, instance):
         """Links a property type from a text entry and updates the property type popup
-
-        Args:
-            instance (kivy.uix.button): The button clicked to route to this function
+        
+        :param instance: Button routing to this function
+        :type instance: kivy.uix.button.Button
         """
 
         module_name = self.plugin_player.tree_manager.tree_module
@@ -302,8 +311,8 @@ class RunManager():
     def submods_config(self, instance):
         """Generates a popup for setting the submodule for a module
 
-        Args:
-            instance (kivy.uix.button): the button clicked to route to the submodules options
+        :param instance: Button routing to this function
+        :type instance: kivy.uix.button.Button
         """
 
         #attempt to close any popups

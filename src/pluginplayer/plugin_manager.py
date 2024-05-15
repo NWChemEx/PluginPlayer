@@ -14,20 +14,31 @@
 """
 
 Dynamically Importing Plugins
-    Modular packages must be imported into the system when creating a GUI interface to allow users to work with Plugins. Each CMake compiled modular project creates a Plugin file within the internal build directory, registered as a .so file. Each Plugin has the load_modules() function to import Modules into a ModuleManager. If the Plugin contains Modules that don’t define its inputs, outputs, or submodules, the Plugin will not be imported, and an error message will be displayed. The ModuleManager acts as a directory for all the Modules to be later configured and run.
+    Modular packages must be imported into the system when creating a GUI interface to allow users to work with Plugins. 
+    Each CMake compiled modular project creates a Plugin file within the internal build directory, registered as a .so file. 
+    Each Plugin has the load_modules() function to import Modules into a ModuleManager. If the Plugin contains Modules that 
+    don’t define its inputs, outputs, or submodules, the Plugin will not be imported, and an error message will be displayed. 
+    The ModuleManager acts as a directory for all the Modules to be later configured and run.
 
     The current GUI design for dynamically importing and viewing plugin information to create an efficient application build.
 
     Users can enter a path to a plugin .so file or a directory to browse.
 
-    Once a Plugin is imported using the `plugin_loader` function, it is displayed as a folder in the Plugin Section, updated by the `plugin_view` function.
+    Once a Plugin is imported using the `plugin_loader` function, it is displayed as a folder in the Plugin Section, 
+    updated by the `plugin_view` function.
 
 Viewing Modules and API
-    A comprehensive GUI application should allow users to view each dynamically imported plugin’s Modules and their APIs, including a functional description, inputs, outputs, and required submodules, to gain information when creating an application design. Having documentation of each loaded Module allows for a more efficient application build.
+    A comprehensive GUI application should allow users to view each dynamically imported plugin’s Modules and their APIs, 
+    including a functional description, inputs, outputs, and required submodules, to gain information when creating an application 
+    design. Having documentation of each loaded Module allows for a more efficient application build.
 
-    When selecting a Plugin folder, a user is shown a popup, showing each of the Plugin’s Modules using the `view_modules` function. The user can also delete the Plugin and remove its Modules from the ModuleManager, add a Module to the Module tree for application building, and view its API info.
+    When selecting a Plugin folder, a user is shown a popup, showing each of the Plugin’s Modules using the `view_modules` 
+    function. The user can also delete the Plugin and remove its Modules from the ModuleManager, clone a Module into the Module Manager,
+    and add a Module to the Module tree for application building, and view its API info.
 
-    When selecting the “Info” button for the module, the following popup is displayed to show the Module’s description, inputs, outputs, and submodules using the `view_module_info` function. Information is provided for the Module’s parameters. If the Module does not provide information, “description unavailable” will be shown.
+    When selecting the “Info” button for the module, the following popup is displayed to show the Module’s description, inputs, 
+    outputs, and submodules using the `view_module_info` function. Information is provided for the Module’s parameters. If the 
+    Module does not provide information, “description unavailable” will be shown.
 
 
 """
@@ -42,7 +53,6 @@ import importlib
 
 #kivy helpers
 from kivy.uix.button import Button
-from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
@@ -54,6 +64,8 @@ from kivy.metrics import dp
 PluginInfo = namedtuple('PluginInfo', ['plugin_name', 'modules'])
 
 class ModuleValues:
+    """The module class for storing information for the GUI, regarding the user's inputs and property types they set to each module
+    """
     def __init__(self, module_name, mm):
         self.inputs = [None] * len(mm.at(module_name).inputs())
         self.evaluated_inputs = [None] * len(mm.at(module_name).inputs())
@@ -82,6 +94,7 @@ class PluginManager:
         entered_text = selected_file_path.text
         selected_file_path.text = ""
         selected_file_path.hint_text = "Enter Filepath/Browsing Directory"
+        
         # Check if the file exists and is a .so file
         if os.path.isfile(entered_text) and entered_text.endswith('.so'):
             self.plugin_player.add_message("File" + entered_text + "recognized as .so Plugin file")
@@ -238,8 +251,8 @@ class PluginManager:
     def duplicate_module(self, instance):
         """Duplicates a module into the Module Manager by asking for a new name through a popup
 
-        Args:
-            instance (kivy.uix.button): The "Clone" button pressed to trigger this action
+        :param instance: The Clone button calling this function
+        :type instance: kivy.uix.button
         """
         #grab the module's name
         moduleName = self.saved_plugins[int(instance.id.split()[0])].modules[int(instance.id.split()[1])]
@@ -266,8 +279,9 @@ class PluginManager:
         def initiate_clone(instance):
             """Internal function of duplicate_module that initiates the cloning process and stores in the saved plugins
 
-            Args:
-                instance (_type_): _description_
+
+            :param instance: When the submit button for the clone popup is pressed
+            :type instance: kivy.uix.button
             """
             moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
 
@@ -417,7 +431,13 @@ class PluginManager:
         self.plugin_view(folder_number, module_widget)
 
     def plugin_view(self, dropped, widget):
-        """update the loaded plugin visual display of folders"""
+        """Updates the plugin section listing the import plugins, and will add a dropdown for the listed plugin, adding the given dropdown widget
+
+        :param dropped: the plugin number which needs a dropdown
+        :type dropped: int
+        :param widget: the dropdown widget to be placed after the dropped plugin
+        :type widget: kivy.uix.boxlayout
+        """
 
         #grab the plugin section
         plugin_widget = self.plugin_player.root.ids.plugin_section.ids.plugin_container

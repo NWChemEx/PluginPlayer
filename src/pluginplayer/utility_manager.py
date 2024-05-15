@@ -39,7 +39,6 @@ from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
 from kivy.metrics import dp
 
 
@@ -48,10 +47,10 @@ class UtilityManager():
     """
 
     def __init__(self, plugin_player):
-        """Initialization of the UtilityManager class
+        """Itialization of the Utility Manager
 
-        Args:
-            plugin_player (PluginPlayer): the PluginPlayer object this UtilityManager is associated with
+        :param plugin_player: The PluginPlayer object that it is managing
+        :type plugin_player: PluginPlayer
         """
         self.plugin_player = plugin_player
         self.imported_classes = []
@@ -59,6 +58,9 @@ class UtilityManager():
 
     def browse(self, instance):
         """Browse for a new file from the file system and place in entry box
+
+        :param instance: The button to browse for files
+        :type instance: kivy.uix.button
         """
 
         #grab text from entry
@@ -155,6 +157,10 @@ class UtilityManager():
 
     def new_type(self, instance):
         """Defines a new class type for custom inputs and property types
+
+
+        :param instance: The button to submit a new type
+        :type instance: kivy.uix.button
         """
         try:
             import_name = self.custom_declaration_widget.text.split()[0]

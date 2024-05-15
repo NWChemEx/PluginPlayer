@@ -64,7 +64,7 @@ class PluginPlayer(App):
         #helper class handling addition/removal of nodes, deleting/running the tree
         self.tree_manager = TreeManager(self)
 
-        #helper class handling the widget building for the module configuration
+        #helper class handling the widget setting submodules, inputs, and running the module
         self.run_manager = RunManager(self)
 
         #helper class handling the loading, deleting, and viewing of plugins and their modules
@@ -80,7 +80,7 @@ class PluginPlayer(App):
         build = Builder.load_file('plugin_player_setup.kv')
         
         #standardize spacing
-        tree_section = build.ids.right_section.ids.tree_section
+        tree_section = right_section.ids.tree_section
         tree_section.spacing = dp(50)
         
     
