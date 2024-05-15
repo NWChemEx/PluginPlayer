@@ -77,10 +77,10 @@ class PluginPlayer(App):
         self.resized_images = []
 
         #build the main application from the kivy script file
-        build = Builder.load_file('plugin_player_setup.kv')
+        build = Builder.load_file('src/pluginplayer/plugin_player_setup.kv')
         
         #standardize spacing
-        tree_section = right_section.ids.tree_section
+        tree_section = build.ids.right_section.ids.tree_section
         tree_section.spacing = dp(50)
         
     

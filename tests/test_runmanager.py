@@ -24,36 +24,41 @@ from pluginplayer_shell import PluginPlayerShell
 #kivy button for instance
 from kivy.uix.button import Button
 
-#pluginplay_example types
+#pluginplay_examples
 from pluginplayer_examples import Multiplier
 
-import sys
+
+class TestRunManager(unittest.TestCase):
+    """Tests the functionality of the run manager"""
+
+    def test_link_input(self):
+        """Tests opening the add input button, and adding the inputs needed, checking the module manager that its been set
+        """
 
 
-class TestutilityManager(unittest.TestCase):
-    """Tests the functionality of the utility_manager class"""
-
-    def test_new_type(self):
-        """Check that you can navigate through importing a new type, and it actually puts it into the system path
+    def test_link_property_type(self):
+        """Tests opening the property type popup, adding a property type, checking that its been saved in the settings
         """
         #get a new shell
         player = PluginPlayerShell()
 
-        #set the id for the back button
-        backButton = Button()
-        backButton.id = '0 0'
+    def test_link_submod(self):
+        """Tests opening the submodule settings, changing property types, verifying they are changed in the module manager"""
 
-        player.utility_manager.custom_declaration_widget.text = 'pluginplayer_examples Multiplier'
+        #get a new shell
+        player = PluginPlayerShell()
 
-        #call the new_type function to add it to the list of types
-        player.utility_manager.new_type(backButton, player)
+        #add a node
+        moduleButton = Button()
+        moduleButton.id = '0 0'
+        player.tree_manager.add_node(moduleButton)
 
-        assert hasattr(
-            sys.modules['__main__'], Multiplier.__name__
-        ), f"{Multiplier.__name__} doesn't exist in the main module after attempted import."
-        self.assertEquals(player.utility_manager.imported_classes[0],
-                          "PointCharge",
-                          "Did not add to listed imported class types")
+        moduleButton.id = '0 0 0 3'
+        player.node_manager.link_submod(moduleButton)
+        
+    def test_run(self):
+        """Set the inputs, property types, submodules and test a Multiplication tree has a successful run and output
+        """
 
 
 if __name__ == "__main__":

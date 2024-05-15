@@ -85,15 +85,18 @@ class PluginManager:
         self.saved_plugins = []
         self.plugin_player = plugin_player
         self.custom_declaration = None
+        self.file_path_input = self.plugin_player.root.ids.file_entry.ids.file_path_input
+        self.plugin_section = self.plugin_player.root.ids.plugin_section
+        self.plugin_container = self.plugin_player.root.ids.plugin_section.ids.plugin_container
+        
 
     def plugin_loader(self):
         """Attempt to load in a plugin from a filepath stored in an entry box and update the plugin view and module manager
         """
         #grab filepath from the entry
-        selected_file_path = self.plugin_player.root.ids.file_entry.ids.file_path_input
-        entered_text = selected_file_path.text
-        selected_file_path.text = ""
-        selected_file_path.hint_text = "Enter Filepath/Browsing Directory"
+        entered_text = self.file_path_input.text
+        self.file_path_input.text = ""
+        self.file_path_input.hint_text = "Enter Filepath/Browsing Directory"
         
         # Check if the file exists and is a .so file
         if os.path.isfile(entered_text) and entered_text.endswith('.so'):
@@ -363,7 +366,7 @@ class PluginManager:
             return
 
         #grab pluginSection widget
-        plugin_section = self.plugin_player.root.ids.plugin_section
+        plugin_section = self.plugin_section
 
         #create widget to fill with modules
         module_widget = BoxLayout(orientation='vertical',
@@ -440,7 +443,7 @@ class PluginManager:
         """
 
         #grab the plugin section
-        plugin_widget = self.plugin_player.root.ids.plugin_section.ids.plugin_container
+        plugin_widget = self.plugin_container
 
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()

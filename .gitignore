@@ -50,8 +50,6 @@ cache.db
 uuid.db
 
 #These are the resized images made using PIL in PluginPlayer
-drag.png
 info.png
-remove.png
 drop.png
 dropped.png

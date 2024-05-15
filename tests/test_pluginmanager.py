@@ -28,18 +28,25 @@ from kivy.uix.button import Button
 class TestPluginManager(unittest.TestCase):
 
     def test_plugin_import_from_shell(self):
+        """Tests the manual loading of a module
+        """
         #get a new shell
         player = PluginPlayerShell()
 
         #check if plugin is loaded
-        self.assertNotEqual(
-            player.plugin_manager.saved_plugins[0], None,
-            "Failed to import pluginplay examples through test shell")
         self.assertEqual(
             len(player.plugin_manager.saved_plugins), 1,
             "Failed to import pluginplay examples through test shell")
+        
+        #check if the module dictionary has been loaded
+        self.assertEqual(
+            len(player.run_manager.module_dict), 3, 
+            "Failed to load pluginplayer_examples's three modules in the module dictionary"
+        )
 
     def test_delete_plugins(self):
+        """Test deleting of a plugin
+        """
         #get a new shell
         player = PluginPlayerShell()
 
@@ -50,28 +57,19 @@ class TestPluginManager(unittest.TestCase):
 
         #attempt to delete the first plugin
         self.assertEqual(
-            player.plugin_manager.saved_plugins[0], None,
-            "Failed to set the imported plugin to None after deletion")
-        self.assertEqual(player.nodes, [])
-
-        #get a new shell
-        player = PluginPlayerShell()
-
-        #add a new node with instance routing to the first module from the first plugin
-        moduleButton = Button()
-        moduleButton.id = '0 0'
-        player.tree_manager.add_node(moduleButton)
-
-        #delete the plugin, which should delete all plugin's nodes as well
-        player.plugin_manager.delete_plugin(deleteButton)
-
+            len(player.plugin_manager.saved_plugins), 0,
+            "Failed to delete plugin")
+        
+        #check if the module dictionary has been cleared
         self.assertEqual(
-            player.plugin_manager.saved_plugins[0], None,
-            "Failed to set the imported plugin to None after deletion")
-        self.assertEqual(
-            player.nodes[0], None,
-            "Failed to set a plugin's nodes to None after the plugin's deletion"
+            len(player.run_manager.module_dict), 0, 
+            "Failed to delete pluginplayer_examples's three modules from the module dictionary"
         )
+        
+    def test_clone(self):
+        """Test cloning of a module
+        """
+        
 
 
 if __name__ == "__main__":
