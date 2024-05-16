@@ -37,16 +37,10 @@ cmaize_option_list(
     BUILD_TESTING OFF "Should we build the tests?"
 )
 
-### Tests need PluginPlay examples ##
-if("${BUILD_TESTING}")
-    set(PP_BUILD_TARGETS pluginplay pluginplay_examples)
-    set(PP_FIND_TARGETS nwx::pluginplay nwx::pluginplay_depends)
-    set(PP_BUILD_TESTS ON)
-else()
-    set(PP_BUILD_TARGETS pluginplay)
-    set(PP_FIND_TARGETS nwx::pluginplay)
-    set(PP_BUILD_TESTS OFF)
-endif()
+set(PP_BUILD_TARGETS pluginplay)
+set(PP_FIND_TARGETS nwx::pluginplay)
+set(PP_BUILD_TESTS OFF)
+
 
 ## Build FriendZone's dependencies ##
 cmaize_find_or_build_dependency(
@@ -67,6 +61,20 @@ if("${BUILD_TESTING}")
     include(CTest)
     include(nwx_pybind11)
     set(PYTHON_TEST_DIR "${CMAKE_CURRENT_LIST_DIR}/tests")
+    set(examples_src_dir "${CMAKE_CURRENT_LIST_DIR}/tests/pluginplayer_examples")
+
+    cmaize_add_library(
+        ${PROJECT_NAME}_examples
+        SOURCE_DIR ${examples_src_dir}
+        INCLUDE_DIRS ${examples_src_dir}
+        DEPENDS pluginplay
+    )
+    nwx_add_pybind11_module(
+        ${PROJECT_NAME}_examples
+        INSTALL OFF
+        SOURCE_DIR ${examples_src_dir}
+        DEPENDS parallelzone pluginplay ${PROJECT_NAME} ${PROJECT_NAME}_examples
+    )
 
     nwx_pybind11_tests(
         py_${PROJECT_NAME}

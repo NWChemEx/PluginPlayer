@@ -5,3 +5,6 @@ py:class kivy.core.window.Event
 py:class kivy.app.App
 py:class kivy.uix.widget.Widget
 py:class kivy.uix.relativelayout.RelativeLayout
+py:class String
+py:class kivy.uix.button
+py:class kivy.uix.boxlayout
