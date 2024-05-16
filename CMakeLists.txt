@@ -67,6 +67,7 @@ if("${BUILD_TESTING}")
         ${PROJECT_NAME}_examples
         SOURCE_DIR ${examples_src_dir}
         INCLUDE_DIRS ${examples_src_dir}
+        DEPENDS pluginplay
     )
     nwx_add_pybind11_module(
         ${PROJECT_NAME}_examples
