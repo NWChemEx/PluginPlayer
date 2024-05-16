@@ -37,6 +37,10 @@ cmaize_option_list(
     BUILD_TESTING OFF "Should we build the tests?"
 )
 
+set(PP_BUILD_TARGETS pluginplay)
+set(PP_FIND_TARGETS nwx::pluginplay)
+set(PP_BUILD_TESTS OFF)
+
 
 ## Build FriendZone's dependencies ##
 cmaize_find_or_build_dependency(
