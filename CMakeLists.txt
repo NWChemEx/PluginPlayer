@@ -37,6 +37,17 @@ cmaize_option_list(
     BUILD_TESTING OFF "Should we build the tests?"
 )
 
+### Tests need PluginPlay examples ##
+if("${BUILD_TESTING}")
+    set(PP_BUILD_TARGETS pluginplay pluginplay_examples)
+    set(PP_FIND_TARGETS nwx::pluginplay nwx::pluginplay_depends)
+    set(PP_BUILD_TESTS ON)
+else()
+    set(PP_BUILD_TARGETS pluginplay)
+    set(PP_FIND_TARGETS nwx::pluginplay)
+    set(PP_BUILD_TESTS OFF)
+endif()
+
 ## Build FriendZone's dependencies ##
 cmaize_find_or_build_dependency(
     pluginplay
