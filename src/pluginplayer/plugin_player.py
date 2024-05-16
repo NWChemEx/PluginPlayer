@@ -77,7 +77,9 @@ class PluginPlayer(App):
         self.utility_manager = UtilityManager(self)
 
         #build the main application from the kivy script file
-        build = Builder.load_file('src/pluginplayer/plugin_player_setup.kv')
+        player_location = os.path.dirname(__file__)
+        kv_filepath = os.path.join(player_location, "plugin_player_setup.kv")
+        build = Builder.load_file(kv_filepath)
 
         #standardize spacing
         tree_section = build.ids.tree_section

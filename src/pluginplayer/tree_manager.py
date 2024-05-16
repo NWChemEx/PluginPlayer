@@ -35,6 +35,7 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, RoundedRectangle, Line
 from kivy.metrics import dp
+import os
 
 
 class TreeManager():
@@ -130,14 +131,18 @@ class TreeManager():
 
         basis_box.add_widget(basis_left)
 
+        player_location = os.path.dirname(__file__)
+        info_filepath = os.path.join(player_location, "assets", "info_icon.png")
+        new_info_filepath = os.path.join(player_location, "assets", "info.png")
+        
         #resize info button
         self.plugin_player.create_image(
-            'src/pluginplayer/assets/info_icon.png',
-            'src/pluginplayer/assets/info.png', (dp(30), dp(30)))
+            info_filepath,
+            new_info_filepath, (dp(30), dp(30)))
 
         #make info button
         info_button = Button(
-            background_normal='src/pluginplayer/assets/info.png',
+            background_normal=new_info_filepath,
             on_press=self.plugin_player.plugin_manager.view_module_info,
             size_hint=(None, None),
             pos_hint={'center_y': 0.5},

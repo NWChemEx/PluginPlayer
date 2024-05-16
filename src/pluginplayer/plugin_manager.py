@@ -460,14 +460,21 @@ class PluginManager:
 
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()
-
+        
+        
+        player_location = os.path.dirname(__file__)
+        drop_filepath = os.path.join(player_location, "assets", "drop_button.png")
+        new_drop_filepath = os.path.join(player_location, "assets", "drop.png")
+        dropped_filepath = os.path.join(player_location, "assets", "dropped_button.png")
+        new_dropped_filepath = os.path.join(player_location, "assets", "dropped.png")
+        
         #resize dropdown images
         self.plugin_player.create_image(
-            'src/pluginplayer/assets/drop_button.png',
-            'src/pluginplayer/assets/drop.png', (20, 20))
+            drop_filepath,
+            new_drop_filepath, (20, 20))
         self.plugin_player.create_image(
-            'src/pluginplayer/assets/dropped_button.png',
-            'src/pluginplayer/assets/dropped.png', (20, 20))
+            dropped_filepath,
+            new_dropped_filepath, (20, 20))
 
         #add a section for each plugin
         for i in range(len(self.saved_plugins)):
@@ -489,7 +496,7 @@ class PluginManager:
                 #add a dropdown button
                 dropDown = Button(
                     on_press=self.view_modules,
-                    background_normal='src/pluginplayer/assets/dropped.png',
+                    background_normal=new_dropped_filepath,
                     size=(dp(20), dp(20)),
                     size_hint=(None, None),
                     valign='bottom')
@@ -502,7 +509,7 @@ class PluginManager:
                 #add a dropdown button
                 dropDown = Button(
                     on_press=self.view_modules,
-                    background_normal='src/pluginplayer/assets/drop.png',
+                    background_normal=new_drop_filepath,
                     size=(dp(20), dp(20)),
                     size_hint=(None, None),
                     valign='bottom')
