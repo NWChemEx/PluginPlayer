@@ -132,13 +132,13 @@ class TreeManager():
         basis_box.add_widget(basis_left)
 
         player_location = os.path.dirname(__file__)
-        info_filepath = os.path.join(player_location, "assets", "info_icon.png")
+        info_filepath = os.path.join(player_location, "assets",
+                                     "info_icon.png")
         new_info_filepath = os.path.join(player_location, "assets", "info.png")
-        
+
         #resize info button
-        self.plugin_player.create_image(
-            info_filepath,
-            new_info_filepath, (dp(30), dp(30)))
+        self.plugin_player.create_image(info_filepath, new_info_filepath,
+                                        (dp(30), dp(30)))
 
         #make info button
         info_button = Button(
