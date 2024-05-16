@@ -41,7 +41,7 @@ class TestutilityManager(unittest.TestCase):
 
         #open a new popup to view the class types
         player.utility_manager.class_types()
-        
+
         #set the id for the back button to make a new type
         backButton = Button()
         backButton.id = '0 0'
@@ -56,8 +56,8 @@ class TestutilityManager(unittest.TestCase):
             sys.modules['__main__'], Multiplier.__name__
         ), f"{Multiplier.__name__} doesn't exist in the main module after attempted import."
         self.assertEqual(player.utility_manager.imported_classes[0],
-                          "Multiplier",
-                          "Did not add to listed imported class types")
+                         "Multiplier",
+                         "Did not add to listed imported class types")
 
 
 if __name__ == "__main__":

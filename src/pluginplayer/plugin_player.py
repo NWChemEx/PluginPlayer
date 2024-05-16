@@ -58,7 +58,7 @@ class PluginPlayer(App):
 
         #string array holding the filepaths of resized images
         self.resized_images = []
-        
+
         self.popup = Popup()
 
         #The app's module manager
@@ -75,19 +75,16 @@ class PluginPlayer(App):
 
         #helper class handling browsing, imported class types, and importing new classes
         self.utility_manager = UtilityManager(self)
-        
+
         #build the main application from the kivy script file
         build = Builder.load_file('src/pluginplayer/plugin_player_setup.kv')
-        
-        
+
         #standardize spacing
         tree_section = build.ids.tree_section
         tree_section.spacing = dp(50)
-        
-        self.root = build
-        
 
-    
+        self.root = build
+
         return build
 
     def add_message(self, message):

@@ -32,50 +32,57 @@ class TestTreeManager(unittest.TestCase):
         """Sets a module to the tree checking its the tree can generate without any errors, doesn't check the visuals, only that there were no errors in tree building
         """
         player = getShell()
-        
+
         #Manually enter submodules to test only tree functionality
         mm = player.mm
-        
+
         #set a button to select to set the 3rd module from the 1st plugin (Multiply by Submods) and create a more complicated tree
         graph_button = Button()
         graph_button.id = "0 2"
-        mm.change_submod("Multiply by Submods", "internal multiplier 1", "Multiply by 2")
-        mm.change_submod("Multiply by Submods", "internal multiplier 2", "Multiply by 1")
-        
+        mm.change_submod("Multiply by Submods", "internal multiplier 1",
+                         "Multiply by 2")
+        mm.change_submod("Multiply by Submods", "internal multiplier 2",
+                         "Multiply by 1")
+
         #should be a tree with multiply by submods as its node, on the left connected to a multiply by 2 with a multiply by 1 child, on the right connected to a multiply by 1
         #attempt to set Multiply by Submods into the tree
         player.tree_manager.set_module(graph_button)
-        
+
         #Grab the success message that the module tree was created successfully
         last_message_log = player.root.ids.message_label.text.splitlines()[-1]
-        
+
         self.assertEqual(last_message_log, "Successfully Created Module Tree")
-        self.assertEqual(player.tree_manager.tree_module, "Multiply by Submods", "Didn't set the tree module variable")
-        self.assertNotEqual(len(player.root.ids.tree_section.children), 0, "Did not add any widgets to the tree")
-        self.assertNotEqual(len(player.root.ids.tree_section.canvas.before.children), 0, "Did not add lines")
-
-
+        self.assertEqual(player.tree_manager.tree_module,
+                         "Multiply by Submods",
+                         "Didn't set the tree module variable")
+        self.assertNotEqual(len(player.root.ids.tree_section.children), 0,
+                            "Did not add any widgets to the tree")
+        self.assertNotEqual(
+            len(player.root.ids.tree_section.canvas.before.children), 0,
+            "Did not add lines")
 
     def test_delete_tree(self):
         """Check once you press the button to delete the tree, the tree is empty"""
-        
+
         #Create a delete button to remove all widgets from the tree
         player = getShell()
-        
+
         #first generate a basic tree with a line
         graph_button = Button()
         graph_button.id = "0 1"
-        player.tree_manager.set_module(graph_button)     
-        
+        player.tree_manager.set_module(graph_button)
+
         #now remove it
-        player.tree_manager.delete_tree() 
-        
+        player.tree_manager.delete_tree()
+
         #Check if the tree isn't full of widgets or set to anything
-        self.assertIsNone(player.tree_manager.tree_module, "Didn't clear the tree module variable")
-        self.assertEqual(len(player.root.ids.tree_section.children), 0, "Did not clear all widgets")
-        
-        #lines still are within the canvas section but are not shown, this cannot be tested without visual confirmation        
-        
+        self.assertIsNone(player.tree_manager.tree_module,
+                          "Didn't clear the tree module variable")
+        self.assertEqual(len(player.root.ids.tree_section.children), 0,
+                         "Did not clear all widgets")
+
+        #lines still are within the canvas section but are not shown, this cannot be tested without visual confirmation
+
 
 if __name__ == "__main__":
     unittest.main()

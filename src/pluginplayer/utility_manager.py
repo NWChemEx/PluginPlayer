@@ -95,7 +95,7 @@ class UtilityManager():
         """
 
         #start creating the new popup
-        types_box = BoxLayout(orientation='vertical', size_hint_y = None)
+        types_box = BoxLayout(orientation='vertical', size_hint_y=None)
 
         types_box.add_widget(
             Label(
@@ -111,19 +111,19 @@ class UtilityManager():
                              height=dp(35),
                              spacing=0)
 
-        self.custom_declaration_widget =  TextInput(
+        self.custom_declaration_widget = TextInput(
             hint_text="from _____ import _____",
             multiline=False,
-            size_hint_x=5/10)
+            size_hint_x=5 / 10)
         new_type.add_widget(self.custom_declaration_widget)
 
         #add an import button
         add_button = Button(text="Import",
-                            height= dp(30),
-                            size_hint_y = None,
+                            height=dp(30),
+                            size_hint_y=None,
                             size_hint_x=1 / 10,
                             on_press=self.new_type)
-        
+
         new_type.add_widget(add_button)
 
         types_box.add_widget(new_type)
@@ -131,7 +131,7 @@ class UtilityManager():
         types_box.add_widget(
             Label(text="Imported Types",
                   font_size="20sp",
-                  height= dp(30),
+                  height=dp(30),
                   color=(0, 0, 0, 1),
                   size_hint_y=None))
 
@@ -141,19 +141,19 @@ class UtilityManager():
                       size_hint_y=None,
                       height=dp(15),
                       color=(0, 0, 0, 1)))
-            
+
         total_height = 0
         for child in types_box.children:
             total_height += child.height
         types_box.height = total_height
-        
-        scroll_view = ScrollView(
-                                 do_scroll_y=True,
+
+        scroll_view = ScrollView(do_scroll_y=True,
                                  scroll_y=1,
                                  scroll_type=['bars'])
         scroll_view.add_widget(types_box)
 
-        self.plugin_player.create_popup(scroll_view, "Class Types", True, (dp(600), dp(400)))
+        self.plugin_player.create_popup(scroll_view, "Class Types", True,
+                                        (dp(600), dp(400)))
 
     def new_type(self, instance):
         """Defines a new class type for custom inputs and property types
@@ -193,7 +193,6 @@ class UtilityManager():
             #Failure Message
             self.plugin_player.add_message(
                 f"Couldn't import type {class_name}: {e}")
-
 
         #recall the popup to update the newly loaded values and show hint text
         self.class_types()

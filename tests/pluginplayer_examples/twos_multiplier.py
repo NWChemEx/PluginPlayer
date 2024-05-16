@@ -22,8 +22,9 @@ class MultiplyBy2(pp.ModuleBase):
         pp.ModuleBase.__init__(self)
         self.description("Two's Multiplier")
         self.satisfies_property_type(ppe.Multiplier())
-        self.add_submodule(ppe.Multiplier(), "internal multiplier").set_description(
-            "Multiplier sub process")
+        self.add_submodule(
+            ppe.Multiplier(),
+            "internal multiplier").set_description("Multiplier sub process")
 
     def run_(self, inputs, submods):
         pt = ppe.Multiplier()
@@ -31,8 +32,10 @@ class MultiplyBy2(pp.ModuleBase):
         rv = self.results()
         output = submods["internal multiplier"].run_as(ppe.Multiplier(), r) * 2
         return pt.wrap_results(rv, output)
-    
+
+
 class MultiplyBy1(pp.ModuleBase):
+
     def __init__(self):
         pp.ModuleBase.__init__(self)
         self.description("Multiplies by 1")

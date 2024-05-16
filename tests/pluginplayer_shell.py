@@ -15,14 +15,12 @@
 #pluginplay helpers
 import pluginplay as pp
 import pluginplayer_examples
-from pluginplayer.plugin_manager import PluginInfo,  ModuleValues
+from pluginplayer.plugin_manager import PluginInfo, ModuleValues
 from pluginplayer.plugin_player import PluginPlayer
-
 
 #kivy helpers
 from kivy.app import App
 from kivy.base import stopTouchApp
-
 
 
 def getShell():
@@ -33,7 +31,7 @@ def getShell():
         running_app.stop()
         stopTouchApp()
         running_app = None
-        
+
     player = PluginPlayer()
     player.build()
 
@@ -42,14 +40,15 @@ def getShell():
 
     #add it to the list of modules
     new_plugin = PluginInfo(plugin_name="pluginplayer_examples",
-                                modules=player.mm.keys())
+                            modules=player.mm.keys())
     player.plugin_manager.saved_plugins.append(new_plugin)
-        
+
     #add each module into the module dictionary for saving inputs and property types
     for key in player.mm.keys():
         player.run_manager.module_dict[key] = ModuleValues(key, player.mm)
-        
+
     return player
+
 
 def getShellNoLoading():
     """Initializes the helpers and instance variables for the PluginPlayer class for testing without importing the pluginplayer_examples
@@ -59,10 +58,8 @@ def getShellNoLoading():
         running_app.stop()
         stopTouchApp()
         running_app = None
-        
+
     player = PluginPlayer()
     player.build()
 
-        
     return player
-        
