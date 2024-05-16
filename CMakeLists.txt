@@ -37,16 +37,6 @@ cmaize_option_list(
     BUILD_TESTING OFF "Should we build the tests?"
 )
 
-### Tests need PluginPlay examples ##
-if("${BUILD_TESTING}")
-    set(PP_BUILD_TARGETS pluginplay pluginplay_examples)
-    set(PP_FIND_TARGETS nwx::pluginplay nwx::pluginplay_depends)
-    set(PP_BUILD_TESTS ON)
-else()
-    set(PP_BUILD_TARGETS pluginplay)
-    set(PP_FIND_TARGETS nwx::pluginplay)
-    set(PP_BUILD_TESTS OFF)
-endif()
 
 ## Build FriendZone's dependencies ##
 cmaize_find_or_build_dependency(
@@ -73,7 +63,6 @@ if("${BUILD_TESTING}")
         ${PROJECT_NAME}_examples
         SOURCE_DIR ${examples_src_dir}
         INCLUDE_DIRS ${examples_src_dir}
-        DEPENDS Catch2::Catch2 ${PROJECT_NAME}
     )
     nwx_add_pybind11_module(
         ${PROJECT_NAME}_examples
