@@ -1,124 +1,5 @@
 <Button>:
     background_color: "#8ad8ff" #"#5c90c0" #NWChemExBlue
-
-
-<LeftSection@BoxLayout>:
-    orientation: 'vertical'
-
-
-<FileEntry@BoxLayout>:
-    orientation: 'horizontal'
-    spacing: 10
-    TextInput:
-        id: file_path_input
-        multiline: False
-        hint_text: "Enter Filepath/Plugin Name"
-        text: "/home/ethgru/PluginPlayer/build/pluginplayer_examples.so"
-        size_hint_x: 3
-
-    Button:
-        text: "Browse"
-        on_press: app.utility_manager.browse(app)
-
-    Button:
-        id: plugin_submit
-        text: "Submit"
-        on_press: app.plugin_manager.plugin_loader()
-
-<MessageSection@BoxLayout>:
-    ScrollView:
-        do_scroll_y: True
-        do_scroll_x: False
-        scroll_y: 0
-        Label:
-            id: message_label
-            halign: 'left'
-            size_hint_y: None
-            height: self.texture_size[1]
-            text_size: self.width, None
-            text: ''
-            color: 0,0,0,1
-
-<PluginSection@ScrollView>:
-    ScrollView:
-        do_scroll_y: True
-        do_scroll_x: False
-        scroll_y: 1
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_y: None
-            height: self.minimum_height
-            spacing: 5
-            id: plugin_container
-
-
-
-<RightSection@BoxLayout>:
-    orientation: 'vertical'
-    id: right_section
-    canvas.before:
-        Color:
-            rgba: 1, 1, 1, 1  
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    Label:
-        text: "Tree Builder"
-        font_size: 18
-        size_hint_y: 1/30
-        color: 0, 0, 0, 1
-
-    BoxLayout:
-        orientation: 'horizontal'
-        size_hint_y: 1/20
-        spacing: 10
-        Widget:
-            size_hint_x: 1/5
-        Button:
-            text: "Libraries"
-            on_press: app.utility_manager.class_types()
-            size_hint_x: 1/10
-        Button:
-            text: "Inputs"
-            on_press: app.run_manager.inputs_config()
-            size_hint_x: 1/10
-            id: input_button
-        Button:
-            text: "Property Type"
-            on_press: app.run_manager.property_type_config()
-            size_hint_x: 1/10
-            id: property_type_button
-
-        Button:
-            text: "Run Module"
-            on_press: app.run_manager.run()
-            size_hint_x: 1/10
-        
-        Button:
-            text: "Clear Tree"
-            on_press: app.tree_manager.delete_tree()
-            size_hint_x: 1/10
-        Widget:
-            size_hint_x: 1/5
-        
-
-    Widget:
-        size_hint_y: None
-        height:20
-        
-    ScrollView:
-        do_scroll_y: True
-        do_scroll_x: True
-        scroll_y: 1
-        scroll_x: .5
-        BoxLayout:
-            id: tree_section
-            orientation: 'vertical'
-            size_hint_y: None
-            size_hint_x: None
-            height: self.minimum_height
-            spacing: 50
-
     
 
 BoxLayout:
@@ -132,7 +13,8 @@ BoxLayout:
     padding: 10
     spacing: 10
     orientation: 'horizontal'
-    LeftSection:
+    BoxLayout:  #LeftSection
+        orientation: 'vertical'
         canvas.before:
             Color:
                 rgba: 1, 1, 1, 1 
@@ -153,16 +35,32 @@ BoxLayout:
             color: 0, 0, 0, 1
             size_hint_y: 3/100
 
-        FileEntry:
+        BoxLayout: #FileEntry
+            orientation: 'horizontal'
+            spacing: 10
+            id: file_entry
+            background_color: 1, 1, 1, 0
+            size_hint_y:4/100
             canvas.before:
                 Color:
                     rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            id: file_entry
-            background_color: 1, 1, 1, 0
-            size_hint_y:4/100
+            TextInput:
+                id: file_path_input
+                multiline: False
+                hint_text: "Enter Filepath/Plugin Name"
+                text: "/home/ethgru/PluginPlayer/build/pluginplayer_examples.so"
+                size_hint_x: 3
+            Button:
+                text: "Browse"
+                on_press: app.utility_manager.browse(app)
+
+            Button:
+                id: plugin_submit
+                text: "Submit"
+                on_press: app.plugin_manager.plugin_loader()
         Widget:
             canvas.before:
                 Color:
@@ -173,7 +71,7 @@ BoxLayout:
             size_hint_y:1/100
 
         
-        PluginSection:
+        ScrollView: #PluginSection
             canvas.before:
                 Color:
                     rgba: 212/255, 213/255, 205/255, 1  #NWChemEX lighter beige
@@ -182,6 +80,16 @@ BoxLayout:
                     size: self.size
             id: plugin_section
             size_hint_y:70/100
+            ScrollView:
+                do_scroll_y: True
+                do_scroll_x: False
+                scroll_y: 1
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: 5
+                    id: plugin_container
 
         Label:
             text: "Console"
@@ -195,7 +103,7 @@ BoxLayout:
                     pos: self.pos
                     size: self.size
 
-        MessageSection:
+        BoxLayout: #MessageSection
             id: message_section
             canvas.before:
                 Color:
@@ -204,11 +112,86 @@ BoxLayout:
                     pos: self.pos
                     size: self.size
             size_hint_y: 19/100
-        
-    RightSection:
-        id: right_section
-        size_hint: 2/3, 1
-    
+            ScrollView:
+                do_scroll_y: True
+                do_scroll_x: False
+                scroll_y: 0
+                Label:
+                    id: message_label
+                    halign: 'left'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    text: ''
+                    color: 0,0,0,1
 
         
-    
+    BoxLayout: #RightSection
+        orientation: 'vertical'
+        id: right_section
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            text: "Tree Builder"
+            font_size: 18
+            size_hint_y: 1/30
+            color: 0, 0, 0, 1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 1/20
+            spacing: 10
+            Widget:
+                size_hint_x: 1/5
+            Button:
+                text: "Libraries"
+                on_press: app.utility_manager.class_types()
+                size_hint_x: 1/10
+            Button:
+                text: "Inputs"
+                on_press: app.run_manager.inputs_config()
+                size_hint_x: 1/10
+                id: input_button
+            Button:
+                text: "Property Type"
+                on_press: app.run_manager.property_type_config()
+                size_hint_x: 1/10
+                id: property_type_button
+
+            Button:
+                text: "Run Module"
+                on_press: app.run_manager.run()
+                size_hint_x: 1/10
+            
+            Button:
+                text: "Clear Tree"
+                on_press: app.tree_manager.delete_tree()
+                size_hint_x: 1/10
+            Widget:
+                size_hint_x: 1/5
+            
+
+        Widget:
+            size_hint_y: None
+            height:20
+            
+        ScrollView:
+            do_scroll_y: True
+            do_scroll_x: True
+            scroll_y: 1
+            scroll_x: .5
+            BoxLayout:
+                id: tree_section
+                orientation: 'vertical'
+                size_hint_y: None
+                size_hint_x: None
+                height: self.minimum_height
+                spacing: 50
+        
+
+            
+        

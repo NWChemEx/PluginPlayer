@@ -85,18 +85,15 @@ class PluginManager:
         self.saved_plugins = []
         self.plugin_player = plugin_player
         self.custom_declaration = None
-        self.file_path_input = self.plugin_player.root.ids.file_entry.ids.file_path_input
-        self.plugin_section = self.plugin_player.root.ids.plugin_section
-        self.plugin_container = self.plugin_player.root.ids.plugin_section.ids.plugin_container
         
 
     def plugin_loader(self):
         """Attempt to load in a plugin from a filepath stored in an entry box and update the plugin view and module manager
         """
         #grab filepath from the entry
-        entered_text = self.file_path_input.text
-        self.file_path_input.text = ""
-        self.file_path_input.hint_text = "Enter Filepath/Browsing Directory"
+        entered_text = self.plugin_player.root.ids.file_path_input.text
+        self.plugin_player.root.ids.file_path_input.text = ""
+        self.plugin_player.root.ids.file_path_input.hint_text = "Enter Filepath/Browsing Directory"
         
         # Check if the file exists and is a .so file
         if os.path.isfile(entered_text) and entered_text.endswith('.so'):
@@ -279,46 +276,13 @@ class PluginManager:
         customNamePopup.add_widget(self.custom_declaration)
 
 
-        def initiate_clone(instance):
-            """Internal function of duplicate_module that initiates the cloning process and stores in the saved plugins
-
-
-            :param instance: When the submit button for the clone popup is pressed
-            :type instance: kivy.uix.button
-            """
-            moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
-
-            #If the cancel button was called, put a cancel message and dismiss the popup
-            if(instance.id.split()[0]=='-1'):
-                self.plugin_player.add_message("Canceled module cloning " + moduleName)
-                self.plugin_player.popup.dismiss()
-                return
-            
-
-            newModuleName = self.custom_declaration.text
-            #clone the module in the module manager
-            try:
-                self.plugin_player.mm.copy_module(moduleName, newModuleName)
-                self.saved_plugins[int(instance.id.split()[1])].modules.append(newModuleName)
-                self.plugin_player.run_manager.module_dict[newModuleName] = ModuleValues(newModuleName, self.plugin_player.mm)
-                self.plugin_player.add_message("Successfully created clone module " + newModuleName)
-
-                #create fake button to reset the plugin view
-                fakeButton = Widget()
-                fakeButton.id = f'{int(instance.id.split()[1])} 0 0'
-                self.view_modules(fakeButton)
-            except Exception as e:
-                self.plugin_player.add_message("Failed cloning module:\n" + f'{e}')
-                self.plugin_player.popup.dismiss()
-
-
         buttons = BoxLayout(orientation='horizontal', size=(dp(20), dp(100)))
 
         #add button padding
         buttons.add_widget(Widget(size_hint_x=1/5))
 
         #add cancel button 
-        cancelButton = Button(on_press=initiate_clone, text="Cancel",  size_hint=(1,1/5))
+        cancelButton = Button(on_press=self.initiate_clone, text="Cancel",  size_hint=(1,1/5))
         cancelButton.id = f'-1 {instance.id}'
         buttons.add_widget(cancelButton)
 
@@ -326,7 +290,7 @@ class PluginManager:
         buttons.add_widget(Widget(size_hint_x=1/5))
 
         #add submit button
-        submitButton = Button( on_press=initiate_clone, text="Submit", size_hint=(1,1/5))
+        submitButton = Button( on_press=self.initiate_clone, text="Submit", size_hint=(1,1/5))
         submitButton.id = f'1 {instance.id}'
         buttons.add_widget(submitButton)
 
@@ -339,6 +303,36 @@ class PluginManager:
         self.plugin_player.create_popup(customNamePopup, "Cloning " + moduleName, False, (dp(600), dp(200)))
         return
     
+    def initiate_clone(self, instance):
+        """Internal function of duplicate_module that initiates the cloning process and stores in the saved plugins
+
+            :param instance: When the submit button for the clone popup is pressed
+            :type instance: kivy.uix.button
+            """
+        moduleName = self.saved_plugins[int(instance.id.split()[1])].modules[int(instance.id.split()[2])]
+
+        #If the cancel button was called, put a cancel message and dismiss the popup
+        if(instance.id.split()[0]=='-1'):
+            self.plugin_player.add_message("Canceled module cloning " + moduleName)
+            self.plugin_player.popup.dismiss()
+            return
+            
+
+        newModuleName = self.custom_declaration.text
+        #clone the module in the module manager
+        try:
+            self.plugin_player.mm.copy_module(moduleName, newModuleName)
+            self.saved_plugins[int(instance.id.split()[1])].modules.append(newModuleName)
+            self.plugin_player.run_manager.module_dict[newModuleName] = ModuleValues(newModuleName, self.plugin_player.mm)
+            self.plugin_player.add_message("Successfully created clone module " + newModuleName)
+            
+            #create fake button to reset the plugin view
+            fakeButton = Widget()
+            fakeButton.id = f'{int(instance.id.split()[1])} 0 0'
+            self.view_modules(fakeButton)
+        except Exception as e:
+            self.plugin_player.add_message("Failed cloning module:\n" + f'{e}')
+            self.plugin_player.popup.dismiss()
     def view_modules(self, instance):
         """View modules from selecting a plugin giving options to add to the tree and view information
 
@@ -366,7 +360,7 @@ class PluginManager:
             return
 
         #grab pluginSection widget
-        plugin_section = self.plugin_section
+        plugin_section = self.plugin_player.root.ids.plugin_section
 
         #create widget to fill with modules
         module_widget = BoxLayout(orientation='vertical',
@@ -443,7 +437,7 @@ class PluginManager:
         """
 
         #grab the plugin section
-        plugin_widget = self.plugin_container
+        plugin_widget = self.plugin_player.root.ids.plugin_container
 
         #clear the plugin section's previous widgets
         plugin_widget.clear_widgets()

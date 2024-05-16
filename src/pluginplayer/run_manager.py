@@ -183,7 +183,7 @@ class RunManager():
         
         #grab needed info form the id
         key_number = int(instance.id.split()[0])
-        module_name = instance.id[2:]
+        module_name = ' '.join(instance.id.split()[1:])
         key = list(self.plugin_player.mm.at(module_name).inputs())[key_number]
 
         #grab input from text entry
@@ -288,11 +288,6 @@ class RunManager():
             property_type_eval = eval(custom_declaration,
                                 sys.modules['__main__'].__dict__)
             
-            #if(not self.plugin_player.mm.at(module_name).ready(property_type_eval)):
-            #    self.plugin_player.add_message(
-            #        f"Could not set property type {custom_declaration}: Invalid property type")
-            
-            #evaluates and will store property type, can evaluate again in the 
             #if successful add it to the module dictionary to save and add success message
             self.module_dict[module_name].property_type = custom_declaration
             self.module_dict[module_name].evaluated_property_type = property_type_eval
@@ -506,7 +501,6 @@ class RunManager():
 
         mm = self.plugin_player.mm
         module_name = ' '.join(instance.id.split()[3:])
-        print("\n\n\n\n\n\n\n" +module_name)
         
         #get info from the instance id
         key_number = int(instance.id.split()[0])
@@ -520,8 +514,11 @@ class RunManager():
         if(submodule_name == module_name):
             self.plugin_player.add_message("A module's submodule cannot be itself, create a clone to add it as a submodule.")
             fakeButton =  Widget()
-            fakeButton = module_name
+            fakeButton.id = module_name
             self.submods_config(fakeButton)
+            return
+        
+        
 
 
         #attempt to add the submodule in the Module Manager

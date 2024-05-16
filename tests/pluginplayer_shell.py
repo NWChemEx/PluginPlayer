@@ -14,66 +14,55 @@
 
 #pluginplay helpers
 import pluginplay as pp
-import pluginplayer_examples as ppe
-from pluginplayer.plugin_manager import PluginInfo
+import pluginplayer_examples
+from pluginplayer.plugin_manager import PluginInfo,  ModuleValues
 from pluginplayer.plugin_player import PluginPlayer
-from unittest.mock import MagicMock
 
-#helper classes for a PluginPlayer interface
-from pluginplayer.plugin_manager import PluginManager, ModuleValues
-from pluginplayer.tree_manager import TreeManager
-from pluginplayer.run_manager import RunManager
-from pluginplayer.utility_manager import UtilityManager
 
 #kivy helpers
 from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.popup import Popup
-from kivy.uix.image import Image
+from kivy.base import stopTouchApp
 
 
-class PluginPlayerShell:
-    """The class representing the connecting helper class 
-    components of PluginPlayer without triggering Kivy window production
+
+def getShell():
+    """Initializes the helpers and instance variables for the PluginPlayer class for testing
     """
-
-    def __init__(self):
-        """Initializes the helpers and instance variables for the PluginPlayer class for testing
-        """
+    running_app = App.get_running_app()
+    if running_app:
+        running_app.stop()
+        stopTouchApp()
+        running_app = None
         
-        self.root = MagicMock()
-                
-        self.popup = Popup()
+    player = PluginPlayer()
+    player.build()
 
-        #The app's module manager
-        self.mm = pp.ModuleManager()
+    #load the example modules into the plugin manually through instance variables
+    pluginplayer_examples.load_modules(player.mm)
 
-        #helper class handling addition/removal of nodes, deleting/running the tree
-        self.tree_manager = TreeManager(self)
-
-        #helper class handling the inputs, property types, and submodules at runtime
-        self.run_manager = RunManager(self)
+    #add it to the list of modules
+    new_plugin = PluginInfo(plugin_name="pluginplayer_examples",
+                                modules=player.mm.keys())
+    player.plugin_manager.saved_plugins.append(new_plugin)
         
-        #helper class handling the loading, deleting, and viewing of plugins and their modules
-        self.plugin_manager = PluginManager(self)
-
-        #helper class handling browsing, imported class types, and importing new classes
-        self.utility_manager = UtilityManager(self)
-
-        #mock the visual functions
-        self.add_message = MagicMock()
-        self.plugin_manager.plugin_view = MagicMock()
-        self.create_image = MagicMock()
-        self.create_popup = MagicMock()
-
-        #load the example modules into the plugin manually through instance variables
-        ppe.load_modules(self.mm)
-
-        #add it to the list of modules
-        new_plugin = PluginInfo(plugin_name="pluginplayer_examples",
-                                modules=self.mm.keys())
-        self.plugin_manager.saved_plugins.append(new_plugin)
+    #add each module into the module dictionary for saving inputs and property types
+    for key in player.mm.keys():
+        player.run_manager.module_dict[key] = ModuleValues(key, player.mm)
         
-        #add each module into the module dictionary for saving inputs and property types
-        for key in self.mm.keys():
-            self.run_manager.module_dict[key] = ModuleValues(key, self.mm)
+    return player
+
+def getShellNoLoading():
+    """Initializes the helpers and instance variables for the PluginPlayer class for testing without importing the pluginplayer_examples
+    """
+    running_app = App.get_running_app()
+    if running_app:
+        running_app.stop()
+        stopTouchApp()
+        running_app = None
+        
+    player = PluginPlayer()
+    player.build()
+
+        
+    return player
+        

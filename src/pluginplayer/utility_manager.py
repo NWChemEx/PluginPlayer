@@ -64,7 +64,7 @@ class UtilityManager():
         """
 
         #grab text from entry
-        entry_text = self.plugin_player.root.ids.file_entry.ids.file_path_input.text
+        entry_text = self.plugin_player.root.ids.file_path_input.text
 
         #if entry text is a directory, open popup to directory
         if os.path.isdir(entry_text):
@@ -76,9 +76,9 @@ class UtilityManager():
         def select_file(instance, selection, *args):
             if selection:
                 # Set selected file path in TextInput
-                file_entry_widget = self.plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget = self.plugin_player.root.ids.file_path_input
                 file_entry_widget.text = selection[0]
-                file_entry_widget = self.plugin_player.root.ids.file_entry.ids.file_path_input
+                file_entry_widget = self.plugin_player.root.ids.file_path_input
                 file_entry_widget.text = selection[0]
                 popup.dismiss()
 

@@ -61,8 +61,8 @@ class TreeManager():
         tree_module = self.tree_module
         self.tree_module = None
 
-        self.plugin_player.root.ids.right_section.ids.tree_section.clear_widgets()
-        self.plugin_player.root.ids.right_section.ids.tree_section.canvas.clear()
+        self.plugin_player.root.ids.tree_section.clear_widgets()
+        self.plugin_player.root.ids.tree_section.canvas.clear()
         
         self.plugin_player.add_message(f"Removed Module Tree: {tree_module}")
 
@@ -253,7 +253,7 @@ class TreeManager():
         tree_nodes = []
         layers = []
         
-        tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
+        tree_section = self.plugin_player.root.ids.tree_section
 
         #clear all lines and widgets
         tree_section.clear_widgets()
@@ -309,7 +309,7 @@ class TreeManager():
         """
 
         layer_count = 0
-        tree_section = self.plugin_player.root.ids.right_section.ids.tree_section
+        tree_section = self.plugin_player.root.ids.tree_section
         tree_section.canvas.before.clear()
         
         #iterate through the module tree and make a line that connects the two modules

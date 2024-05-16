@@ -56,6 +56,9 @@ class PluginPlayer(App):
         :rtype: kivy.app.App
         """
 
+        #string array holding the filepaths of resized images
+        self.resized_images = []
+        
         self.popup = Popup()
 
         #The app's module manager
@@ -72,17 +75,18 @@ class PluginPlayer(App):
 
         #helper class handling browsing, imported class types, and importing new classes
         self.utility_manager = UtilityManager(self)
-
-        #string array holding the filepaths of resized images
-        self.resized_images = []
-
+        
         #build the main application from the kivy script file
         build = Builder.load_file('src/pluginplayer/plugin_player_setup.kv')
         
+        
         #standardize spacing
-        tree_section = build.ids.right_section.ids.tree_section
+        tree_section = build.ids.tree_section
         tree_section.spacing = dp(50)
         
+        self.root = build
+        
+
     
         return build
 
@@ -93,12 +97,9 @@ class PluginPlayer(App):
         :type message: str
         """
 
-        #grab message widget
-        message_widget = self.root.ids.message_section
-
         #add the message
-        message_widget.ids.message_label.text += f"\n{message}"
-        message_widget.scroll_y = 1
+        self.root.ids.message_label.text += f"\n{message}"
+        self.root.ids.message_section.scroll_y = 1
 
     def create_popup(self, widget, description, dismiss, size):
         """Set up a basic popup given a scrolling widget, name, description, and dismissal protocol
