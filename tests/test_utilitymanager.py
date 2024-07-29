@@ -19,42 +19,45 @@ Config.set('graphics', 'backend', 'dummy')
 
 # test_pluginplayer.py
 import unittest
-from pluginplayer_shell import PluginPlayerShell
+from pluginplayer_shell import getShell
 
 #kivy button for instance
 from kivy.uix.button import Button
 
 #pluginplay_example types
-from pluginplay_examples import PointCharge
+from pluginplayer_examples import Multiplier
 
 import sys
 
 
 class TestutilityManager(unittest.TestCase):
-
-    def test_class_types(self):
-        #get a new shell
-        player = PluginPlayerShell()
+    """Tests the functionality of the utility_manager class"""
 
     def test_new_type(self):
+        """Check that you can navigate through importing a new type, and it actually puts it into the system path
+        """
         #get a new shell
-        player = PluginPlayerShell()
+        player = getShell()
 
-        #set the id for the back button
+        #open a new popup to view the class types
+        player.utility_manager.class_types()
+
+        #set the id for the back button to make a new type
         backButton = Button()
         backButton.id = '0 0'
 
-        player.utility_manager.custom_declaration_widget.text = 'pluginplay_examples PointCharge'
+        #set the type to import
+        player.utility_manager.custom_declaration_widget.text = 'pluginplayer_examples Multiplier'
 
         #call the new_type function to add it to the list of types
-        player.utility_manager.new_type(backButton, player)
+        player.utility_manager.new_type(backButton)
 
         assert hasattr(
-            sys.modules['__main__'], PointCharge.__name__
-        ), f"{PointCharge.__name__} doesn't exist in the main module after attempted import."
-        self.assertEquals(player.utility_manager.imported_classes[0],
-                          "PointCharge",
-                          "Did not add to listed imported class types")
+            sys.modules['__main__'], Multiplier.__name__
+        ), f"{Multiplier.__name__} doesn't exist in the main module after attempted import."
+        self.assertEqual(player.utility_manager.imported_classes[0],
+                         "Multiplier",
+                         "Did not add to listed imported class types")
 
 
 if __name__ == "__main__":
