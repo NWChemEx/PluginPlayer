@@ -52,15 +52,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introductory.html">Introductary Observations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kivyintro.html">Kivy</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">pluginplayer</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../node_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../node_widget/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_widget</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../node_widget_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_widget_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plugin_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.plugin_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plugin_player/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.plugin_player</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tree_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.tree_manager</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.utility_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_manager/index.html">pluginplayer.plugin_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_player/index.html">pluginplayer.plugin_player</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../run_manager/index.html">pluginplayer.run_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tree_manager/index.html">pluginplayer.tree_manager</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pluginplayer.utility_manager</a></li>
 </ul>
 </li>
 </ul>
@@ -84,8 +82,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.utility_manager</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">pluginplayer</a></li>
+      <li class="breadcrumb-item active">pluginplayer.utility_manager</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/pluginplayer/utility_manager/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,7 +94,7 @@
            <div itemprop="articleBody">
              
   <section id="module-pluginplayer.utility_manager">
-<span id="pluginplayer-utility-manager"></span><h1><a class="reference internal" href="#module-pluginplayer.utility_manager" title="pluginplayer.utility_manager"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.utility_manager</span></code></a><a class="headerlink" href="#module-pluginplayer.utility_manager" title="Link to this heading"></a></h1>
+<span id="pluginplayer-utility-manager"></span><h1>pluginplayer.utility_manager<a class="headerlink" href="#module-pluginplayer.utility_manager" title="Link to this heading"></a></h1>
 <dl class="simple">
 <dt>The need for a utility manager</dt><dd><p>Throughout the GUI it is essential to keep track of added class types, adding new class types, and browsing files. The <cite>UtilityManager</cite> class handles this to allow for helper functions needed throughout the application.</p>
 </dd>
@@ -111,10 +109,8 @@
 <dt>Importing a new class type</dt><dd><p>Directed from the <cite>class_types</cite> popup, you can enter a python partial import statement defining the library to import from as well as the type name. Clicking the Import button, the <cite>new_type</cite> function runs <cite>importlib</cite> to import the new class type into the system’s main modules which is used in evaluating import and property type statements. If a module is unable to be imported, a message is displayed and the system’s modules are not modified.</p>
 </dd>
 </dl>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pluginplayer.utility_manager.UtilityManager" title="pluginplayer.utility_manager.UtilityManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UtilityManager</span></code></a></p></td>
@@ -122,52 +118,58 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pluginplayer.utility_manager.</span></span><span class="sig-name descname"><span class="pre">UtilityManager</span></span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pluginplayer.utility_manager.</span></span><span class="sig-name descname"><span class="pre">UtilityManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_player</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager" title="Link to this definition"></a></dt>
 <dd><p>Helper class for the PluginPlayer application to browse files, view class types, and import new class types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.plugin_player">
+<span class="sig-name descname"><span class="pre">plugin_player</span></span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.plugin_player" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.imported_classes">
+<span class="sig-name descname"><span class="pre">imported_classes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.imported_classes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.custom_declaration_widget">
+<span class="sig-name descname"><span class="pre">custom_declaration_widget</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.custom_declaration_widget" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.browse">
-<span class="sig-name descname"><span class="pre">browse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_player</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.browse" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">browse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.browse" title="Link to this definition"></a></dt>
 <dd><p>Browse for a new file from the file system and place in entry box</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>plugin_player</strong> (<a class="reference internal" href="../plugin_player/index.html#pluginplayer.plugin_player.PluginPlayer" title="pluginplayer.plugin_player.PluginPlayer"><em>PluginPlayer</em></a>) – The PluginPlayer object to manage</p>
+<dd class="field-odd"><p><strong>instance</strong> (<em>kivy.uix.button</em>) – The button to browse for files</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.class_types">
-<span class="sig-name descname"><span class="pre">class_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plugin_player</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.class_types" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">class_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.class_types" title="Link to this definition"></a></dt>
 <dd><p>Show a popup to see all class types imported</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>instance</strong> (<em>kivy.uix.button.Button</em>) – The button that called this function</p></li>
-<li><p><strong>plugin_player</strong> (<a class="reference internal" href="../plugin_player/index.html#pluginplayer.plugin_player.PluginPlayer" title="pluginplayer.plugin_player.PluginPlayer"><em>PluginPlayer</em></a>) – The PluginPlayer object to display the popup on</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pluginplayer.utility_manager.UtilityManager.new_type">
-<span class="sig-name descname"><span class="pre">new_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plugin_player</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.new_type" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">new_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.utility_manager.UtilityManager.new_type" title="Link to this definition"></a></dt>
 <dd><p>Defines a new class type for custom inputs and property types</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>instance</strong> (<em>kivy.uix.button.Button</em>) – The button used to call this function</p></li>
-<li><p><strong>plugin_player</strong> (<a class="reference internal" href="../plugin_player/index.html#pluginplayer.plugin_player.PluginPlayer" title="pluginplayer.plugin_player.PluginPlayer"><em>PluginPlayer</em></a>) – The PluginPlayer object to output messages on</p></li>
-</ul>
+<dd class="field-odd"><p><strong>instance</strong> (<em>kivy.uix.button</em>) – The button to submit a new type</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 

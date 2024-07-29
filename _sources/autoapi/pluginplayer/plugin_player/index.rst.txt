@@ -1,24 +1,21 @@
-:py:mod:`pluginplayer.plugin_player`
-====================================
+pluginplayer.plugin_player
+==========================
 
 .. py:module:: pluginplayer.plugin_player
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    pluginplayer.plugin_player.PluginPlayer
 
 
-
+Module Contents
+---------------
 
 .. py:class:: PluginPlayer
-
 
 
 
@@ -32,12 +29,14 @@ Classes
    :return: returns a built app
    :rtype: kivy.app.App
 
+
    .. py:method:: build()
 
       Builds the main window from the plugin_player_setup.kv file, and creates instances of helper classes to alter the imported plugins and tree structure.
 
       :return: The built Kivy application
       :rtype: kivy.app.App
+
 
 
    .. py:method:: add_message(message)
@@ -48,7 +47,8 @@ Classes
       :type message: str
 
 
-   .. py:method:: create_popup(widget, description, dismiss)
+
+   .. py:method:: create_popup(widget, description, dismiss, size)
 
       Set up a basic popup given a scrolling widget, name, description, and dismissal protocol
 
@@ -61,6 +61,7 @@ Classes
       :type dismiss: bool
 
 
+
    .. py:method:: create_image(filepath, new_filepath, size)
 
       Resize an image using Pillow to fit the pixel size desired.
@@ -71,6 +72,7 @@ Classes
       :type new_filepath: str
       :param size: The desired size of the new image
       :type size: (int, int)
+
 
 
    .. py:method:: on_stop()

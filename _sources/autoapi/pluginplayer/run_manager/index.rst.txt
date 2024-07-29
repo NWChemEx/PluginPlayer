@@ -1,0 +1,124 @@
+pluginplayer.run_manager
+========================
+
+.. py:module:: pluginplayer.run_manager
+
+.. autoapi-nested-parse::
+
+   Setting a submodule
+       By clicking the Map button on the module node, you can set the module's submodule by interacting with a popup created by `submods_config`,
+       listing each submodule the module has with a button to edit the cooresponding submodule.
+       
+       `select_submod` then creates a popup listing all modules to select to add as a submodule.
+       
+       `add_submod` then takes the selected module and adds it to the module's submodule, outputting its success/error messages
+          
+   Setting an input
+       By clicking the Add Inputs button, you can trigger `inputs_config`, which will create a popup with a space to enter a python variable as an input.
+       When clicking set, `add_input` will change the input both in the module manager and the local storage for inputs.
+
+   Setting a property type
+       By clicking the Add Property Type button, you can trigger `property_type_config`, which will create a popup with a space to enter a python variable as a property type.
+       When clicking set, `add_property_type` will change the property type in the local storage for run time.
+
+   Running the tree
+       Runs the module tree by using the `ready` module function and checking the local storage of inputs and property types. This combination
+       of verification of tree readiness will gaurantee that the tree has all inputs, property types, and submodules set before its attempted to be ran
+       and output.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   pluginplayer.run_manager.RunManager
+
+
+Module Contents
+---------------
+
+.. py:class:: RunManager(plugin_player)
+
+   Helper class for the PluginPlayer application to set a modules inputs, property types, and submodules for viewing a module's run configuration
+       
+
+
+   .. py:attribute:: plugin_player
+
+
+   .. py:attribute:: module_dict
+
+
+   .. py:attribute:: custom_declaration
+      :value: None
+
+
+
+   .. py:method:: inputs_config()
+
+      Open a popup to view the configuration of a module's inputs
+              
+
+
+
+   .. py:method:: add_input(instance)
+
+      Links an input from a text entry, adds to the ModuleManager, and updates the input popup
+
+      :param instance: Button routing to this function
+      :type instance: kivy.uix.button.Button
+
+
+
+   .. py:method:: property_type_config()
+
+      Prompts user input for a property type through a popup
+              
+
+
+
+   .. py:method:: add_property_type(instance)
+
+      Links a property type from a text entry and updates the property type popup
+
+      :param instance: Button routing to this function
+      :type instance: kivy.uix.button.Button
+
+
+
+   .. py:method:: submods_config(instance)
+
+      Generates a popup for setting the submodule for a module
+
+      :param instance: Button routing to this function
+      :type instance: kivy.uix.button.Button
+
+
+
+   .. py:method:: select_submod(instance)
+
+      Opens a popup to prompt a user to select a submodule from the imported modules.
+
+      :param instance: Button routing to the function
+      :type instance: kivy.uix.button.Button
+
+
+
+   .. py:method:: add_submod(instance)
+
+      Dictates the linkage of a module's submodule by attempting to assign the inputted submodule to the module
+
+      :param instance: The instance of the button pressed to redirect to this function.
+      :type instance: kivy.uix.button.Button
+
+
+
+   .. py:method:: run()
+
+      Run the module with the set inputs and property type if it's ready
+              
+
+
+

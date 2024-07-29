@@ -1,43 +1,62 @@
-:py:mod:`pluginplayer.tree_manager`
-===================================
+pluginplayer.tree_manager
+=========================
 
 .. py:module:: pluginplayer.tree_manager
 
 .. autoapi-nested-parse::
 
-   Managing tree nodes
-       The `TreeManager` class handles adding and deleting tree nodes and adding them to the `nodes` list.
+   Managing tree generation
+       The `TreeManager` class handles setting the module to be viewed in a tree view, and generates the tree with its connections.
 
-       When a user wants to delete a node, they can press the delete X button on the node's widget to run the `delete_node` function which iterates through it's connections with other nodes, removes them, removes their lines, and then removes the widget from the tree.
-
-       When a user wants to add a node, they can choose to add a module to the tree within the `module_view` which will run the `add_node` function, calling `NodeWidgetManager` defined types to build a new widget and add it to the `nodes` list with empty connections.
-
-   Running the tree
-       A user can run their connected module tree by clicking the Run Tree button in the tree section. This will call the `run_tree` function that will recursively iterate through the `nodes` list using Depth First Search and determine if a node relies on another, creating a run order. If each node has all run settings set, the run order will individually run each module through the `ModuleManager`, store its output, and use it on other dependent modules. 
-
+       When a user wants to view a module on the tree, they can select the Graph button from the PluginSection (left). 
+       
+       The Module will then be placed as the root node on the tree and it will build a map for each layer of the tree, adding a new layer
+       with the submodules of the previous layer, including their mappings. This is done with the `submodule_dependencies` function.
+       
+       The `generate_tree` function will use the built map to center and place the nodes into a tree like structure.
+       
+       The `add_connections` function will then bind the mappings of each node with a line connecting them.
+       
    Deleting the tree
-       A user can delete their connected module tree by clicking the Delete Tree button in the tree section. This will call the `delete_tree` function that will iterate through the `nodes` list and call the `remove_node` function, removing all connections within the tree and its nodes.
+       All canvas instructions and widgets added to the tree section are removed, and the set inputs and property types are cleared.
 
 
-
-Module Contents
----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    pluginplayer.tree_manager.TreeManager
 
 
-
+Module Contents
+---------------
 
 .. py:class:: TreeManager(plugin_player)
 
-
    TreeManager is a helper class for the PluginPlayer application to add/delete nodes from the module tree, run the tree, and delete the tree
        
+
+
+   .. py:attribute:: plugin_player
+
+
+   .. py:attribute:: saved_output
+      :value: None
+
+
+
+   .. py:attribute:: tree_module
+      :value: None
+
+
+
+   .. py:attribute:: node_height
+
+
+   .. py:attribute:: node_width
+
 
    .. py:method:: delete_tree()
 
@@ -45,40 +64,48 @@ Classes
               
 
 
-   .. py:method:: add_node(instance)
 
-      Add a new node to the tree section
+   .. py:method:: create_node(module_name)
 
-      :param instance: The button that calls this function
-      :type instance: kivy.uix.button.Button
+      Create a new node to add the tree section
 
-
-   .. py:method:: remove_node(instance)
-
-      Remove a node's widget and connecting edges
-
-      :param instance: The button that calls this function
-      :type instance: kivy.uix.button.Button
+      :param module_name: The name of the module the node will represent
+      :type module_name: String
 
 
-   .. py:method:: run_tree()
 
-      Run the series of nodes through the connected tree
+   .. py:method:: set_module(instance)
+
+      Adds a module to the tree and saves its information to the tree
+
+      Args:
+          instance (kivy.uix.button): The button clicked to add the module to the tree
+
+
+
+   .. py:method:: submodule_dependencies()
+
+      generates a 2D array of each level of the tree
               
 
 
-   .. py:method:: dfs_traversal(nodes, dfs_stack, visited)
 
-      recursively traverse the tree and return a list for run order, catches cycles, and non-used nodes
+   .. py:method:: generate_tree(module_tree)
 
-      :param nodes: The array of nodes in the tree
-      :type nodes: ModuleNode[]
-      :param dfs_stack: The array of nodes needing to be processed and visited for cycles and links
-      :type dfs_stack: ModuleNode[]
-      :param visited: The array of nodes already processed and visited
-      :type visited: ModuleNode[]
-      :return: The array of updated visited/processed nodes
-      :rtype: ModuleNode[]
+      Generates the visual tree map, filling with module nodes
+
+      Args:
+          module_tree (Array): The 2d Array filled with the module layers of the trees
+
+
+
+   .. py:method:: add_connections(module_tree, tree_nodes)
+
+      Adds the lines to connect nodes
+
+      Args:
+          module_tree (Array): 2d Array mapping the modules and their submodule dependencies by layer
+          tree_nodes (Array): 2d Array holding the module's node widgets by layer
 
 
 

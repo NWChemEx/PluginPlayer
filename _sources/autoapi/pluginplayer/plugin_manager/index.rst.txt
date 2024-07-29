@@ -1,59 +1,102 @@
-:py:mod:`pluginplayer.plugin_manager`
-=====================================
+pluginplayer.plugin_manager
+===========================
 
 .. py:module:: pluginplayer.plugin_manager
 
 .. autoapi-nested-parse::
 
    Dynamically Importing Plugins
-       Modular packages must be imported into the system when creating a GUI interface to allow users to work with Plugins. Each CMake compiled modular project creates a Plugin file within the internal build directory, registered as a .so file. Each Plugin has the load_modules() function to import Modules into a ModuleManager. If the Plugin contains Modules that don’t define its inputs, outputs, or submodules, the Plugin will not be imported, and an error message will be displayed. The ModuleManager acts as a directory for all the Modules to be later configured and run.
+       Modular packages must be imported into the system when creating a GUI interface to allow users to work with Plugins. 
+       Each CMake compiled modular project creates a Plugin file within the internal build directory, registered as a .so file. 
+       Each Plugin has the load_modules() function to import Modules into a ModuleManager. If the Plugin contains Modules that 
+       don’t define its inputs, outputs, or submodules, the Plugin will not be imported, and an error message will be displayed. 
+       The ModuleManager acts as a directory for all the Modules to be later configured and run.
 
        The current GUI design for dynamically importing and viewing plugin information to create an efficient application build.
 
        Users can enter a path to a plugin .so file or a directory to browse.
 
-       Once a Plugin is imported using the `plugin_loader` function, it is displayed as a folder in the Plugin Section, updated by the `plugin_view` function.
+       Once a Plugin is imported using the `plugin_loader` function, it is displayed as a folder in the Plugin Section, 
+       updated by the `plugin_view` function.
 
    Viewing Modules and API
-       A comprehensive GUI application should allow users to view each dynamically imported plugin’s Modules and their APIs, including a functional description, inputs, outputs, and required submodules, to gain information when creating an application design. Having documentation of each loaded Module allows for a more efficient application build.
+       A comprehensive GUI application should allow users to view each dynamically imported plugin’s Modules and their APIs, 
+       including a functional description, inputs, outputs, and required submodules, to gain information when creating an application 
+       design. Having documentation of each loaded Module allows for a more efficient application build.
 
-       When selecting a Plugin folder, a user is shown a popup, showing each of the Plugin’s Modules using the `view_modules` function. The user can also delete the Plugin and remove its Modules from the ModuleManager, add a Module to the Module tree for application building, and view its API info.
+       When selecting a Plugin folder, a user is shown a popup, showing each of the Plugin’s Modules using the `view_modules` 
+       function. The user can also delete the Plugin and remove its Modules from the ModuleManager, clone a Module into the Module Manager,
+       and add a Module to the Module tree for application building, and view its API info.
 
-       When selecting the “Info” button for the module, the following popup is displayed to show the Module’s description, inputs, outputs, and submodules using the `view_module_info` function. Information is provided for the Module’s parameters. If the Module does not provide information, “description unavailable” will be shown.
-
-
-
-
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   pluginplayer.plugin_manager.PluginManager
+       When selecting the “Info” button for the module, the following popup is displayed to show the Module’s description, inputs, 
+       outputs, and submodules using the `view_module_info` function. Information is provided for the Module’s parameters. If the 
+       Module does not provide information, “description unavailable” will be shown.
 
 
 
 
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    pluginplayer.plugin_manager.PluginInfo
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   pluginplayer.plugin_manager.ModuleValues
+   pluginplayer.plugin_manager.PluginManager
+
+
+Module Contents
+---------------
+
 .. py:data:: PluginInfo
 
-   
+.. py:class:: ModuleValues(module_name, mm)
+
+   The module class for storing information for the GUI, regarding the user's inputs and property types they set to each module
+       
+
+
+   .. py:attribute:: inputs
+
+
+   .. py:attribute:: evaluated_inputs
+
+
+   .. py:attribute:: property_type
+      :value: None
+
+
+
+   .. py:attribute:: evaluated_property_type
+      :value: None
+
+
 
 .. py:class:: PluginManager(plugin_player)
 
-
    Helper class for the PluginPlayer application handling loading/deleting plugins and viewing their modules
        
+
+
+   .. py:attribute:: saved_plugins
+      :value: []
+
+
+
+   .. py:attribute:: plugin_player
+
+
+   .. py:attribute:: custom_declaration
+      :value: None
+
+
 
    .. py:method:: plugin_loader()
 
@@ -61,10 +104,12 @@ Attributes
               
 
 
+
    .. py:method:: delete_plugin(instance)
 
       delete a preinstalled plugin from the module manager, remove all it's module nodes, remove linkage from the tree that depend on it's modules, and remove the folder from the plugin view.
               
+
 
 
    .. py:method:: view_module_info(instance)
@@ -75,6 +120,25 @@ Attributes
       :type instance: kivy.uix.button.Button
 
 
+
+   .. py:method:: duplicate_module(instance)
+
+      Duplicates a module into the Module Manager by asking for a new name through a popup
+
+      :param instance: The Clone button calling this function
+      :type instance: kivy.uix.button
+
+
+
+   .. py:method:: initiate_clone(instance)
+
+      Internal function of duplicate_module that initiates the cloning process and stores in the saved plugins
+
+      :param instance: When the submit button for the clone popup is pressed
+      :type instance: kivy.uix.button
+
+
+
    .. py:method:: view_modules(instance)
 
       View modules from selecting a plugin giving options to add to the tree and view information
@@ -83,9 +147,15 @@ Attributes
       :type instance: kivy.uix.button.Button
 
 
-   .. py:method:: plugin_view()
 
-      update the loaded plugin visual display of folders
+   .. py:method:: plugin_view(dropped, widget)
+
+      Updates the plugin section listing the import plugins, and will add a dropdown for the listed plugin, adding the given dropdown widget
+
+      :param dropped: the plugin number which needs a dropdown
+      :type dropped: int
+      :param widget: the dropdown widget to be placed after the dropped plugin
+      :type widget: kivy.uix.boxlayout
 
 
 

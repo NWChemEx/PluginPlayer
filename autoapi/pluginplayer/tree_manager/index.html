@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="pluginplayer.utility_manager" href="../utility_manager/index.html" />
-    <link rel="prev" title="pluginplayer.plugin_player" href="../plugin_player/index.html" /> 
+    <link rel="prev" title="pluginplayer.run_manager" href="../run_manager/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,15 +53,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introductory.html">Introductary Observations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../kivyintro.html">Kivy</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">pluginplayer</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../node_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../node_widget/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_widget</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../node_widget_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.node_widget_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plugin_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.plugin_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plugin_player/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.plugin_player</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.tree_manager</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../utility_manager/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.utility_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_manager/index.html">pluginplayer.plugin_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_player/index.html">pluginplayer.plugin_player</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../run_manager/index.html">pluginplayer.run_manager</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pluginplayer.tree_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utility_manager/index.html">pluginplayer.utility_manager</a></li>
 </ul>
 </li>
 </ul>
@@ -85,8 +83,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.tree_manager</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">pluginplayer</a></li>
+      <li class="breadcrumb-item active">pluginplayer.tree_manager</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/pluginplayer/tree_manager/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,21 +95,20 @@
            <div itemprop="articleBody">
              
   <section id="module-pluginplayer.tree_manager">
-<span id="pluginplayer-tree-manager"></span><h1><a class="reference internal" href="#module-pluginplayer.tree_manager" title="pluginplayer.tree_manager"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pluginplayer.tree_manager</span></code></a><a class="headerlink" href="#module-pluginplayer.tree_manager" title="Link to this heading"></a></h1>
+<span id="pluginplayer-tree-manager"></span><h1>pluginplayer.tree_manager<a class="headerlink" href="#module-pluginplayer.tree_manager" title="Link to this heading"></a></h1>
 <dl>
-<dt>Managing tree nodes</dt><dd><p>The <cite>TreeManager</cite> class handles adding and deleting tree nodes and adding them to the <cite>nodes</cite> list.</p>
-<p>When a user wants to delete a node, they can press the delete X button on the node’s widget to run the <cite>delete_node</cite> function which iterates through it’s connections with other nodes, removes them, removes their lines, and then removes the widget from the tree.</p>
-<p>When a user wants to add a node, they can choose to add a module to the tree within the <cite>module_view</cite> which will run the <cite>add_node</cite> function, calling <cite>NodeWidgetManager</cite> defined types to build a new widget and add it to the <cite>nodes</cite> list with empty connections.</p>
+<dt>Managing tree generation</dt><dd><p>The <cite>TreeManager</cite> class handles setting the module to be viewed in a tree view, and generates the tree with its connections.</p>
+<p>When a user wants to view a module on the tree, they can select the Graph button from the PluginSection (left).</p>
+<p>The Module will then be placed as the root node on the tree and it will build a map for each layer of the tree, adding a new layer
+with the submodules of the previous layer, including their mappings. This is done with the <cite>submodule_dependencies</cite> function.</p>
+<p>The <cite>generate_tree</cite> function will use the built map to center and place the nodes into a tree like structure.</p>
+<p>The <cite>add_connections</cite> function will then bind the mappings of each node with a line connecting them.</p>
 </dd>
-<dt>Running the tree</dt><dd><p>A user can run their connected module tree by clicking the Run Tree button in the tree section. This will call the <cite>run_tree</cite> function that will recursively iterate through the <cite>nodes</cite> list using Depth First Search and determine if a node relies on another, creating a run order. If each node has all run settings set, the run order will individually run each module through the <cite>ModuleManager</cite>, store its output, and use it on other dependent modules.</p>
-</dd>
-<dt>Deleting the tree</dt><dd><p>A user can delete their connected module tree by clicking the Delete Tree button in the tree section. This will call the <cite>delete_tree</cite> function that will iterate through the <cite>nodes</cite> list and call the <cite>remove_node</cite> function, removing all connections within the tree and its nodes.</p>
+<dt>Deleting the tree</dt><dd><p>All canvas instructions and widgets added to the tree section are removed, and the set inputs and property types are cleared.</p>
 </dd>
 </dl>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#pluginplayer.tree_manager.TreeManager" title="pluginplayer.tree_manager.TreeManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TreeManager</span></code></a></p></td>
@@ -119,10 +116,38 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pluginplayer.tree_manager.</span></span><span class="sig-name descname"><span class="pre">TreeManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_player</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager" title="Link to this definition"></a></dt>
 <dd><p>TreeManager is a helper class for the PluginPlayer application to add/delete nodes from the module tree, run the tree, and delete the tree</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.plugin_player">
+<span class="sig-name descname"><span class="pre">plugin_player</span></span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.plugin_player" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.saved_output">
+<span class="sig-name descname"><span class="pre">saved_output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.saved_output" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.tree_module">
+<span class="sig-name descname"><span class="pre">tree_module</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.tree_module" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.node_height">
+<span class="sig-name descname"><span class="pre">node_height</span></span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.node_height" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.node_width">
+<span class="sig-name descname"><span class="pre">node_width</span></span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.node_width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.delete_tree">
 <span class="sig-name descname"><span class="pre">delete_tree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.delete_tree" title="Link to this definition"></a></dt>
@@ -130,57 +155,55 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.add_node">
-<span class="sig-name descname"><span class="pre">add_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.add_node" title="Link to this definition"></a></dt>
-<dd><p>Add a new node to the tree section</p>
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.create_node" title="Link to this definition"></a></dt>
+<dd><p>Create a new node to add the tree section</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>instance</strong> (<em>kivy.uix.button.Button</em>) – The button that calls this function</p>
+<dd class="field-odd"><p><strong>module_name</strong> (<em>String</em>) – The name of the module the node will represent</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.remove_node">
-<span class="sig-name descname"><span class="pre">remove_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.remove_node" title="Link to this definition"></a></dt>
-<dd><p>Remove a node’s widget and connecting edges</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>instance</strong> (<em>kivy.uix.button.Button</em>) – The button that calls this function</p>
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.set_module">
+<span class="sig-name descname"><span class="pre">set_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.set_module" title="Link to this definition"></a></dt>
+<dd><p>Adds a module to the tree and saves its information to the tree</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>instance (kivy.uix.button): The button clicked to add the module to the tree</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.run_tree">
-<span class="sig-name descname"><span class="pre">run_tree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.run_tree" title="Link to this definition"></a></dt>
-<dd><p>Run the series of nodes through the connected tree</p>
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.submodule_dependencies">
+<span class="sig-name descname"><span class="pre">submodule_dependencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.submodule_dependencies" title="Link to this definition"></a></dt>
+<dd><p>generates a 2D array of each level of the tree</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.dfs_traversal">
-<span class="sig-name descname"><span class="pre">dfs_traversal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfs_stack</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visited</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.dfs_traversal" title="Link to this definition"></a></dt>
-<dd><p>recursively traverse the tree and return a list for run order, catches cycles, and non-used nodes</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> (<a class="reference internal" href="../node_widget/index.html#pluginplayer.node_widget.ModuleNode" title="pluginplayer.node_widget.ModuleNode"><em>ModuleNode</em></a><em>[</em><em>]</em>) – The array of nodes in the tree</p></li>
-<li><p><strong>dfs_stack</strong> (<a class="reference internal" href="../node_widget/index.html#pluginplayer.node_widget.ModuleNode" title="pluginplayer.node_widget.ModuleNode"><em>ModuleNode</em></a><em>[</em><em>]</em>) – The array of nodes needing to be processed and visited for cycles and links</p></li>
-<li><p><strong>visited</strong> (<a class="reference internal" href="../node_widget/index.html#pluginplayer.node_widget.ModuleNode" title="pluginplayer.node_widget.ModuleNode"><em>ModuleNode</em></a><em>[</em><em>]</em>) – The array of nodes already processed and visited</p></li>
-</ul>
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.generate_tree">
+<span class="sig-name descname"><span class="pre">generate_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_tree</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.generate_tree" title="Link to this definition"></a></dt>
+<dd><p>Generates the visual tree map, filling with module nodes</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>module_tree (Array): The 2d Array filled with the module layers of the trees</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array of updated visited/processed nodes</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../node_widget/index.html#pluginplayer.node_widget.ModuleNode" title="pluginplayer.node_widget.ModuleNode">ModuleNode</a>[]</p>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pluginplayer.tree_manager.TreeManager.add_connections">
+<span class="sig-name descname"><span class="pre">add_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pluginplayer.tree_manager.TreeManager.add_connections" title="Link to this definition"></a></dt>
+<dd><p>Adds the lines to connect nodes</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>module_tree (Array): 2d Array mapping the modules and their submodule dependencies by layer
+tree_nodes (Array): 2d Array holding the module’s node widgets by layer</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -188,7 +211,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../plugin_player/index.html" class="btn btn-neutral float-left" title="pluginplayer.plugin_player" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../run_manager/index.html" class="btn btn-neutral float-left" title="pluginplayer.run_manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../utility_manager/index.html" class="btn btn-neutral float-right" title="pluginplayer.utility_manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

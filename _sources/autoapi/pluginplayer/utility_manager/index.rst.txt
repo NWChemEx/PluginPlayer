@@ -1,5 +1,5 @@
-:py:mod:`pluginplayer.utility_manager`
-======================================
+pluginplayer.utility_manager
+============================
 
 .. py:module:: pluginplayer.utility_manager
 
@@ -20,51 +20,59 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    pluginplayer.utility_manager.UtilityManager
 
 
+Module Contents
+---------------
 
-
-.. py:class:: UtilityManager
-
+.. py:class:: UtilityManager(plugin_player)
 
    Helper class for the PluginPlayer application to browse files, view class types, and import new class types.
        
 
-   .. py:method:: browse(plugin_player)
+
+   .. py:attribute:: plugin_player
+
+
+   .. py:attribute:: imported_classes
+      :value: []
+
+
+
+   .. py:attribute:: custom_declaration_widget
+      :value: None
+
+
+
+   .. py:method:: browse(instance)
 
       Browse for a new file from the file system and place in entry box
 
-      :param plugin_player: The PluginPlayer object to manage
-      :type plugin_player: PluginPlayer
+      :param instance: The button to browse for files
+      :type instance: kivy.uix.button
 
 
-   .. py:method:: class_types(instance, plugin_player)
+
+   .. py:method:: class_types()
 
       Show a popup to see all class types imported
-
-      :param instance: The button that called this function
-      :type instance: kivy.uix.button.Button
-      :param plugin_player: The PluginPlayer object to display the popup on
-      :type plugin_player: PluginPlayer
+              
 
 
-   .. py:method:: new_type(instance, plugin_player)
+
+   .. py:method:: new_type(instance)
 
       Defines a new class type for custom inputs and property types
 
-      :param instance: The button used to call this function
-      :type instance: kivy.uix.button.Button
-      :param plugin_player: The PluginPlayer object to output messages on
-      :type plugin_player: PluginPlayer
+
+      :param instance: The button to submit a new type
+      :type instance: kivy.uix.button
 
 
 
